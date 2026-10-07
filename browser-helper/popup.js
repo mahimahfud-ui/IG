@@ -271,3 +271,20 @@ document.querySelectorAll('[data-close]').forEach(function(x){x.onclick=function
 
 // Use extension menu-less behavior: long-running operations are kept in this popup session.
 setTimeout(checkSession,150);
+document.getElementById('motionSwitch').onclick=function(){
+  document.body.classList.toggle('reduce-motion');
+  this.classList.toggle('on');
+  chrome.storage.local.set({reduceMotion:document.body.classList.contains('reduce-motion')});
+};
+document.getElementById('compactSwitch').onclick=function(){
+  this.classList.toggle('on');
+  document.body.classList.toggle('compact');
+  chrome.storage.local.set({compact:this.classList.contains('on')});
+};
+document.getElementById('openWeb').onclick=function(){
+  chrome.tabs.create({url:'https://mahi-unliker.onrender.com'});
+};
+chrome.storage.local.get(['reduceMotion','compact'],function(prefs){
+  if(prefs.reduceMotion){document.body.classList.add('reduce-motion');$('motionSwitch').classList.add('on');}
+  if(prefs.compact!==false){$('compactSwitch').classList.add('on');}
+});
