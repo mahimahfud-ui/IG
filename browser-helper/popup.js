@@ -3,12 +3,10 @@ const state={nf:[],likes:[],nfSelected:new Set(),likeSelected:new Set(),session:
 const $=id=>document.getElementById(id);
 
 async function activeInstagramTab(){
-  const tabs=await chrome.tabs.query({active:true,currentWindow:true});
-  const tab=tabs[0];
-  if(!tab || !tab.id || !String(tab.url||'').startsWith('https://www.instagram.com/')){
-    throw new Error('Open Instagram in the active tab first.');
-  }
-  return tab;
+  const tabs=await chrome.tabs.query({currentWindow:true});
+  const instagram=tabs.filter(tab=>tab.id && /^https:\/\/www\\.instagram\\.com\//.test(String(tab.url||'')));
+  if(!instagram.length) throw new Error('Open Instagram in Chrome first.');
+  return instagram.find(tab=>tab.active) || instagram[0];
 }
 
 async function send(type,payload={}){
@@ -57,7 +55,7 @@ async function checkSession(){
     else showStatus('Instagram is open, but no active login was detected.');
   }catch(error){
     setSession(false);
-    showStatus(error.message);
+    showStatus(error.message + ' Click OPEN INSTAGRAM to continue.');
   }
 }
 
@@ -270,7 +268,7 @@ document.getElementById('settingsSheet').addEventListener('click',function(e){if
 document.querySelectorAll('[data-close]').forEach(function(x){x.onclick=function(){closeSheet(x.dataset.close)}});
 
 // Use extension menu-less behavior: long-running operations are kept in this popup session.
-setTimeout(checkSession,150);
+setTimeout(checkSession,180);
 document.getElementById('motionSwitch').onclick=function(){
   document.body.classList.toggle('reduce-motion');
   this.classList.toggle('on');
@@ -280,9 +278,6 @@ document.getElementById('compactSwitch').onclick=function(){
   this.classList.toggle('on');
   document.body.classList.toggle('compact');
   chrome.storage.local.set({compact:this.classList.contains('on')});
-};
-document.getElementById('openWeb').onclick=function(){
-  chrome.tabs.create({url:'https://mahi-unliker.onrender.com'});
 };
 chrome.storage.local.get(['reduceMotion','compact'],function(prefs){
   if(prefs.reduceMotion){document.body.classList.add('reduce-motion');$('motionSwitch').classList.add('on');}
