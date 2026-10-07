@@ -17,3 +17,14 @@ https://github.com/davidarroyo1234/InstagramUnfollowers
 Copyright (c) David Arroyo. The upstream project is distributed under the MIT License.
 
 The launcher opens the upstream browser tool in the user's logged-in Instagram browser session; Instagram credentials are not collected by this feature.
+
+
+## InstaPy
+
+The **InstaPy Automation** workspace is based on the documented public APIs of:
+
+https://github.com/InstaPy/InstaPy
+
+The upstream project is distributed under the GNU General Public License v3.0 (GPL-3.0).
+
+This app does not bundle or copy the upstream InstaPy source code. The web UI generates a small original runner configuration that references the user's locally installed InstaPy package.
