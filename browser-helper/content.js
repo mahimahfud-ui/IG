@@ -17,6 +17,10 @@
     const headers = new Headers(options.headers || {});
     headers.set('Accept', 'application/json, text/plain, */*');
     headers.set('X-Requested-With', 'XMLHttpRequest');
+    // Instagram's desktop web client uses this public application id
+    // for its /api/v1 web requests. Without it some endpoints can reply
+    // with "useragent mismatch" even from a real signed-in browser tab.
+    headers.set('X-IG-App-ID', '936619743392459');
     const csrf = cookie('csrftoken');
     if (csrf) headers.set('X-CSRFToken', csrf);
 
