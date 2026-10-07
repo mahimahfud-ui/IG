@@ -1,19 +1,30 @@
 {
   "manifest_version": 3,
   "name": "Mahi Instagram Helper",
-  "version": "1.1.0",
-  "description": "A polished, privacy-first browser dashboard for managing your own Instagram following, likes, comments workflow, and InstaPy scripts.",
-  "permissions": ["activeTab", "tabs", "storage"],
-  "host_permissions": ["https://www.instagram.com/*"],
+  "version": "1.2.0",
+  "description": "Privacy-first Instagram utility dashboard for your own account.",
+  "host_permissions": [
+    "https://www.instagram.com/*"
+  ],
   "action": {
     "default_title": "Mahi Instagram Helper",
     "default_popup": "popup.html"
   },
   "content_scripts": [
     {
-      "matches": ["https://www.instagram.com/*"],
-      "js": ["content.js"],
+      "matches": [
+        "https://www.instagram.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
       "run_at": "document_idle"
     }
-  ]
+  ],
+  "version_name": "1.2.0 · Store Release",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "homepage_url": "https://github.com/mahimahfud-ui/IG"
 }
