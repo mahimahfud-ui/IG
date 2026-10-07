@@ -78,8 +78,8 @@ button,input,select{font:inherit}.app{padding:14px 14px 18px}
   <div class="metrics"><div class="metric"><b id="nfFollowing">0</b><small>FOLLOWING</small></div><div class="metric"><b id="nfFollowers">0</b><small>FOLLOWERS</small></div><div class="metric"><b id="nfCount">0</b><small>NOT BACK</small></div></div>
   <div class="control"><div class="control-title"><b>Unfollow controls</b><span>Saved locally</span></div><div class="control-grid">
     <div class="control-field"><label>Limit</label><input id="unfollowLimit" type="number" min="1" max="50" value="25"></div>
-    <div class="control-field"><label>Min sleep ms</label><input id="unfollowMinDelay" type="number" min="1000" max="60000" step="100" value="1500"></div>
-    <div class="control-field"><label>Max sleep ms</label><input id="unfollowMaxDelay" type="number" min="1000" max="60000" step="100" value="3000"></div>
+    <div class="control-field"><label>Min sleep (sec)</label><input id="unfollowMinDelay" type="number" min="1" max="60" step="0.5" value="1.5"></div>
+    <div class="control-field"><label>Max sleep (sec)</label><input id="unfollowMaxDelay" type="number" min="1" max="60" step="0.5" value="3"></div>
   </div><div class="control-help">Pacing delay between completed actions. Limit: 1–50.</div></div>
   <input class="input search" id="nfSearch" placeholder="Search username">
   <div class="toolbar"><button class="chip" id="nfAll" type="button">SELECT ALL</button><button class="chip" id="nfNone" type="button">CLEAR</button></div>
@@ -96,8 +96,8 @@ button,input,select{font:inherit}.app{padding:14px 14px 18px}
   <div class="progress-card"><div class="progress-top"><b>SCAN / ACTION PROGRESS</b><span id="likeProgressText">Ready</span></div><div class="progress" id="likeProgress" style="--progress:0%"></div></div>
   <div class="control"><div class="control-title"><b>Unlike controls</b><span>Saved locally</span></div><div class="control-grid">
     <div class="control-field"><label>Limit</label><input id="unlikeLimit" type="number" min="1" max="50" value="25"></div>
-    <div class="control-field"><label>Min sleep ms</label><input id="unlikeMinDelay" type="number" min="1000" max="60000" step="100" value="1500"></div>
-    <div class="control-field"><label>Max sleep ms</label><input id="unlikeMaxDelay" type="number" min="1000" max="60000" step="100" value="3000"></div>
+    <div class="control-field"><label>Min sleep (sec)</label><input id="unlikeMinDelay" type="number" min="1" max="60" step="0.5" value="1.5"></div>
+    <div class="control-field"><label>Max sleep (sec)</label><input id="unlikeMaxDelay" type="number" min="1" max="60" step="0.5" value="3"></div>
   </div><div class="control-help">Pacing delay between completed actions. Limit: 1–50.</div></div>
   <input class="input search" id="likeSearch" placeholder="Search creator or caption">
   <div class="toolbar"><button class="chip" id="likeAll" type="button">SELECT ALL</button><button class="chip" id="likeNone" type="button">CLEAR</button></div>
@@ -115,8 +115,8 @@ button,input,select{font:inherit}.app{padding:14px 14px 18px}
   <div class="progress-card"><div class="progress-top"><b>SCAN / DELETE PROGRESS</b><span id="commentProgressText">Ready</span></div><div class="progress" id="commentProgress" style="--progress:0%"></div></div>
   <div class="control"><div class="control-title"><b>Comment delete controls</b><span>Visible items only</span></div><div class="control-grid">
     <div class="control-field"><label>Limit</label><input id="commentsLimit" type="number" min="1" max="50" value="10"></div>
-    <div class="control-field"><label>Min sleep ms</label><input id="commentsMinDelay" type="number" min="1000" max="60000" step="100" value="2000"></div>
-    <div class="control-field"><label>Max sleep ms</label><input id="commentsMaxDelay" type="number" min="1000" max="60000" step="100" value="4000"></div>
+    <div class="control-field"><label>Min sleep (sec)</label><input id="commentsMinDelay" type="number" min="1" max="60" step="0.5" value="2"></div>
+    <div class="control-field"><label>Max sleep (sec)</label><input id="commentsMaxDelay" type="number" min="1" max="60" step="0.5" value="4"></div>
   </div><div class="control-help">Only currently visible Instagram Activity items are eligible for this cleanup.</div></div>
   <div class="toolbar"><button class="chip" id="commentAll" type="button">SELECT ALL</button><button class="chip" id="commentNone" type="button">CLEAR</button></div>
   <div class="list" id="commentList"><div class="notice">Open Comments Activity, scroll through your history, then scan the visible activity.</div></div>
