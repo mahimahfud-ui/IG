@@ -8,33 +8,18 @@ on:
       - ".github/workflows/chrome-webstore-publish.yml"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   publish:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Read extension version
-        id: version
-        shell: bash
-        run: |
-          VERSION=$(python - <<'PY'
-          import json
-          with open("browser-helper/manifest.json", encoding="utf-8") as f:
-              print(json.load(f)["version"])
-          PY
-          )
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-
-      - name: Package extension
-        shell: bash
-        run: |
-          rm -f mahi-instagram-helper.zip
-          cd browser-helper
-          zip -r ../mahi-instagram-helper.zip . -x "*.DS_Store"
+        with:
+          fetch-depth: 0
 
       - name: Check Web Store credentials
         id: ready
@@ -47,29 +32,56 @@ jobs:
           REFRESH_TOKEN: ${{ secrets.CHROME_WEBSTORE_REFRESH_TOKEN }}
         run: |
           if [ -z "$PUBLISHER_ID" ] || [ -z "$EXTENSION_ID" ] || [ -z "$CLIENT_ID" ] || [ -z "$CLIENT_SECRET" ] || [ -z "$REFRESH_TOKEN" ]; then
-            echo "Chrome Web Store credentials are not configured yet. Skipping publish."
-            echo "See STORE_LISTING.md for one-time setup."
+            echo "Web Store secrets are not configured yet. Skipping publish."
             exit 0
           fi
           echo "ready=true" >> "$GITHUB_OUTPUT"
 
-      - name: Get Google access token
-        id: token
+      - name: Auto bump patch version
         if: steps.ready.outputs.ready == 'true'
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("browser-helper/manifest.json")
+          data = json.loads(path.read_text(encoding="utf-8"))
+          major, minor, patch = [int(x) for x in data["version"].split(".")]
+          data["version"] = f"{major}.{minor}.{patch + 1}"
+          data["version_name"] = f"{data['version']} · Chrome Web Store"
+          path.write_text(json.dumps(data, indent=2) + "
+", encoding="utf-8")
+          print("Version:", data["version"])
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add browser-helper/manifest.json
+          git commit -m "chore: bump Chrome extension version [skip ci]" || true
+          git push
+
+      - name: Package extension
+        if: steps.ready.outputs.ready == 'true'
+        shell: bash
+        run: |
+          rm -f mahi-instagram-helper.zip
+          cd browser-helper
+          zip -r ../mahi-instagram-helper.zip . -x "*.DS_Store"
+
+      - name: Get Google access token
+        if: steps.ready.outputs.ready == 'true'
+        id: token
         env:
           CLIENT_ID: ${{ secrets.CHROME_WEBSTORE_CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CHROME_WEBSTORE_CLIENT_SECRET }}
           REFRESH_TOKEN: ${{ secrets.CHROME_WEBSTORE_REFRESH_TOKEN }}
         shell: bash
         run: |
-          TOKEN=$(curl -sS -X POST https://oauth2.googleapis.com/token \
-            -d client_id="$CLIENT_ID" \
-            -d client_secret="$CLIENT_SECRET" \
-            -d refresh_token="$REFRESH_TOKEN" \
-            -d grant_type=refresh_token | python -c "import sys,json; d=json.load(sys.stdin); print(d['access_token'])")
+          TOKEN=$(curl -sS -X POST https://oauth2.googleapis.com/token             -d client_id="$CLIENT_ID"             -d client_secret="$CLIENT_SECRET"             -d refresh_token="$REFRESH_TOKEN"             -d grant_type=refresh_token | python -c "import sys,json; d=json.load(sys.stdin); print(d['access_token'])")
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
-      - name: Upload new package
+      - name: Upload package to Chrome Web Store
         if: steps.ready.outputs.ready == 'true'
         env:
           TOKEN: ${{ steps.token.outputs.token }}
@@ -77,13 +89,9 @@ jobs:
           EXTENSION_ID: ${{ secrets.CHROME_WEBSTORE_EXTENSION_ID }}
         shell: bash
         run: |
-          curl --fail-with-body -sS \
-            -H "Authorization: Bearer $TOKEN" \
-            -X POST \
-            -T mahi-instagram-helper.zip \
-            "https://chromewebstore.googleapis.com/upload/v2/publishers/$PUBLISHER_ID/items/$EXTENSION_ID:upload"
+          curl --fail-with-body -sS             -H "Authorization: Bearer $TOKEN"             -X POST             -T mahi-instagram-helper.zip             "https://chromewebstore.googleapis.com/upload/v2/publishers/$PUBLISHER_ID/items/$EXTENSION_ID:upload"
 
-      - name: Publish for review
+      - name: Publish submission
         if: steps.ready.outputs.ready == 'true'
         env:
           TOKEN: ${{ steps.token.outputs.token }}
@@ -91,7 +99,4 @@ jobs:
           EXTENSION_ID: ${{ secrets.CHROME_WEBSTORE_EXTENSION_ID }}
         shell: bash
         run: |
-          curl --fail-with-body -sS \
-            -H "Authorization: Bearer $TOKEN" \
-            -X POST \
-            "https://chromewebstore.googleapis.com/v2/publishers/$PUBLISHER_ID/items/$EXTENSION_ID:publish"
+          curl --fail-with-body -sS             -H "Authorization: Bearer $TOKEN"             -X POST             "https://chromewebstore.googleapis.com/v2/publishers/$PUBLISHER_ID/items/$EXTENSION_ID:publish"
