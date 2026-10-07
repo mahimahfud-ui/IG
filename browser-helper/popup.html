@@ -33,6 +33,7 @@ button,input,select{font:inherit}.app{padding:14px 14px 18px}
 .setting{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.05)}.setting div{text-align:left}.setting b{font-size:8px}.setting span{display:block;color:#6e6a75;font-size:6px;margin-top:3px}.switch{width:39px;height:23px;border:0;border-radius:99px;background:#36323d;position:relative}.switch:after{content:'';position:absolute;left:3px;top:3px;width:17px;height:17px;border-radius:50%;background:#fff;transition:.2s}.switch.on{background:linear-gradient(100deg,#ff356b,#975dff)}.switch.on:after{transform:translateX(16px)}
 .compact .list{max-height:245px}.compact .card{padding:13px}.compact .welcome{padding-top:16px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.control{margin-top:10px;padding:10px;border:1px solid rgba(255,255,255,.06);border-radius:14px;background:rgba(255,255,255,.018)}.control-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}.control-title b{font-size:7px;letter-spacing:.08em;text-transform:uppercase}.control-title span{font-size:6px;color:#6d6975}.control-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.control-field{display:flex;flex-direction:column;gap:4px}.control-field label{font-size:6px;color:#77727e;text-transform:uppercase;letter-spacing:.06em;text-align:center}.control-field input{width:100%;height:34px;border-radius:9px;border:1px solid var(--line);background:rgba(255,255,255,.028);color:#fff;text-align:center;font-size:8px;outline:0}.control-help{margin-top:6px;text-align:center;color:#625e69;font-size:6px;line-height:1.45}.progress-card{margin-top:9px;padding:9px 10px;border-radius:13px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.018)}.progress-top{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:6px;color:#817c88}.progress-top b{color:#c9c4ce;font-size:7px}.progress{height:5px;margin-top:7px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden;position:relative}.progress:before{content:'';position:absolute;inset:0 auto 0 0;width:var(--progress,0%);background:linear-gradient(90deg,#ff356b,#975dff 70%,#5b91ff);border-radius:inherit;transition:width .25s ease}.progress.indeterminate:before{width:35%;animation:indeterminate 1.15s ease-in-out infinite}@keyframes indeterminate{0%{left:-35%}100%{left:100%}}.toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:50;padding:9px 12px;border:1px solid rgba(255,255,255,.1);border-radius:999px;background:rgba(20,19,27,.96);color:#ddd9e2;font-size:8px}.gear{width:30px;height:30px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.025);color:#aaa6b0}.top-actions{display:flex;align-items:center;gap:6px}.danger{border-color:rgba(255,111,142,.2)!important;color:#ffadbe!important}
 </style>
 </head>
 <body>
@@ -73,7 +74,13 @@ button,input,select{font:inherit}.app{padding:14px 14px 18px}
  <div class="card">
   <div class="card-head"><div class="icon">↗</div><h2>Non-Followers</h2><div class="sub">Accounts you follow that do not follow you back.</div></div>
   <button class="button primary" id="scanNF">SCAN NON-FOLLOWERS</button>
+  <div class="progress-card"><div class="progress-top"><b>SCAN PROGRESS</b><span id="nfProgressText">Ready</span></div><div class="progress" id="nfProgress" style="--progress:0%"></div></div>
   <div class="metrics"><div class="metric"><b id="nfFollowing">0</b><small>FOLLOWING</small></div><div class="metric"><b id="nfFollowers">0</b><small>FOLLOWERS</small></div><div class="metric"><b id="nfCount">0</b><small>NOT BACK</small></div></div>
+  <div class="control"><div class="control-title"><b>Unfollow controls</b><span>Saved locally</span></div><div class="control-grid">
+    <div class="control-field"><label>Limit</label><input id="unfollowLimit" type="number" min="1" max="50" value="25"></div>
+    <div class="control-field"><label>Min sleep ms</label><input id="unfollowMinDelay" type="number" min="1000" max="60000" step="100" value="1500"></div>
+    <div class="control-field"><label>Max sleep ms</label><input id="unfollowMaxDelay" type="number" min="1000" max="60000" step="100" value="3000"></div>
+  </div><div class="control-help">Pacing delay between completed actions. Limit: 1–50.</div></div>
   <input class="input search" id="nfSearch" placeholder="Search username">
   <div class="toolbar"><button class="chip" id="nfAll" type="button">SELECT ALL</button><button class="chip" id="nfNone" type="button">CLEAR</button></div>
   <div class="list" id="nfList"><div class="notice">Open Instagram and tap scan.</div></div>
@@ -86,6 +93,12 @@ button,input,select{font:inherit}.app{padding:14px 14px 18px}
  <div class="card">
   <div class="card-head"><div class="icon">♡</div><h2>Liked Posts</h2><div class="sub">Posts available to your current signed-in Instagram web session.</div></div>
   <button class="button primary" id="scanLikes">SCAN LIKED POSTS</button>
+  <div class="progress-card"><div class="progress-top"><b>SCAN / ACTION PROGRESS</b><span id="likeProgressText">Ready</span></div><div class="progress" id="likeProgress" style="--progress:0%"></div></div>
+  <div class="control"><div class="control-title"><b>Unlike controls</b><span>Saved locally</span></div><div class="control-grid">
+    <div class="control-field"><label>Limit</label><input id="unlikeLimit" type="number" min="1" max="50" value="25"></div>
+    <div class="control-field"><label>Min sleep ms</label><input id="unlikeMinDelay" type="number" min="1000" max="60000" step="100" value="1500"></div>
+    <div class="control-field"><label>Max sleep ms</label><input id="unlikeMaxDelay" type="number" min="1000" max="60000" step="100" value="3000"></div>
+  </div><div class="control-help">Pacing delay between completed actions. Limit: 1–50.</div></div>
   <input class="input search" id="likeSearch" placeholder="Search creator or caption">
   <div class="toolbar"><button class="chip" id="likeAll" type="button">SELECT ALL</button><button class="chip" id="likeNone" type="button">CLEAR</button></div>
   <div class="list" id="likeList"><div class="notice">Open Instagram and tap scan.</div></div>
@@ -99,7 +112,15 @@ button,input,select{font:inherit}.app{padding:14px 14px 18px}
   <div class="card-head"><div class="icon">◌</div><h2>Comments</h2><div class="sub">Instagram's own Activity page is used for your comment history.</div></div>
   <button class="button primary" id="openComments">OPEN COMMENTS ACTIVITY</button>
   <button class="button" id="scanComments">SCAN VISIBLE ACTIVITY</button>
+  <div class="progress-card"><div class="progress-top"><b>SCAN / DELETE PROGRESS</b><span id="commentProgressText">Ready</span></div><div class="progress" id="commentProgress" style="--progress:0%"></div></div>
+  <div class="control"><div class="control-title"><b>Comment delete controls</b><span>Visible items only</span></div><div class="control-grid">
+    <div class="control-field"><label>Limit</label><input id="commentsLimit" type="number" min="1" max="50" value="10"></div>
+    <div class="control-field"><label>Min sleep ms</label><input id="commentsMinDelay" type="number" min="1000" max="60000" step="100" value="2000"></div>
+    <div class="control-field"><label>Max sleep ms</label><input id="commentsMaxDelay" type="number" min="1000" max="60000" step="100" value="4000"></div>
+  </div><div class="control-help">Only currently visible Instagram Activity items are eligible for this cleanup.</div></div>
+  <div class="toolbar"><button class="chip" id="commentAll" type="button">SELECT ALL</button><button class="chip" id="commentNone" type="button">CLEAR</button></div>
   <div class="list" id="commentList"><div class="notice">Open Comments Activity, scroll through your history, then scan the visible activity.</div></div>
+  <div class="bulk" id="commentBulk"><div class="bulk-label" id="commentSelected">0 selected</div><button class="button danger" id="deleteComments" type="button">DELETE SELECTED</button><button class="button" id="commentNone2" type="button">CLEAR</button></div>
   <div class="status" id="commentResult"></div>
  </div>
 </section>
@@ -125,7 +146,7 @@ button,input,select{font:inherit}.app{padding:14px 14px 18px}
 <div class="notice">Privacy-first: the helper does not ask for your Instagram password and does not send session cookies to the Mahi server.</div>
 </div>
 
-<div class="sheet" id="settingsSheet"><div class="sheet-inner"><div class="handle"></div><div class="sheet-head"><b>Settings</b><button class="close" data-close="settingsSheet">×</button></div><div class="setting"><div><b>Reduce motion</b><span>Use calmer transitions and background effects.</span></div><button class="switch" id="motionSwitch"></button></div><div class="setting"><div><b>Keep extension compact</b><span>Prefer denser cards and shorter lists.</span></div><button class="switch on" id="compactSwitch"></button></div><button class="button" id="openWeb" style="margin-top:12px">OPEN MAHI WEB APP</button></div></div>
+<div class="sheet" id="settingsSheet"><div class="sheet-inner"><div class="handle"></div><div class="sheet-head"><b>Settings</b><button class="close" data-close="settingsSheet">×</button></div><div class="setting"><div><b>Reduce motion</b><span>Use calmer transitions and background effects.</span></div><button class="switch" id="motionSwitch"></button></div><div class="setting"><div><b>Keep extension compact</b><span>Prefer denser cards and shorter lists.</span></div><button class="switch on" id="compactSwitch"></button></div><div class="notice">Limits are capped at 50 per run and sleep settings are local pacing controls. Instagram may impose its own limits or change its web interface.</div><button class="button primary" id="saveControls" style="margin-top:10px">SAVE CONTROL SETTINGS</button></div></div>
 
 <script src="popup.js"></script>
 </body>
