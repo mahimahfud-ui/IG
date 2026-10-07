@@ -231,6 +231,11 @@
           });
           break;
 
+        case 'OPEN_COMMENTS':
+          window.location.href = 'https://www.instagram.com/your_activity/interactions/comments/';
+          sendResponse({ ok: true, data: { opened: true } });
+          break;
+
         case 'SCAN_VISIBLE_COMMENTS':
           sendResponse({
             ok: true,
