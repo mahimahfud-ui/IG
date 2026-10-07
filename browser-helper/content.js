@@ -221,6 +221,16 @@
           });
           break;
 
+        case 'GET_SESSION':
+          sendResponse({
+            ok: true,
+            data: {
+              loggedIn: !!userId(),
+              userId: userId()
+            }
+          });
+          break;
+
         case 'SCAN_VISIBLE_COMMENTS':
           sendResponse({
             ok: true,
