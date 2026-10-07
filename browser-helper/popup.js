@@ -1,4 +1,5 @@
-const state={nf:[],likes:[],nfSelected:new Set(),likeSelected:new Set(),session:false};
+const DEFAULTS={unfollow:{limit:25,minDelay:1500,maxDelay:3000},unlike:{limit:25,minDelay:1500,maxDelay:3000},comments:{limit:10,minDelay:2000,maxDelay:4000}};
+const state={nf:[],likes:[],comments:[],nfSelected:new Set(),likeSelected:new Set(),commentSelected:new Set(),session:false,settings:structuredClone(DEFAULTS)};
 
 const $=id=>document.getElementById(id);
 
@@ -76,6 +77,56 @@ function showStatus(message){
   document.body.appendChild(node);
   setTimeout(()=>node.remove(),2300);
 }
+function loadSettings(){
+  chrome.storage.local.get(['mahiSettings'],function(data){
+    const saved=data.mahiSettings||{};
+    state.settings={unfollow:Object.assign({},DEFAULTS.unfollow,saved.unfollow||{}),unlike:Object.assign({},DEFAULTS.unlike,saved.unlike||{}),comments:Object.assign({},DEFAULTS.comments,saved.comments||{})};
+    syncSettingsUI();
+  });
+}
+
+function normalizeConfig(kind){
+  const defaults=DEFAULTS[kind];
+  const limit=Math.max(1,Math.min(50,Number(document.getElementById(kind+'Limit').value)||defaults.limit));
+  const minDelay=Math.max(1000,Math.min(60000,Number(document.getElementById(kind+'MinDelay').value)||defaults.minDelay));
+  const maxDelay=Math.max(minDelay,Math.min(60000,Number(document.getElementById(kind+'MaxDelay').value)||defaults.maxDelay));
+  return {limit,minDelay,maxDelay};
+}
+
+function saveSettings(){
+  ['unfollow','unlike','comments'].forEach(function(kind){state.settings[kind]=normalizeConfig(kind)});
+  chrome.storage.local.set({mahiSettings:state.settings});
+  syncSettingsUI();
+  showStatus('Control settings saved.');
+}
+
+function syncSettingsUI(){
+  Object.keys(state.settings).forEach(function(kind){
+    const s=state.settings[kind];
+    const a=document.getElementById(kind+'Limit'),b=document.getElementById(kind+'MinDelay'),c=document.getElementById(kind+'MaxDelay');
+    if(a)a.value=s.limit;if(b)b.value=s.minDelay;if(c)c.value=s.maxDelay;
+  });
+}
+
+function renderProgress(data){
+  if(!data)return;
+  const map={nonFollowers:['nfProgress','nfProgressText'],unfollow:['nfProgress','nfProgressText'],likes:['likeProgress','likeProgressText'],unlike:['likeProgress','likeProgressText'],comments:['commentProgress','commentProgressText'],commentsDelete:['commentProgress','commentProgressText']};
+  const target=map[data.job];
+  if(!target)return;
+  const bar=document.getElementById(target[0]),label=document.getElementById(target[1]);
+  if(!bar||!label)return;
+  const total=Number(data.total||0);
+  const current=Number(data.processed!=null?data.processed:(data.scanned!=null?data.scanned:(data.overallScanned||0)));
+  const pct=total?Math.max(0,Math.min(100,current/total*100)):(data.done?100:25);
+  bar.style.setProperty('--progress',pct+'%');bar.classList.toggle('indeterminate',!total&&!data.done);
+  const parts=[];if(data.phase)parts.push(data.phase);
+  if(data.job==='nonFollowers')parts.push('scanned '+current+(total?' / '+total:''));
+  else if(data.job==='likes')parts.push('scanned '+current);
+  else{parts.push('processed '+current+(total?' / '+total:''));if(data.success!=null)parts.push('✓ '+data.success);if(data.failed!=null)parts.push('✕ '+data.failed);if(data.remaining!=null)parts.push(data.remaining+' left');}
+  label.textContent=parts.join('  ·  ');
+}
+
+chrome.runtime.onMessage.addListener(function(message){if(message?.type==='MAHI_PROGRESS')renderProgress(message.data);});
 
 $('checkSession').onclick=checkSession;
 
@@ -104,7 +155,9 @@ function renderNF(){
 }
 
 $('scanNF').onclick=async function(){
+  this.disabled=true;
   try{
+    renderProgress({job:'nonFollowers',phase:'Starting…',scanned:0,total:0,done:false});
     $('nfResult').textContent='Scanning Following + Followers…';
     const r=await send('SCAN_NON_FOLLOWERS');
     if(!r?.ok)throw new Error(r?.error||'Scan failed.');
@@ -117,6 +170,7 @@ $('scanNF').onclick=async function(){
     setSession(true);
     $('nfResult').textContent='Scan complete. Review before acting.';
   }catch(e){$('nfResult').textContent=e.message}
+  finally{this.disabled=false}
 };
 
 $('nfSearch').oninput=renderNF;
@@ -127,12 +181,14 @@ $('nfClear').onclick=function(){state.nfSelected.clear();renderNF();};
 $('unfollowSelected').onclick=async function(){
   const ids=[...state.nfSelected];
   if(!ids.length)return;
-  if(ids.length>25){$('nfResult').textContent='Select up to 25 accounts per action.';return}
+  const limit=state.settings.unfollow.limit;
+  if(ids.length>limit){$('nfResult').textContent='Your current limit is '+limit+'. Select '+limit+' or fewer.';return}
   if(!confirm('Unfollow '+ids.length+' selected account(s)?'))return;
   $('unfollowSelected').disabled=true;
   $('nfResult').textContent='Unfollowing selected…';
   try{
-    const r=await send('UNFOLLOW_SELECTED',{ids:ids});
+    renderProgress({job:'unfollow',phase:'Starting…',processed:0,total:ids.length,success:0,failed:0,remaining:ids.length,done:false});
+    const r=await send('UNFOLLOW_SELECTED',{ids:ids,settings:state.settings.unfollow});
     if(!r?.ok)throw new Error(r?.error||'Action failed.');
     const failed=new Set((r.data||[]).filter(x=>!x.ok).map(x=>x.id));
     state.nf=state.nf.filter(x=>!ids.includes(x.id)||failed.has(x.id));
@@ -161,7 +217,9 @@ function renderLikes(){
 }
 
 $('scanLikes').onclick=async function(){
+  this.disabled=true;
   try{
+    renderProgress({job:'likes',phase:'Starting…',scanned:0,total:0,done:false});
     $('likeResult').textContent='Loading liked posts…';
     const r=await send('SCAN_LIKES');
     if(!r?.ok)throw new Error(r?.error||'Scan failed.');
@@ -172,6 +230,7 @@ $('scanLikes').onclick=async function(){
     setSession(true);
     $('likeResult').textContent=state.likes.length+' liked posts loaded.';
   }catch(e){$('likeResult').textContent=e.message}
+  finally{this.disabled=false}
 };
 
 $('likeSearch').oninput=renderLikes;
@@ -182,12 +241,14 @@ $('likeClear').onclick=function(){state.likeSelected.clear();renderLikes();};
 $('unlikeSelected').onclick=async function(){
   const ids=[...state.likeSelected];
   if(!ids.length)return;
-  if(ids.length>25){$('likeResult').textContent='Select up to 25 posts per action.';return}
+  const limit=state.settings.unlike.limit;
+  if(ids.length>limit){$('likeResult').textContent='Your current limit is '+limit+'. Select '+limit+' or fewer.';return}
   if(!confirm('Unlike '+ids.length+' selected post(s)?'))return;
   $('unlikeSelected').disabled=true;
   $('likeResult').textContent='Unliking selected…';
   try{
-    const r=await send('UNLIKE_SELECTED',{ids:ids});
+    renderProgress({job:'unlike',phase:'Starting…',processed:0,total:ids.length,success:0,failed:0,remaining:ids.length,done:false});
+    const r=await send('UNLIKE_SELECTED',{ids:ids,settings:state.settings.unlike});
     if(!r?.ok)throw new Error(r?.error||'Action failed.');
     const failed=new Set((r.data||[]).filter(x=>!x.ok).map(x=>x.id));
     state.likes=state.likes.filter(x=>!ids.includes(x.id)||failed.has(x.id));
@@ -201,19 +262,46 @@ $('unlikeSelected').onclick=async function(){
 };
 
 $('openComments').onclick=function(){chrome.tabs.create({url:'https://www.instagram.com/your_activity/interactions/comments/'})};
+
+function renderComments(){
+  $('commentList').innerHTML=state.comments.length?state.comments.map(function(x){return '<div class="row"><input type="checkbox" data-id="'+esc(x.id)+'" '+(state.commentSelected.has(x.id)?'checked':'')+'><div><b>Comment activity</b><small>'+esc(x.text)+'</small></div><button class="open" data-open="'+esc(x.url)+'">OPEN</button></div>'}).join(''):'<div class="notice">Open Comments Activity, scroll, then scan visible activity.</div>';
+  $('commentList').querySelectorAll('input').forEach(function(box){box.onchange=function(){box.checked?state.commentSelected.add(box.dataset.id):state.commentSelected.delete(box.dataset.id);$('commentBulk').classList.toggle('show',state.commentSelected.size>0);selectedCount(state.commentSelected,'commentSelected')}});
+  $('commentList').querySelectorAll('[data-open]').forEach(function(button){button.onclick=function(){chrome.tabs.create({url:button.dataset.open})}});
+  selectedCount(state.commentSelected,'commentSelected');
+}
+
 $('scanComments').onclick=async function(){
+  this.disabled=true;
   try{
+    renderProgress({job:'comments',phase:'Reading visible activity',scanned:0,total:0,done:false});
     $('commentResult').textContent='Reading visible Instagram activity…';
     const r=await send('SCAN_VISIBLE_COMMENTS');
     if(!r?.ok)throw new Error(r?.error||'Could not read activity.');
-    const arr=r.data||[];
-    $('commentList').innerHTML=arr.length?arr.map(x=>'<div class="row"><div></div><div><b>Comment activity</b><small>'+esc(x.text)+'</small></div><button class="open" data-open="'+esc(x.url)+'">OPEN</button></div>').join(''):'<div class="notice">No visible activity. Open Comments Activity, scroll, then scan again.</div>';
-    $('commentList').querySelectorAll('[data-open]').forEach(function(button){button.onclick=function(){chrome.tabs.create({url:button.dataset.open})}});
-    $('commentResult').textContent=arr.length+' visible items found.';
-    setSession(true);
+    state.comments=r.data||[];state.commentSelected.clear();renderComments();
+    $('commentResult').textContent=state.comments.length+' visible items found.';setSession(true);
   }catch(e){$('commentResult').textContent=e.message}
+  finally{this.disabled=false}
 };
 
+$('commentAll').onclick=function(){state.comments.forEach(function(x){state.commentSelected.add(x.id)});renderComments()};
+$('commentNone').onclick=function(){state.commentSelected.clear();renderComments()};
+
+$('deleteComments').onclick=async function(){
+  const ids=[...state.commentSelected],limit=state.settings.comments.limit;
+  if(!ids.length)return;
+  if(ids.length>limit){$('commentResult').textContent='Your current limit is '+limit+'. Select '+limit+' or fewer.';return}
+  if(!confirm('Delete '+ids.length+' selected visible comment item(s)? This cannot be undone.'))return;
+  this.disabled=true;
+  try{
+    renderProgress({job:'commentsDelete',phase:'Starting…',processed:0,total:ids.length,success:0,failed:0,remaining:ids.length,done:false});
+    const r=await send('DELETE_COMMENTS_SELECTED',{ids:ids,settings:state.settings.comments});
+    if(!r?.ok)throw new Error(r?.error||'Delete failed.');
+    const failed=new Set((r.data||[]).filter(function(x){return !x.ok}).map(function(x){return x.id}));
+    state.comments=state.comments.filter(function(x){return !ids.includes(x.id)||failed.has(x.id)});state.commentSelected.clear();renderComments();
+    const ok=(r.data||[]).filter(function(x){return x.ok}).length;$('commentResult').textContent=ok+' comments deleted.'+(failed.size?' '+failed.size+' failed.':'');
+  }catch(e){$('commentResult').textContent=e.message}
+  finally{this.disabled=false}
+};
 function buildIpy(){
   const u=($('ipyUser').value||'YOUR_USERNAME').trim();
   const target=($('ipyTarget').value||'example').trim();
@@ -268,6 +356,7 @@ document.getElementById('settingsSheet').addEventListener('click',function(e){if
 document.querySelectorAll('[data-close]').forEach(function(x){x.onclick=function(){closeSheet(x.dataset.close)}});
 
 // Use extension menu-less behavior: long-running operations are kept in this popup session.
+loadSettings();
 setTimeout(checkSession,180);
 document.getElementById('motionSwitch').onclick=function(){
   document.body.classList.toggle('reduce-motion');
