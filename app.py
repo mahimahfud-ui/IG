@@ -368,6 +368,11 @@ def stop(job_id):
     return jsonify({"ok": True})
 
 
+@app.get("/privacy")
+def privacy():
+    return send_from_directory("web", "privacy.html")
+
+
 @app.get("/health")
 def health():
     cleanup_old_jobs()
