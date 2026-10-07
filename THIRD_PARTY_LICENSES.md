@@ -28,3 +28,11 @@ https://github.com/InstaPy/InstaPy
 The upstream project is distributed under the GNU General Public License v3.0 (GPL-3.0).
 
 This app does not bundle or copy the upstream InstaPy source code. The web UI generates a small original runner configuration that references the user's locally installed InstaPy package.
+
+## JSZip
+
+The **Account Data Center** uses JSZip in the browser to read user-selected Instagram export ZIP files locally.
+
+https://github.com/Stuk/jszip
+
+JSZip is distributed under the MIT License. The library is loaded from the jsDelivr/cdnjs browser CDN; no uploaded export ZIP is sent to the app server by the Data Center.
