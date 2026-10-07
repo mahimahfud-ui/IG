@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Mahi Instagram Helper",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Standalone Instagram utility dashboard using your existing signed-in browser session.",
   "host_permissions": [
     "https://www.instagram.com/*"
@@ -21,7 +21,7 @@
       "run_at": "document_idle"
     }
   ],
-  "version_name": "2.0.0 · Standalone Browser Session",
+  "version_name": "2.0.1 · Web Session Header Fix",
   "permissions": [
     "activeTab",
     "storage"
