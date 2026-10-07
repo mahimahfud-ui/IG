@@ -252,3 +252,25 @@
     return true;
   });
 })();
+
+(function(){
+  if(location.hostname!=='mahi-unliker.onrender.com' && location.hostname!=='localhost' && location.hostname!=='127.0.0.1') return;
+  window.addEventListener('message', function(event){
+    if(event.source!==window || event.data?.source!=='mahi-web') return;
+    chrome.runtime.sendMessage({
+      source:'mahi-web',
+      requestId:event.data.requestId,
+      type:event.data.type,
+      payload:event.data.payload||{}
+    }, function(response){
+      var message={
+        source:'mahi-extension',
+        requestId:event.data.requestId,
+        ok:!!(response&&response.ok),
+        data:response&&response.data,
+        error:response&&response.error
+      };
+      window.postMessage(message, location.origin);
+    });
+  });
+})();
