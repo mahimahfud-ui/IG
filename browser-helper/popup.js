@@ -4,7 +4,7 @@ const $=id=>document.getElementById(id);
 
 async function activeInstagramTab(){
   const tabs=await chrome.tabs.query({currentWindow:true});
-  const instagram=tabs.filter(tab=>tab.id && /^https:\/\/www\\.instagram\\.com\//.test(String(tab.url||'')));
+  const instagram=tabs.filter(tab=>tab.id && /^https:\/\/www\.instagram\.com\//.test(String(tab.url||'')));
   if(!instagram.length) throw new Error('Open Instagram in Chrome first.');
   return instagram.find(tab=>tab.active) || instagram[0];
 }
