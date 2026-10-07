@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Mahi Instagram Helper",
+  "version": "1.0.0",
+  "description": "Private browser-side helper for managing your own Instagram following and liked activity.",
+  "permissions": ["activeTab", "tabs", "storage"],
+  "host_permissions": ["https://www.instagram.com/*"],
+  "action": {
+    "default_title": "Mahi Instagram Helper",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.instagram.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
