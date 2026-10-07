@@ -88,7 +88,7 @@ body{background:#07070b}
 .hero h1{margin:16px auto 15px;max-width:760px;text-align:center}
 .hero p{margin:0 auto;max-width:600px;text-align:center}
 .hero-meta{justify-content:center}
-.service-strip{position:relative;top:auto;grid-template-columns:repeat(4,minmax(0,1fr));max-width:920px;margin:10px auto 16px;padding:5px;background:rgba(7,7,11,.45)}
+.service-strip{position:relative;top:auto;grid-template-columns:repeat(5,minmax(0,1fr));max-width:920px;margin:10px auto 16px;padding:5px;background:rgba(7,7,11,.45)}
 .service{display:flex;flex-direction:column;align-items:center;text-align:center;min-height:112px}
 .service p{max-width:190px}
 .workspace{text-align:center}
@@ -118,8 +118,39 @@ body{background:#07070b}
 .orb-b{width:38vw;height:38vw;min-width:250px;min-height:250px;right:-12vw;top:28vh;background:radial-gradient(circle at 50% 50%,rgba(151,93,255,.22),transparent 68%)}
 .orb-c{width:30vw;height:30vw;min-width:210px;min-height:210px;left:36vw;top:62vh;background:radial-gradient(circle at 50% 50%,rgba(77,159,255,.16),transparent 70%)}
 .scroll-grid{position:absolute;inset:-20%;background:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(circle at center,#000 0%,transparent 75%);opacity:.45;transform:perspective(500px) rotateX(65deg) translateY(6%);transform-origin:center top}
-@media(max-width:900px){.service-strip{grid-template-columns:repeat(4,minmax(185px,1fr));overflow-x:auto}.service{scroll-snap-align:center}.service-strip{scrollbar-width:none}.service-strip::-webkit-scrollbar{display:none}}
-@media(max-width:620px){.shell{padding:12px 12px 104px}.hero{padding:27px 0 16px}.hero h1{font-size:43px}.service-strip{grid-template-columns:repeat(4,68vw)}.service{min-height:108px;padding:14px}.info h3{font-size:25px}.login{padding:18px}.dock{width:calc(100vw - 18px)}}
+@media(max-width:900px){.service-strip{grid-template-columns:repeat(5,minmax(185px,1fr));overflow-x:auto}.service{scroll-snap-align:center}.service-strip{scrollbar-width:none}.service-strip::-webkit-scrollbar{display:none}}
+@media(max-width:620px){.shell{padding:12px 12px 104px}.hero{padding:27px 0 16px}.hero h1{font-size:43px}.service-strip{grid-template-columns:repeat(5,68vw)}.service{min-height:108px;padding:14px}.info h3{font-size:25px}.login{padding:18px}.dock{width:calc(100vw - 18px)}}
+
+.hero-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:17px}
+.center-panel{max-width:980px;margin:0 auto}
+.data-card{padding:20px}
+.dropzone{border:1px dashed rgba(255,255,255,.14);border-radius:19px;padding:26px 18px;text-align:center;background:rgba(255,255,255,.018);transition:.2s}
+.dropzone.drag{border-color:rgba(255,91,127,.58);background:rgba(255,53,107,.06)}
+.dropzone strong{display:block;font:600 18px 'Space Grotesk';margin-bottom:7px}
+.dropzone p{margin:0 auto 13px;max-width:540px;color:#7d7985;font-size:9px;line-height:1.6}
+.import-input{display:none}
+.data-toolbar{display:grid;grid-template-columns:1fr auto;gap:9px;align-items:center;margin-top:12px}
+.search{height:42px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.03);color:#fff;padding:0 12px;text-align:center;outline:0;font-size:10px}
+.filter-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.filter{padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.025);color:#8f8b98;font-size:8px}
+.filter.active{color:#fff;border-color:rgba(255,91,127,.36);background:rgba(255,53,107,.08)}
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.stat{padding:12px 8px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025)}
+.stat b{display:block;font:600 17px 'Space Grotesk';color:#fff}.stat span{display:block;color:#74717c;font-size:7px;margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.list-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:15px 0 8px}.list-head b{font:600 14px 'Space Grotesk'}
+.select-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
+.mini-btn{border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.03);color:#aaa6b1;padding:7px 9px;font-size:7px}
+.items{display:grid;gap:7px;max-height:390px;overflow:auto;padding-right:2px}
+.item{display:grid;grid-template-columns:30px 1fr auto;gap:9px;align-items:center;padding:10px;border:1px solid rgba(255,255,255,.06);border-radius:14px;background:rgba(255,255,255,.022);text-align:left}
+.item:hover{background:rgba(255,255,255,.037)}
+.check{width:18px;height:18px;accent-color:#ff4f78}
+.item-main b{display:block;font-size:9px}.item-main span{display:block;color:#73707c;font-size:7px;line-height:1.5;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:520px}
+.item-action{padding:7px 8px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.03);color:#aaa6b0;font-size:7px}
+.empty{padding:34px 10px;text-align:center;color:#74717c;font-size:9px}.empty strong{display:block;color:#aaa6b0;font-size:12px;margin-bottom:5px}
+.bulkbar{display:none;position:sticky;bottom:6px;z-index:2;margin-top:10px;padding:9px;border:1px solid rgba(255,255,255,.1);border-radius:15px;background:rgba(18,17,24,.91);backdrop-filter:blur(18px);box-shadow:0 14px 40px rgba(0,0,0,.3)}
+.bulkbar.show{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap}.bulkbar span{font-size:8px;color:#9a96a2}
+.connect-note{margin-top:12px;padding:12px;border-radius:13px;background:rgba(255,255,255,.02);border:1px solid var(--line);color:#77737f;font-size:8px;line-height:1.6}
+@media(max-width:620px){.hero-actions{flex-direction:column}.hero-actions .btn{width:100%}.stat-row{grid-template-columns:repeat(2,1fr)}.data-toolbar{grid-template-columns:1fr}.item{grid-template-columns:25px 1fr auto}.item-main span{max-width:58vw}}
 </style>
 </head>
 <body>
@@ -139,6 +170,7 @@ body{background:#07070b}
   <div class="eyebrow">ONE APP · FOUR SERVICES</div>
   <h1>Your social account,<br><span class="grad">under your control.</span></h1>
   <p>A polished, mobile-first control center for personal Instagram cleanup and utility workflows.</p>
+  <div class="hero-actions"><button class="btn primary" id="connectInstagram" type="button">CONNECT INSTAGRAM</button><button class="btn secondary" id="openDataCenter" type="button">IMPORT INSTAGRAM DATA</button></div>
   <div class="hero-meta"><span class="meta-pill">● Ready</span><span class="meta-pill">4 tools connected</span><span class="meta-pill">Private workspace</span></div>
 </section>
 
@@ -265,8 +297,8 @@ body{background:#07070b}
 </div>
 
 <script>
-const services=[...document.querySelectorAll('.service')],pages={likes:'likes',comments:'comments',nonfollowers:'nonfollowers',instapy:'instapy'};
-function activate(key){services.forEach(s=>s.classList.toggle('active',s.dataset.service===key));Object.values(pages).forEach(id=>document.getElementById(id).classList.toggle('active',id===pages[key]));document.querySelector('#'+pages[key]).scrollIntoView({behavior:'smooth',block:'start'})}
+const services=[...document.querySelectorAll('.service')],pages={likes:'likes',comments:'comments',nonfollowers:'nonfollowers',instapy:'instapy',data:'dataCenter'};
+function activate(key){services.forEach(s=>s.classList.toggle('active',s.dataset.service===key));Object.values(pages).forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('active',id===pages[key])});const dc=document.getElementById('dataCenter');if(dc)dc.style.display=key==='data'?'block':'none';const target=document.getElementById(pages[key]);if(target)target.scrollIntoView({behavior:'smooth',block:'start'})}
 services.forEach(s=>s.addEventListener('click',()=>activate(s.dataset.service)));
 document.querySelectorAll('[data-service-jump]').forEach(x=>x.addEventListener('click',()=>activate(x.dataset.serviceJump)));
 
@@ -405,6 +437,86 @@ if(window.THREE && !reduceMotion){
   }
 }
 
+
+
+/* local Instagram export data center */
+const dataInput=document.getElementById('dataFiles'),drop=document.getElementById('dropzone'),dataList=document.getElementById('dataList'),dataMsg=document.getElementById('dataMsg'),dataSearch=document.getElementById('dataSearch'),dataFilters=[...document.querySelectorAll('[data-data-view]')];
+const dataState={followers:[],following:[],likes:[],comments:[],view:'nonfollowers',selected:new Set()};
+function userKey(item){let s=(item.username||item.title||'').toString().trim().toLowerCase();if(!s&&item.href){try{s=new URL(item.href).pathname.split('/').filter(Boolean)[0]?.toLowerCase()||''}catch(_){}}return s.replace(/^@/,'')}
+function collectRecords(node,fileName,arr=[]){
+  if(!node)return arr;
+  if(Array.isArray(node)){node.forEach(x=>collectRecords(x,fileName,arr));return arr}
+  if(typeof node!=='object')return arr;
+  if(Array.isArray(node.string_list_data)&&node.string_list_data.length){
+    node.string_list_data.forEach(x=>{
+      if(typeof x!=='object')return;
+      const href=x.href||'';const value=x.value||'';const title=node.title||node.username||'';
+      arr.push({title:title||value||'Item',username:title||'',href,value,date:x.timestamp?new Date(x.timestamp*1000).toLocaleDateString():'',file:fileName});
+    });
+  }
+  Object.keys(node).forEach(k=>{if(k!=='string_list_data')collectRecords(node[k],fileName,arr)});
+  return arr;
+}
+function unique(arr,keyFn){const seen=new Set(),out=[];for(const x of arr){const k=keyFn(x)||JSON.stringify(x);if(!seen.has(k)){seen.add(k);out.push(x)}}return out}
+function classify(name,json){
+  const n=name.toLowerCase();const records=collectRecords(json,name);
+  if(n.includes('followers'))dataState.followers.push(...records);
+  if(n.includes('following'))dataState.following.push(...records);
+  if(n.includes('liked')||n.includes('likes'))dataState.likes.push(...records);
+  if(n.includes('comment'))dataState.comments.push(...records);
+}
+function recompute(){
+  ['followers','following','likes','comments'].forEach(k=>dataState[k]=unique(dataState[k],x=>userKey(x)+'|'+(x.href||'')+'|'+(x.value||'')));
+  document.getElementById('statFollowers').textContent=dataState.followers.map(userKey).filter(Boolean).filter((x,i,a)=>a.indexOf(x)===i).length;
+  document.getElementById('statFollowing').textContent=dataState.following.map(userKey).filter(Boolean).filter((x,i,a)=>a.indexOf(x)===i).length;
+  const followerSet=new Set(dataState.followers.map(userKey).filter(Boolean));
+  const non=dataState.following.filter(x=>{const u=userKey(x);return u&&!followerSet.has(u)});
+  document.getElementById('statNon').textContent=unique(non,userKey).length;
+  document.getElementById('statActivity').textContent=dataState.likes.length+dataState.comments.length;
+  renderData();
+}
+function currentItems(){
+ const q=(dataSearch.value||'').trim().toLowerCase();let arr=[];
+ if(dataState.view==='nonfollowers'){const fs=new Set(dataState.followers.map(userKey));arr=unique(dataState.following.filter(x=>{const u=userKey(x);return u&&!fs.has(u)}),userKey)}
+ else arr=dataState[dataState.view]||[];
+ if(q)arr=arr.filter(x=>(x.title+' '+x.username+' '+x.value+' '+x.href).toLowerCase().includes(q));
+ return arr;
+}
+function renderData(){
+ const arr=currentItems(),title={nonfollowers:'Not following you back',following:'Following',followers:'Followers',likes:'Liked posts',comments:'Your comments'}[dataState.view]||'Activity';
+ document.getElementById('listTitle').textContent=title;document.getElementById('listCount').textContent=arr.length+' items';
+ dataList.innerHTML='';
+ if(!arr.length){dataList.innerHTML='<div class="empty"><strong>No matching items</strong>Import the relevant Instagram export JSON or change your search.</div>'}
+ arr.slice(0,600).forEach((x,i)=>{const key=(dataState.view+'|'+i+'|'+(x.href||'')+'|'+userKey(x));const row=document.createElement('div');row.className='item';row.innerHTML='<input class="check" type="checkbox" '+(dataState.selected.has(key)?'checked':'')+'><div class="item-main"><b>'+escapeHtml(x.title||x.username||'Instagram item')+'</b><span>'+escapeHtml(x.value||x.href||x.date||'')+'</span></div><button class="item-action" type="button">OPEN</button>';row.querySelector('.check').onchange=e=>{e.target.checked?dataState.selected.add(key):dataState.selected.delete(key);updateBulk()};row.querySelector('.item-action').onclick=()=>{if(x.href)window.open(x.href,'_blank','noopener');else showToast('No direct URL in export')};dataList.appendChild(row)});
+ updateBulk();
+}
+function escapeHtml(v){return String(v).replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]))}
+function updateBulk(){const n=dataState.selected.size;document.getElementById('selectedCount').textContent=n+' selected';document.getElementById('bulkBar').classList.toggle('show',n>0)}
+function selectAllVisible(){const arr=currentItems();arr.forEach((x,i)=>dataState.selected.add(dataState.view+'|'+i+'|'+(x.href||'')+'|'+userKey(x)));renderData()}
+dataFilters.forEach(b=>b.onclick=()=>{dataFilters.forEach(x=>x.classList.remove('active'));b.classList.add('active');dataState.view=b.dataset.dataView;dataState.selected.clear();renderData()});
+dataSearch.oninput=()=>{dataState.selected.clear();renderData()};
+document.getElementById('selectAll').onclick=selectAllVisible;
+document.getElementById('clearSelect').onclick=()=>{dataState.selected.clear();renderData()};
+document.getElementById('copySelected').onclick=()=>{const arr=currentItems(),set=new Set(dataState.selected);const names=[];arr.forEach((x,i)=>{const k=dataState.view+'|'+i+'|'+(x.href||'')+'|'+userKey(x);if(set.has(k))names.push(x.username||x.title||userKey(x))});if(!names.length)return showToast('Nothing selected');navigator.clipboard.writeText([...new Set(names)].join('\\n')).then(()=>showToast('Selected names copied'))};
+document.getElementById('bulkPrimary').onclick=()=>{if(dataState.view==='nonfollowers'){window.open('https://davidarroyo1234.github.io/InstagramUnfollowers/','_blank','noopener');showToast('Non-followers tool opened')}else if(dataState.view==='comments'){window.open('https://www.instagram.com/your_activity/interactions/comments','_blank','noopener');showToast('Instagram comments opened')}else if(dataState.view==='likes'){window.open('https://www.instagram.com/your_activity/interactions/likes','_blank','noopener');showToast('Instagram likes activity opened')}else{showToast('Select a supported action from the list')}}
+async function importDataFiles(files){
+ for(const file of files){
+  try{
+   if(file.name.toLowerCase().endsWith('.zip')){
+    const zip=await JSZip.loadAsync(file);const entries=Object.values(zip.files).filter(x=>!x.dir&&x.name.toLowerCase().endsWith('.json'));
+    for(const z of entries){const txt=await z.async('text');try{classify(z.name,JSON.parse(txt))}catch(_){}}
+   }else{const txt=await file.text();classify(file.name,JSON.parse(txt))}
+  }catch(e){dataMsg.textContent='Could not read '+file.name}
+ }
+ recompute();dataMsg.textContent='Import complete. Files are processed locally in this browser.';showToast('Instagram data imported');
+}
+document.getElementById('chooseData').onclick=()=>dataInput.click();
+dataInput.onchange=e=>importDataFiles([...e.target.files]);
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag')}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag')}));
+drop.addEventListener('drop',e=>{const files=[...e.dataTransfer.files];if(files.length)importDataFiles(files)});
+document.getElementById('openDataCenter').onclick=()=>{activate('data');setTimeout(()=>document.getElementById('dataCenter').scrollIntoView({behavior:'smooth'}),50)};
+document.getElementById('connectInstagram').onclick=()=>window.open('https://www.instagram.com/accounts/login/','_blank','noopener');
 
 /* scroll-linked ambient motion */
 const orbA=document.querySelector('.orb-a'),orbB=document.querySelector('.orb-b'),orbC=document.querySelector('.orb-c'),grid=document.querySelector('.scroll-grid');
