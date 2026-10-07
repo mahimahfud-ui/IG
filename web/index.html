@@ -14,16 +14,16 @@
 #bg{position:fixed;inset:0;z-index:0;pointer-events:none}.aurora{position:fixed;inset:-25%;z-index:0;pointer-events:none;background:radial-gradient(circle at 18% 22%,rgba(255,53,107,.12),transparent 28%),radial-gradient(circle at 82% 20%,rgba(151,93,255,.13),transparent 28%),radial-gradient(circle at 55% 82%,rgba(77,159,255,.09),transparent 30%);filter:blur(38px);animation:drift 15s ease-in-out infinite alternate}@keyframes drift{to{transform:translate3d(4%,-2%,0) scale(1.04)}}
 .shell{position:relative;z-index:2;max-width:1280px;margin:auto;padding:18px 22px 100px}.header{display:flex;justify-content:space-between;align-items:center;height:54px}.brand{display:flex;align-items:center;gap:10px}.mark{width:38px;height:38px;border-radius:13px;background:linear-gradient(135deg,#ff3a71,#975dff 56%,#4d9fff);position:relative;box-shadow:0 0 34px rgba(255,53,107,.22)}.mark:before{content:'';position:absolute;inset:9px;border:2px solid #fff;border-radius:9px}.mark:after{content:'';position:absolute;width:5px;height:5px;top:8px;right:8px;border-radius:50%;background:#fff}.brand strong{font:700 16px 'Space Grotesk';letter-spacing:-.03em}.brand small{display:block;color:#6f6c78;font-size:8px;letter-spacing:.16em;text-transform:uppercase;margin-top:3px}.secure{display:flex;align-items:center;gap:8px;padding:8px 11px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.03);color:#8c8996;font-size:9px}.secure i{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 11px rgba(82,227,154,.75)}
 .hero{padding:46px 2px 24px}.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:9px;letter-spacing:.19em;text-transform:uppercase;color:#aaa7b3}.eyebrow:before{content:'';width:25px;height:1px;background:linear-gradient(90deg,var(--pink),var(--purple))}.hero h1{font:700 clamp(45px,7vw,82px)/.94 'Space Grotesk';letter-spacing:-.07em;margin:17px 0 17px;max-width:820px}.grad{color:transparent;background:linear-gradient(105deg,#fff 0%,#ff5b82 38%,#a96fff 73%,#76bfff 100%);-webkit-background-clip:text;background-clip:text}.hero p{max-width:650px;color:#9996a4;font-size:12px;line-height:1.75;margin:0}
-.service-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}.service{position:relative;text-align:left;padding:18px;border:1px solid var(--line);border-radius:20px;background:rgba(13,13,18,.72);backdrop-filter:blur(24px);color:#fff;transition:.25s ease;overflow:hidden}.service:after{content:'';position:absolute;inset:auto -30% -70% 20%;height:120px;background:radial-gradient(circle,rgba(255,53,107,.15),transparent 65%);pointer-events:none}.service:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.15)}.service.active{border-color:rgba(255,87,126,.45);background:linear-gradient(145deg,rgba(255,53,107,.11),rgba(34,27,49,.72));box-shadow:0 18px 55px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.04)}.service .num{font:600 9px 'Space Grotesk';letter-spacing:.16em;color:#706d78}.service h2{font:600 18px 'Space Grotesk';letter-spacing:-.03em;margin:11px 0 5px}.service p{font-size:9px;line-height:1.55;color:#87838f;margin:0}.service .mini{display:inline-flex;margin-top:12px;padding:6px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.08);font-size:7px;color:#9995a1}.service.active .mini{color:#ffafc1;border-color:rgba(255,87,126,.2)}
+.service-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}.service{position:relative;text-align:left;padding:18px;border:1px solid var(--line);border-radius:20px;background:rgba(13,13,18,.72);backdrop-filter:blur(24px);color:#fff;transition:.25s ease;overflow:hidden}.service:after{content:'';position:absolute;inset:auto -30% -70% 20%;height:120px;background:radial-gradient(circle,rgba(255,53,107,.15),transparent 65%);pointer-events:none}.service:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.15)}.service.active{border-color:rgba(255,87,126,.45);background:linear-gradient(145deg,rgba(255,53,107,.11),rgba(34,27,49,.72));box-shadow:0 18px 55px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.04)}.service .num{font:600 9px 'Space Grotesk';letter-spacing:.16em;color:#706d78}.service h2{font:600 18px 'Space Grotesk';letter-spacing:-.03em;margin:11px 0 5px}.service p{font-size:9px;line-height:1.55;color:#87838f;margin:0}.service .mini{display:inline-flex;margin-top:12px;padding:6px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.08);font-size:7px;color:#9995a1}.service.active .mini{color:#ffafc1;border-color:rgba(255,87,126,.2)}
 .workspace{display:none;margin-top:18px;animation:in .35s cubic-bezier(.2,.75,.2,1)}.workspace.active{display:block}@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:16px}.card{border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(145deg,rgba(23,22,30,.79),rgba(10,10,14,.78));backdrop-filter:blur(26px);box-shadow:0 24px 75px rgba(0,0,0,.28)}
 .info{padding:31px;min-height:385px;display:flex;flex-direction:column;justify-content:space-between}.badge{display:inline-flex;align-items:center;gap:7px;width:max-content;padding:7px 9px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.025);font-size:8px;letter-spacing:.11em;text-transform:uppercase;color:#9b97a4}.info h3{font:600 31px/1.03 'Space Grotesk';letter-spacing:-.045em;margin:14px 0 10px;max-width:570px}.info p{margin:0;color:#8e8a97;font-size:10px;line-height:1.75;max-width:600px}.steps{display:flex;flex-wrap:wrap;gap:7px;margin-top:24px}.steps span{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.022);font-size:8px;color:#9c98a5}
-.login{padding:24px;position:relative;overflow:hidden}.login:before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 100% 0%,rgba(151,93,255,.12),transparent 31%),radial-gradient(circle at 0% 100%,rgba(255,53,107,.08),transparent 30%)}.login>*{position:relative}.login-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:18px}.login-head strong{font:600 20px 'Space Grotesk';letter-spacing:-.03em}.login-head span{color:#71707b;text-align:right;font-size:8px;line-height:1.5}.field{margin:11px 0}.field label{display:block;color:#77737f;font-size:8px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px}.input{width:100%;height:45px;border-radius:13px;border:1px solid rgba(255,255,255,.075);background:rgba(255,255,255,.035);padding:0 12px;color:#fff;outline:0;font-size:11px;transition:.2s}.input:focus{border-color:rgba(255,91,127,.55);box-shadow:0 0 0 4px rgba(255,53,107,.07)}.input::placeholder{color:#5f5c66}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.btn{min-height:45px;border-radius:13px;border:0;padding:0 13px;color:#fff;font-weight:600;font-size:10px;transition:.22s;position:relative;overflow:hidden}.btn:before{content:'';position:absolute;inset:0;transform:translateX(-105%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);transition:.5s}.btn:hover:before{transform:translateX(105%)}.btn:hover{transform:translateY(-1px)}.primary{background:linear-gradient(100deg,#ff315d,#975dff 62%,#557fff);box-shadow:0 14px 32px rgba(255,53,107,.16)}.secondary{background:rgba(255,255,255,.035);border:1px solid var(--line);color:#d7d3dc}.full{width:100%}.hint{margin-top:10px;color:#716e79;font-size:8px;line-height:1.65}.status{display:none;margin-top:13px;padding:12px;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.025)}.status.show{display:block;animation:fade .25s ease}@keyframes fade{from{opacity:0}to{opacity:1}}.status-top{display:flex;justify-content:space-between;color:#8f8b97;font-size:8px;margin-bottom:7px}.status-top b{color:#fff}.bar{height:6px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}.fill{width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ff315d,#a24fff,#5c82ff);transition:width .42s ease}.msg{margin-top:8px;min-height:15px;color:#85818d;font-size:8px}
+.login{padding:24px;position:relative;overflow:hidden}.login:before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 100% 0%,rgba(151,93,255,.12),transparent 31%),radial-gradient(circle at 0% 100%,rgba(255,53,107,.08),transparent 30%)}.login>*{position:relative}.login-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:18px}.login-head strong{font:600 20px 'Space Grotesk';letter-spacing:-.03em}.login-head span{color:#71707b;text-align:right;font-size:8px;line-height:1.5}.field{margin:11px 0}.field label{display:block;color:#77737f;font-size:8px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px}.input{width:100%;height:45px;border-radius:13px;border:1px solid rgba(255,255,255,.075);background:rgba(255,255,255,.035);padding:0 12px;color:#fff;outline:0;font-size:11px;transition:.2s}.input:focus{border-color:rgba(255,91,127,.55);box-shadow:0 0 0 4px rgba(255,53,107,.07)}.input::placeholder{color:#5f5c66}.input option{background:#17161e;color:#fff}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.btn{min-height:45px;border-radius:13px;border:0;padding:0 13px;color:#fff;font-weight:600;font-size:10px;transition:.22s;position:relative;overflow:hidden}.btn:before{content:'';position:absolute;inset:0;transform:translateX(-105%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);transition:.5s}.btn:hover:before{transform:translateX(105%)}.btn:hover{transform:translateY(-1px)}.primary{background:linear-gradient(100deg,#ff315d,#975dff 62%,#557fff);box-shadow:0 14px 32px rgba(255,53,107,.16)}.secondary{background:rgba(255,255,255,.035);border:1px solid var(--line);color:#d7d3dc}.full{width:100%}.hint{margin-top:10px;color:#716e79;font-size:8px;line-height:1.65}.status{display:none;margin-top:13px;padding:12px;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.025)}.status.show{display:block;animation:fade .25s ease}@keyframes fade{from{opacity:0}to{opacity:1}}.status-top{display:flex;justify-content:space-between;color:#8f8b97;font-size:8px;margin-bottom:7px}.status-top b{color:#fff}.bar{height:6px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}.fill{width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ff315d,#a24fff,#5c82ff);transition:width .42s ease}.msg{margin-top:8px;min-height:15px;color:#85818d;font-size:8px}
 .browser-login{margin:0 0 12px;padding:13px;border-radius:13px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025)}.browser-login b{font-size:10px}.browser-login p{margin:5px 0 0;color:#77737e;font-size:8px;line-height:1.6}.linkrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
 .footer{margin-top:24px;display:flex;justify-content:space-between;color:#65616c;font-size:8px}.warn{color:#ff8da5}
 .toast{position:fixed;left:50%;bottom:22px;z-index:20;transform:translate(-50%,18px);opacity:0;pointer-events:none;padding:10px 14px;border-radius:999px;background:rgba(22,21,29,.95);border:1px solid var(--line);box-shadow:0 16px 50px rgba(0,0,0,.4);color:#dedbe3;font-size:9px;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:900px){.shell{padding:12px 14px 86px}.header{height:48px}.hero{padding:34px 1px 17px}.grid{grid-template-columns:1fr}.info{min-height:auto}.service-strip{grid-template-columns:repeat(3,minmax(205px,1fr));overflow-x:auto;padding:1px 1px 7px;scroll-snap-type:x mandatory}.service{scroll-snap-align:start}.service::-webkit-scrollbar,.service-strip::-webkit-scrollbar{height:4px}.service-strip::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:99px}}
-@media(max-width:620px){.brand small{display:none}.secure{font-size:8px}.secure i{width:5px;height:5px}.hero h1{font-size:47px}.hero p{font-size:10px}.service-strip{grid-template-columns:repeat(3,74vw)}.service{padding:16px}.service h2{font-size:17px}.grid{gap:12px}.info{padding:21px}.info h3{font-size:27px}.login{padding:18px}.two{grid-template-columns:1fr}.linkrow{grid-template-columns:1fr}.footer{font-size:7px}}
+@media(max-width:900px){.shell{padding:12px 14px 86px}.header{height:48px}.hero{padding:34px 1px 17px}.grid{grid-template-columns:1fr}.info{min-height:auto}.service-strip{grid-template-columns:repeat(4,minmax(205px,1fr));overflow-x:auto;padding:1px 1px 7px;scroll-snap-type:x mandatory}.service{scroll-snap-align:start}.service::-webkit-scrollbar,.service-strip::-webkit-scrollbar{height:4px}.service-strip::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:99px}}
+@media(max-width:620px){.brand small{display:none}.secure{font-size:8px}.secure i{width:5px;height:5px}.hero h1{font-size:47px}.hero p{font-size:10px}.service-strip{grid-template-columns:repeat(4,74vw)}.service{padding:16px}.service h2{font-size:17px}.grid{gap:12px}.info{padding:21px}.info h3{font-size:27px}.login{padding:18px}.two{grid-template-columns:1fr}.linkrow{grid-template-columns:1fr}.footer{font-size:7px}}
 </style>
 </head>
 <body>
@@ -35,15 +35,16 @@
 </header>
 
 <section class="hero">
-  <div class="eyebrow">ONE APP · THREE SERVICES</div>
+  <div class="eyebrow">ONE APP · FOUR SERVICES</div>
   <h1>Everything you need to <span class="grad">clean up.</span></h1>
-  <p>Three focused Instagram cleanup services, kept together on one mobile-first screen. Pick a service from the top and use its own login or browser-session connection.</p>
+  <p>Four focused Instagram utility services, kept together on one mobile-first screen. Pick a service from the top and use its own connection or automation workspace.</p>
 </section>
 
 <nav class="service-strip" aria-label="Cleanup services">
   <button class="service active" data-service="likes" type="button"><div class="num">01</div><h2>Like Cleanup</h2><p>Remove likes from your exported liked-post history.</p><span class="mini">LOGIN + RUNNER</span></button>
   <button class="service" data-service="comments" type="button"><div class="num">02</div><h2>Comment Cleanup</h2><p>Open comments activity and manage your own comments.</p><span class="mini">INSTAGRAM SESSION</span></button>
   <button class="service" data-service="nonfollowers" type="button"><div class="num">03</div><h2>Non-Followers</h2><p>Find people who do not follow you back and review them.</p><span class="mini">INSTAGRAM SESSION</span></button>
+<button class="service" data-service="instapy" type="button"><div class="num">04</div><h2>InstaPy Automation</h2><p>Build personal automation actions from the InstaPy workflow.</p><span class="mini">AUTOMATION CENTER</span></button>
 </nav>
 
 <section id="likes" class="workspace active">
@@ -97,12 +98,47 @@
  </div>
 </section>
 
-<footer class="footer"><span>MAHI SOCIAL CLEANER · MOBILE FIRST</span><span class="warn">USE RESPONSIBLY</span></footer>
+<section id="instapy" class="workspace">
+ <div class="grid">
+  <div class="card info"><div><div class="badge">04 · INSTAPY AUTOMATION</div><h3>Build your own Instagram automation workflow.</h3><p>Choose an InstaPy-supported action, configure the target and pacing, then copy or download a ready-to-run Python script. This builder does not execute InstaPy inside Render because InstaPy requires a local Selenium browser environment.</p></div><div class="steps"><span>Choose action</span><span>Set target</span><span>Configure amount</span><span>Export script</span></div></div>
+  <section class="card login">
+   <div class="login-head"><strong>InstaPy Automation Center</strong><span>local runner<br>recommended</span></div>
+   <div class="browser-login">
+    <b>Account identity</b>
+    <p>Use environment variables in your local runner. Do not paste your Instagram password into generated scripts or public repositories.</p>
+    <div class="field"><label>Instagram username</label><input class="input" id="ipyUser" autocomplete="username" placeholder="@username"></div>
+   </div>
+   <div class="field"><label>Automation action</label>
+    <select class="input" id="ipyAction">
+      <option value="like_by_tags">Like by hashtags</option>
+      <option value="like_by_feed">Like from feed</option>
+      <option value="like_by_locations">Like by location</option>
+      <option value="follow_by_tags">Follow by hashtags</option>
+      <option value="follow_by_locations">Follow by location</option>
+      <option value="follow_user_followers">Follow another account's followers</option>
+      <option value="follow_user_following">Follow another account's following</option>
+      <option value="unfollow_nonfollowers">Unfollow non-followers</option>
+      <option value="unfollow_custom">Unfollow custom list</option>
+      <option value="interact_by_url">Interact with post URLs</option>
+    </select>
+   </div>
+   <div class="field"><label>Target / list</label><input class="input" id="ipyTarget" placeholder="e.g. travel,nature or username"></div>
+   <div class="two"><div class="field"><label>Amount</label><input class="input" id="ipyAmount" type="number" min="1" value="10"></div><div class="field"><label>Sleep delay (sec)</label><input class="input" id="ipySleep" type="number" min="0" value="600"></div></div>
+   <button class="btn primary full" id="buildIpy" type="button">BUILD INSTAPY SCRIPT</button>
+   <div class="status show" style="margin-top:12px"><div class="status-top"><span>PREVIEW</span><b>LOCAL RUNNER</b></div><pre id="ipyPreview" style="white-space:pre-wrap;max-height:240px;overflow:auto;margin:7px 0 0;color:#9d99a6;font:9px/1.65 ui-monospace,SFMono-Regular,monospace"></pre></div>
+   <div class="linkrow"><button class="btn secondary" id="copyIpy" type="button">COPY SCRIPT</button><button class="btn secondary" id="downloadIpy" type="button">DOWNLOAD .PY</button></div>
+   <div class="linkrow"><button class="btn secondary" id="openIpyDocs" type="button">INSTAPY DOCS</button><button class="btn secondary" id="openIpySource" type="button">GITHUB SOURCE</button></div>
+   <div class="hint">Source basis: InstaPy/InstaPy (GPL-3.0). Generated code is a small original configuration wrapper around documented InstaPy APIs; the upstream project is not copied into this app.</div>
+  </section>
+ </div>
+</section>
+
+<footer class="footer"><span>MAHI SOCIAL CLEANER · 4 SERVICE WORKSPACE</span><span class="warn">USE RESPONSIBLY</span></footer>
 </div>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
-const services=[...document.querySelectorAll('.service')],pages={likes:'likes',comments:'comments',nonfollowers:'nonfollowers'},crumb=document.querySelector('.brand small');
+const services=[...document.querySelectorAll('.service')],pages={likes:'likes',comments:'comments',nonfollowers:'nonfollowers',instapy:'instapy'},crumb=document.querySelector('.brand small');
 function activate(key){services.forEach(s=>s.classList.toggle('active',s.dataset.service===key));Object.values(pages).forEach(id=>document.getElementById(id).classList.toggle('active',id===pages[key]));document.querySelector('#'+pages[key]).scrollIntoView({behavior:'smooth',block:'start'})}
 services.forEach(s=>s.addEventListener('click',()=>activate(s.dataset.service)));
 
@@ -115,6 +151,34 @@ document.getElementById('openComments').onclick=()=>window.open('https://www.ins
 document.getElementById('launchNonFollowers').onclick=()=>window.open('https://davidarroyo1234.github.io/InstagramUnfollowers/','_blank','noopener');
 document.getElementById('openNonFollowersSource').onclick=()=>window.open('https://github.com/davidarroyo1234/InstagramUnfollowers','_blank','noopener');
 document.getElementById('copyComments').onclick=async()=>{try{const t=await(await fetch('/tools/auto-delete-instagram-comments.js')).text();await navigator.clipboard.writeText(t);document.getElementById('commentMsg').textContent='Tool copied. Paste it in the Instagram comments tab console.';showToast('Comment tool copied')}catch(e){document.getElementById('commentMsg').textContent='Copy failed: '+e.message;showToast('Copy failed')}};
+
+const ipyUser=document.getElementById('ipyUser'),ipyAction=document.getElementById('ipyAction'),ipyTarget=document.getElementById('ipyTarget'),ipyAmount=document.getElementById('ipyAmount'),ipySleep=document.getElementById('ipySleep'),ipyPreview=document.getElementById('ipyPreview');
+function buildIpy(){
+  const u=(ipyUser.value||'YOUR_USERNAME').trim(), target=(ipyTarget.value||'example').trim(), amount=Math.max(1,Number(ipyAmount.value)||10), sleep=Math.max(0,Number(ipySleep.value)||600), action=ipyAction.value;
+  const tagList=target.split(',').map(x=>x.trim()).filter(Boolean).map(x=>x.replace(/^#/,''));
+  let body='';
+  if(action==='like_by_tags') body="session.like_by_tags("+JSON.stringify(tagList.length?tagList:['example'])+", amount="+amount+")";
+  else if(action==='like_by_feed') body="session.like_by_feed(amount="+amount+", randomize=True)";
+  else if(action==='like_by_locations') body="session.like_by_locations("+JSON.stringify([target])+", amount="+amount+")";
+  else if(action==='follow_by_tags') body="session.follow_by_tags("+JSON.stringify(tagList.length?tagList:['example'])+", amount="+amount+")";
+  else if(action==='follow_by_locations') body="session.follow_by_locations("+JSON.stringify([target])+", amount="+amount+")";
+  else if(action==='follow_user_followers') body="session.follow_user_followers("+JSON.stringify([target])+", amount="+amount+", randomize=False, sleep_delay="+sleep+")";
+  else if(action==='follow_user_following') body="session.follow_user_following("+JSON.stringify([target])+", amount="+amount+", randomize=False, sleep_delay="+sleep+")";
+  else if(action==='unfollow_nonfollowers') body="session.unfollow_users(amount="+amount+", nonFollowers=True, style=\"RANDOM\", sleep_delay="+sleep+")";
+  else if(action==='unfollow_custom') body="session.unfollow_users(amount="+amount+", custom_list_enabled=True, custom_list="+JSON.stringify(tagList.length?tagList:['example'])+", custom_list_param=\"all\", style=\"FIFO\", sleep_delay="+sleep+")";
+  else if(action==='interact_by_url') body="session.interact_by_URL(urls="+JSON.stringify(tagList.length?tagList:['https://www.instagram.com/p/POST_ID/'])+", randomize=True, interact=False)";
+  else body="pass";
+  const script="# InstaPy local runner generated by Mahi Social Cleaner\n# Keep credentials in environment variables.\n# pip install instapy\n\nimport os\nfrom instapy import InstaPy\n\nUSERNAME = os.environ.get('INSTA_USER') or "+JSON.stringify(u)+"\nPASSWORD = os.environ.get('INSTA_PW')\n\nsession = InstaPy(username=USERNAME, password=PASSWORD, headless_browser=True)\nsession.login()\n\n"+body+"\n\nsession.end()\n";
+  ipyPreview.textContent=script;return script
+}
+function downloadIpy(){const blob=new Blob([buildIpy()],{type:'text/x-python'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mahi-instapy-runner.py';a.click();URL.revokeObjectURL(a.href);showToast('InstaPy script downloaded')}
+function copyIpy(){navigator.clipboard.writeText(buildIpy()).then(()=>showToast('InstaPy script copied')).catch(()=>showToast('Copy failed'))}
+document.getElementById('buildIpy').onclick=()=>{buildIpy();showToast('Script ready')};
+document.getElementById('copyIpy').onclick=copyIpy;
+document.getElementById('downloadIpy').onclick=downloadIpy;
+document.getElementById('openIpyDocs').onclick=()=>window.open('https://github.com/InstaPy/InstaPy/tree/master/docs','_blank','noopener');
+document.getElementById('openIpySource').onclick=()=>window.open('https://github.com/InstaPy/InstaPy','_blank','noopener');
+buildIpy();
 
 const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.setSize(innerWidth,innerHeight);document.getElementById('bg').appendChild(renderer.domElement);
 const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,.1,120);camera.position.z=9;const group=new THREE.Group();scene.add(group);
