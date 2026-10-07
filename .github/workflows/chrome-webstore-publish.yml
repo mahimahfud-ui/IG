@@ -36,8 +36,26 @@ jobs:
           cd browser-helper
           zip -r ../mahi-instagram-helper.zip . -x "*.DS_Store"
 
+      - name: Check Web Store credentials
+        id: ready
+        shell: bash
+        env:
+          PUBLISHER_ID: ${{ secrets.CHROME_WEBSTORE_PUBLISHER_ID }}
+          EXTENSION_ID: ${{ secrets.CHROME_WEBSTORE_EXTENSION_ID }}
+          CLIENT_ID: ${{ secrets.CHROME_WEBSTORE_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CHROME_WEBSTORE_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CHROME_WEBSTORE_REFRESH_TOKEN }}
+        run: |
+          if [ -z "$PUBLISHER_ID" ] || [ -z "$EXTENSION_ID" ] || [ -z "$CLIENT_ID" ] || [ -z "$CLIENT_SECRET" ] || [ -z "$REFRESH_TOKEN" ]; then
+            echo "Chrome Web Store credentials are not configured yet. Skipping publish."
+            echo "See STORE_LISTING.md for one-time setup."
+            exit 0
+          fi
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
       - name: Get Google access token
         id: token
+        if: steps.ready.outputs.ready == 'true'
         env:
           CLIENT_ID: ${{ secrets.CHROME_WEBSTORE_CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CHROME_WEBSTORE_CLIENT_SECRET }}
@@ -52,6 +70,7 @@ jobs:
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
       - name: Upload new package
+        if: steps.ready.outputs.ready == 'true'
         env:
           TOKEN: ${{ steps.token.outputs.token }}
           PUBLISHER_ID: ${{ secrets.CHROME_WEBSTORE_PUBLISHER_ID }}
@@ -65,6 +84,7 @@ jobs:
             "https://chromewebstore.googleapis.com/upload/v2/publishers/$PUBLISHER_ID/items/$EXTENSION_ID:upload"
 
       - name: Publish for review
+        if: steps.ready.outputs.ready == 'true'
         env:
           TOKEN: ${{ steps.token.outputs.token }}
           PUBLISHER_ID: ${{ secrets.CHROME_WEBSTORE_PUBLISHER_ID }}
