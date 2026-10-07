@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07070b">
-<meta name="description" content="Mahi Social Cleaner — three personal Instagram cleanup services in one mobile-friendly workspace.">
+<meta name="description" content="Mahi Social Cleaner — four focused Instagram utility services in one mobile-first workspace.">
 <title>Mahi Social Cleaner</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
@@ -18,7 +18,7 @@
 .workspace{display:none;margin-top:18px;animation:in .35s cubic-bezier(.2,.75,.2,1)}.workspace.active{display:block}@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:16px}.card{border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(145deg,rgba(23,22,30,.79),rgba(10,10,14,.78));backdrop-filter:blur(26px);box-shadow:0 24px 75px rgba(0,0,0,.28)}
 .info{padding:31px;min-height:385px;display:flex;flex-direction:column;justify-content:space-between}.badge{display:inline-flex;align-items:center;gap:7px;width:max-content;padding:7px 9px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.025);font-size:8px;letter-spacing:.11em;text-transform:uppercase;color:#9b97a4}.info h3{font:600 31px/1.03 'Space Grotesk';letter-spacing:-.045em;margin:14px 0 10px;max-width:570px}.info p{margin:0;color:#8e8a97;font-size:10px;line-height:1.75;max-width:600px}.steps{display:flex;flex-wrap:wrap;gap:7px;margin-top:24px}.steps span{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.022);font-size:8px;color:#9c98a5}
-.login{padding:24px;position:relative;overflow:hidden}.login:before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 100% 0%,rgba(151,93,255,.12),transparent 31%),radial-gradient(circle at 0% 100%,rgba(255,53,107,.08),transparent 30%)}.login>*{position:relative}.login-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:18px}.login-head strong{font:600 20px 'Space Grotesk';letter-spacing:-.03em}.login-head span{color:#71707b;text-align:right;font-size:8px;line-height:1.5}.field{margin:11px 0}.field label{display:block;color:#77737f;font-size:8px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px}.input{width:100%;height:45px;border-radius:13px;border:1px solid rgba(255,255,255,.075);background:rgba(255,255,255,.035);padding:0 12px;color:#fff;outline:0;font-size:11px;transition:.2s}.input:focus{border-color:rgba(255,91,127,.55);box-shadow:0 0 0 4px rgba(255,53,107,.07)}.input::placeholder{color:#5f5c66}.input option{background:#17161e;color:#fff}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.btn{min-height:45px;border-radius:13px;border:0;padding:0 13px;color:#fff;font-weight:600;font-size:10px;transition:.22s;position:relative;overflow:hidden}.btn:before{content:'';position:absolute;inset:0;transform:translateX(-105%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);transition:.5s}.btn:hover:before{transform:translateX(105%)}.btn:hover{transform:translateY(-1px)}.primary{background:linear-gradient(100deg,#ff315d,#975dff 62%,#557fff);box-shadow:0 14px 32px rgba(255,53,107,.16)}.secondary{background:rgba(255,255,255,.035);border:1px solid var(--line);color:#d7d3dc}.full{width:100%}.hint{margin-top:10px;color:#716e79;font-size:8px;line-height:1.65}.status{display:none;margin-top:13px;padding:12px;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.025)}.status.show{display:block;animation:fade .25s ease}@keyframes fade{from{opacity:0}to{opacity:1}}.status-top{display:flex;justify-content:space-between;color:#8f8b97;font-size:8px;margin-bottom:7px}.status-top b{color:#fff}.bar{height:6px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}.fill{width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ff315d,#a24fff,#5c82ff);transition:width .42s ease}.msg{margin-top:8px;min-height:15px;color:#85818d;font-size:8px}
+.login{padding:24px;position:relative;overflow:hidden}.login:before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 100% 0%,rgba(151,93,255,.12),transparent 31%),radial-gradient(circle at 0% 100%,rgba(255,53,107,.08),transparent 30%)}.login>*{position:relative}.login-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:18px}.login-head strong{font:600 20px 'Space Grotesk';letter-spacing:-.03em}.login-head span{color:#71707b;text-align:right;font-size:8px;line-height:1.5}.field{margin:11px 0}.field label{display:block;color:#77737f;font-size:8px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px}.input{width:100%;height:45px;border-radius:13px;border:1px solid rgba(255,255,255,.075);background:rgba(255,255,255,.035);padding:0 12px;color:#fff;outline:0;font-size:11px;transition:.2s}.input:focus{border-color:rgba(255,91,127,.55);box-shadow:0 0 0 4px rgba(255,53,107,.07)}.input::placeholder{color:#5f5c66}.input option{background:#17161e;color:#fff}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.btn{min-height:45px;border-radius:13px;border:0;padding:0 13px;color:#fff;font-weight:600;font-size:10px;transition:.22s;position:relative;overflow:hidden}.btn:before{content:'';position:absolute;inset:0;transform:translateX(-105%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);transition:.5s}.btn:hover:before{transform:translateX(105%)}.btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}.btn:disabled:before{display:none}.primary{background:linear-gradient(100deg,#ff315d,#975dff 62%,#557fff);box-shadow:0 14px 32px rgba(255,53,107,.16)}.secondary{background:rgba(255,255,255,.035);border:1px solid var(--line);color:#d7d3dc}.full{width:100%}.hint{margin-top:10px;color:#716e79;font-size:8px;line-height:1.65}.status{display:none;margin-top:13px;padding:12px;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.025)}.status.show{display:block;animation:fade .25s ease}@keyframes fade{from{opacity:0}to{opacity:1}}.status-top{display:flex;justify-content:space-between;color:#8f8b97;font-size:8px;margin-bottom:7px}.status-top b{color:#fff}.bar{height:6px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}.fill{width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ff315d,#a24fff,#5c82ff);transition:width .42s ease}.msg{margin-top:8px;min-height:15px;color:#85818d;font-size:8px}
 .browser-login{margin:0 0 12px;padding:13px;border-radius:13px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025)}.browser-login b{font-size:10px}.browser-login p{margin:5px 0 0;color:#77737e;font-size:8px;line-height:1.6}.linkrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
 .footer{margin-top:24px;display:flex;justify-content:space-between;color:#65616c;font-size:8px}.warn{color:#ff8da5}
 .toast{position:fixed;left:50%;bottom:22px;z-index:20;transform:translate(-50%,18px);opacity:0;pointer-events:none;padding:10px 14px;border-radius:999px;background:rgba(22,21,29,.95);border:1px solid var(--line);box-shadow:0 16px 50px rgba(0,0,0,.4);color:#dedbe3;font-size:9px;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
@@ -65,7 +65,7 @@
       <div class="field"><label>Retry delay</label><input class="input" name="retry_delay" type="number" value="60" min="0"></div>
     </div>
     <button class="btn primary full" id="start" type="submit">LOGIN & START CLEANUP</button>
-    <div class="status" id="progress"><div class="status-top"><span id="label">PREPARING</span><b id="pct">0%</b></div><div class="bar"><div class="fill" id="fill"></div></div><div class="msg" id="msg"></div><button class="btn secondary full" type="button" id="stop" style="margin-top:10px">STOP RUN</button></div>
+    <div class="status" id="progress"><div class="status-top"><span id="label">PREPARING</span><b id="pct">0%</b></div><div class="bar"><div class="fill" id="fill"></div></div><div class="msg" id="msg"></div><button class="btn secondary full" type="button" id="stop" style="margin-top:10px" disabled>STOP RUN</button></div>
    </form>
    <div class="hint">Only use this with an account you control. Instagram may request verification or change systems used by third-party clients.</div>
   </section>
@@ -180,14 +180,89 @@ document.getElementById('openIpyDocs').onclick=()=>window.open('https://github.c
 document.getElementById('openIpySource').onclick=()=>window.open('https://github.com/InstaPy/InstaPy','_blank','noopener');
 buildIpy();
 
-const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.setSize(innerWidth,innerHeight);document.getElementById('bg').appendChild(renderer.domElement);
-const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,.1,120);camera.position.z=9;const group=new THREE.Group();scene.add(group);
-const count=650,pos=new Float32Array(count*3);for(let i=0;i<count;i++){const a=Math.random()*Math.PI*2,r=5+Math.random()*10;pos[i*3]=Math.cos(a)*r;pos[i*3+1]=(Math.random()-.5)*9;pos[i*3+2]=Math.sin(a)*r-4}
-const pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(pos,3));const points=new THREE.Points(pg,new THREE.PointsMaterial({color:0xf26493,size:.021,transparent:true,opacity:.48}));group.add(points);
-const ringColors=[0xff355f,0x985dff,0x4d9fff,0xff6c9b];for(let i=0;i<4;i++){const ring=new THREE.Mesh(new THREE.TorusGeometry(3.4+i*.96,.01,12,180),new THREE.MeshBasicMaterial({color:ringColors[i],transparent:true,opacity:.045}));ring.rotation.x=.95+i*.06;ring.rotation.y=i*.2;group.add(ring)}
-let mx=0,my=0;addEventListener('pointermove',e=>{mx=(e.clientX/innerWidth-.5)*.55;my=(e.clientY/innerHeight-.5)*.32});
-(function loop(){group.rotation.y+=(mx-group.rotation.y)*.008;group.rotation.x+=(my-group.rotation.x)*.008;group.children.slice(1).forEach((q,i)=>{q.rotation.z+=.00055*(i+1);q.rotation.y+=.00017*(i+1)});points.rotation.z+=.00007;renderer.render(scene,camera);requestAnimationFrame(loop)})();
-addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+const bg=document.getElementById('bg');
+const reduceMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+let renderer=null,scene=null,camera=null,group=null,points=null,frameId=0,lastFrame=performance.now();
+if(window.THREE && !reduceMotion){
+  try{
+    renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,window.matchMedia('(max-width: 900px)').matches?1.25:1.5));
+    renderer.setSize(innerWidth,innerHeight,false);
+    bg.appendChild(renderer.domElement);
+    scene=new THREE.Scene();
+    camera=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,.1,120);
+    camera.position.z=9;
+    group=new THREE.Group();
+    scene.add(group);
+    const count=650,pos=new Float32Array(count*3);
+    for(let i=0;i<count;i++){
+      const a=Math.random()*Math.PI*2,r=5+Math.random()*10;
+      pos[i*3]=Math.cos(a)*r;
+      pos[i*3+1]=(Math.random()-.5)*9;
+      pos[i*3+2]=Math.sin(a)*r-4;
+    }
+    const pg=new THREE.BufferGeometry();
+    pg.setAttribute('position',new THREE.BufferAttribute(pos,3));
+    points=new THREE.Points(pg,new THREE.PointsMaterial({color:0xf26493,size:.021,transparent:true,opacity:.48}));
+    group.add(points);
+    const ringColors=[0xff355f,0x985dff,0x4d9fff,0xff6c9b];
+    for(let i=0;i<4;i++){
+      const ring=new THREE.Mesh(
+        new THREE.TorusGeometry(3.4+i*.96,.01,12,180),
+        new THREE.MeshBasicMaterial({color:ringColors[i],transparent:true,opacity:.045})
+      );
+      ring.rotation.x=.95+i*.06;
+      ring.rotation.y=i*.2;
+      group.add(ring);
+    }
+    let mx=0,my=0;
+    const finePointer=window.matchMedia?.('(pointer: fine)').matches;
+    if(finePointer){
+      addEventListener('pointermove',e=>{
+        mx=(e.clientX/innerWidth-.5)*.55;
+        my=(e.clientY/innerHeight-.5)*.32;
+      },{passive:true});
+    }
+    function render(now){
+      if(document.hidden)return;
+      const step=Math.min((now-lastFrame)/16.6667,3);
+      lastFrame=now;
+      const ease=Math.min(1,.008*step);
+      group.rotation.y+=(mx-group.rotation.y)*ease;
+      group.rotation.x+=(my-group.rotation.x)*Math.min(1,.008*step);
+      group.children.slice(1).forEach((q,i)=>{
+        q.rotation.z+=.00055*(i+1)*step;
+        q.rotation.y+=.00017*(i+1)*step;
+      });
+      points.rotation.z+=.00007*step;
+      renderer.render(scene,camera);
+      frameId=requestAnimationFrame(render);
+    }
+    frameId=requestAnimationFrame(render);
+    document.addEventListener('visibilitychange',()=>{
+      if(document.hidden){
+        if(frameId)cancelAnimationFrame(frameId);
+        frameId=0;
+      }else{
+        lastFrame=performance.now();
+        if(!frameId)frameId=requestAnimationFrame(render);
+      }
+    });
+    let resizeFrame=0;
+    addEventListener('resize',()=>{
+      if(resizeFrame)cancelAnimationFrame(resizeFrame);
+      resizeFrame=requestAnimationFrame(()=>{
+        resizeFrame=0;
+        if(!camera||!renderer)return;
+        camera.aspect=innerWidth/innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(innerWidth,innerHeight,false);
+      });
+    },{passive:true});
+  }catch(_error){
+    bg.textContent='';
+  }
+}
 
 const form=document.getElementById('form'),start=document.getElementById('start'),stop=document.getElementById('stop'),progress=document.getElementById('progress'),fill=document.getElementById('fill'),pct=document.getElementById('pct'),msg=document.getElementById('msg'),label=document.getElementById('label');let job=null,timer=null;
 function updateJob(j){const p=Math.max(0,Math.min(100,Number(j.progress||0)));fill.style.width=p+'%';pct.textContent=p+'%';label.textContent=String(j.status||'WORKING').toUpperCase();msg.textContent=j.error||j.message||'';if(['complete','error','cancelled'].includes(j.status)){clearInterval(timer);start.disabled=false;stop.disabled=true}}
