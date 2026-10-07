@@ -47,15 +47,15 @@
         : path;
 
       const data = await api(url);
-      const users = Array.isArray(data.users) ? data.users : [];
-      out.push(...users);
+      const records = Array.isArray(data.users) ? data.users : (Array.isArray(data.items) ? data.items : (Array.isArray(data.results) ? data.results : []));
+      out.push(...records);
 
       const candidate =
         data.next_max_id ||
         (data.pagination && data.pagination.next_max_id) ||
         '';
 
-      if (!candidate || !users.length || candidate === next) break;
+      if (!candidate || !records.length || candidate === next) break;
       next = candidate;
     }
 
