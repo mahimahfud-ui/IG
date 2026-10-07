@@ -9,5 +9,6 @@
   "background": {"service_worker":"background.js"},
   "content_scripts": [{"matches":["https://www.instagram.com/*"],"js":["content.js"],"run_at":"document_idle"}],
   "externally_connectable": {"matches":["https://mahi-ig-control.onrender.com/*"]},
-  "homepage_url":"https://github.com/mahimahfud-ui/IG"
+  "homepage_url":"https://github.com/mahimahfud-ui/IG",
+  "key":"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwkasd6OyhnXepg+nY29FFSEi1JQnIA+48JB4kPHRH7aIf3F4e/RSx1xYLH6fC997E3dLr9dsr6DetPmYhsud0KCEqNdL2S+r/eJYL7h1ovWqsNjgvNT4oHLvYaN5yOUGFgpCKoaqZByFI+cpybG6jg35UN2FQjEzhOwEz9S3XZWpNkHbjzOKKH1EW/BDxYBP6sqtMSEkVgJiofEFBQFQltR6ybexbdvEDJirISgs014XpvzzDlbJnV3XsqFqsRTHEZAm6bcFRcBP3eprm4W5gkzb7onmOOqTRfK6UIY+EvX4dwo+K/Hy3tUvd+s8tRGi7fG76ldf3o209mBucCe9YwIDAQAB"
 }
