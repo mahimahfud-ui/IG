@@ -31,6 +31,7 @@ button,input,select{font:inherit}.app{padding:14px 14px 18px}
 .steps{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:10px}.step{padding:10px;border-radius:12px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);text-align:center}.step b{display:block;font-size:8px}.step span{display:block;color:#6d6975;font-size:6px;margin-top:3px}
 .sheet{position:fixed;inset:0;z-index:20;display:none;align-items:flex-end;background:rgba(0,0,0,.52);backdrop-filter:blur(7px)}.sheet.open{display:flex}.sheet-inner{width:100%;padding:13px 15px 16px;border-top:1px solid var(--line);border-radius:24px 24px 0 0;background:#15141c;box-shadow:0 -24px 70px rgba(0,0,0,.5);animation:sheet .25s ease}@keyframes sheet{from{transform:translateY(18px);opacity:.7}to{transform:none;opacity:1}}.handle{width:35px;height:4px;border-radius:99px;background:rgba(255,255,255,.14);margin:0 auto 13px}.sheet-head{display:flex;justify-content:space-between;align-items:center}.sheet-head b{font:600 17px 'Space Grotesk'}.close{width:29px;height:29px;border-radius:50%;border:1px solid var(--line);background:#ffffff05;color:#aaa6b0}
 .setting{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.05)}.setting div{text-align:left}.setting b{font-size:8px}.setting span{display:block;color:#6e6a75;font-size:6px;margin-top:3px}.switch{width:39px;height:23px;border:0;border-radius:99px;background:#36323d;position:relative}.switch:after{content:'';position:absolute;left:3px;top:3px;width:17px;height:17px;border-radius:50%;background:#fff;transition:.2s}.switch.on{background:linear-gradient(100deg,#ff356b,#975dff)}.switch.on:after{transform:translateX(16px)}
+.compact .list{max-height:245px}.compact .card{padding:13px}.compact .welcome{padding-top:16px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -38,7 +39,7 @@ button,input,select{font:inherit}.app{padding:14px 14px 18px}
 <div class="app">
 <header class="top">
   <div class="brand"><div class="logo">M</div><div><b>MAHI</b><span>Instagram utility</span></div></div>
-  <div class="session" id="sessionPill"><i></i><span id="sessionText">OPEN INSTAGRAM</span></div>
+  <div class="top-actions"><div class="session" id="sessionPill"><i></i><span id="sessionText">OPEN INSTAGRAM</span></div><button class="gear" id="openSettings" type="button" aria-label="Settings">⚙</button></div>
 </header>
 
 <section class="welcome">
