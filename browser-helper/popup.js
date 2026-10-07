@@ -88,9 +88,9 @@ function loadSettings(){
 function normalizeConfig(kind){
   const defaults=DEFAULTS[kind];
   const limit=Math.max(1,Math.min(50,Number(document.getElementById(kind+'Limit').value)||defaults.limit));
-  const minDelay=Math.max(1000,Math.min(60000,Number(document.getElementById(kind+'MinDelay').value)||defaults.minDelay));
-  const maxDelay=Math.max(minDelay,Math.min(60000,Number(document.getElementById(kind+'MaxDelay').value)||defaults.maxDelay));
-  return {limit,minDelay,maxDelay};
+  const minSeconds=Math.max(1,Math.min(60,Number(document.getElementById(kind+'MinDelay').value)||defaults.minDelay/1000));
+  const maxSeconds=Math.max(minSeconds,Math.min(60,Number(document.getElementById(kind+'MaxDelay').value)||defaults.maxDelay/1000));
+  return {limit,minDelay:Math.round(minSeconds*1000),maxDelay:Math.round(maxSeconds*1000)};
 }
 
 function saveSettings(){
@@ -104,7 +104,7 @@ function syncSettingsUI(){
   Object.keys(state.settings).forEach(function(kind){
     const s=state.settings[kind];
     const a=document.getElementById(kind+'Limit'),b=document.getElementById(kind+'MinDelay'),c=document.getElementById(kind+'MaxDelay');
-    if(a)a.value=s.limit;if(b)b.value=s.minDelay;if(c)c.value=s.maxDelay;
+    if(a)a.value=s.limit;if(b)b.value=(s.minDelay/1000).toString();if(c)c.value=(s.maxDelay/1000).toString();
   });
 }
 
