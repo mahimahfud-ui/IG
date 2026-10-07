@@ -1,30 +1,13 @@
 {
   "manifest_version": 3,
   "name": "Mahi Instagram Helper",
-  "version": "2.1.0",
-  "description": "Standalone Instagram utility dashboard using your existing signed-in browser session.",
-  "host_permissions": [
-    "https://www.instagram.com/*"
-  ],
-  "action": {
-    "default_title": "Mahi Instagram Helper",
-    "default_popup": "popup.html"
-  },
-  "content_scripts": [
-    {
-      "matches": [
-        "https://www.instagram.com/*"
-      ],
-      "js": [
-        "content.js"
-      ],
-      "run_at": "document_idle"
-    }
-  ],
-  "version_name": "2.1.0 · Pro Controls & Live Progress",
-  "permissions": [
-    "activeTab",
-    "storage"
-  ],
-  "homepage_url": "https://github.com/mahimahfud-ui/IG"
+  "version": "2.2.0",
+  "description": "Browser-session Instagram helper for the Mahi Control Center.",
+  "host_permissions": ["https://www.instagram.com/*"],
+  "permissions": ["activeTab","storage","tabs"],
+  "action": {"default_title":"Mahi Instagram Helper","default_popup":"popup.html"},
+  "background": {"service_worker":"background.js"},
+  "content_scripts": [{"matches":["https://www.instagram.com/*"],"js":["content.js"],"run_at":"document_idle"}],
+  "externally_connectable": {"matches":["https://mahi-ig-control.onrender.com/*"]},
+  "homepage_url":"https://github.com/mahimahfud-ui/IG"
 }
