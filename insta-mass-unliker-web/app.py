@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, jsonify
+import os, hmac
 from datetime import datetime, timezone
 import json, secrets, threading, time, random
 app=Flask(__name__); app.config["MAX_CONTENT_LENGTH"]=25*1024*1024
+ACCESS_PASSWORD=os.environ.get("APP_ACCESS_PASSWORD","").strip()
 SESSIONS={}; JOBS={}; LOCK=threading.Lock()
 
 def media_id_from_shortcode(code):
@@ -29,6 +31,17 @@ def parse_likes(payload):
             if isinstance(v,list): raw=v; break
     if not isinstance(raw,list): raise ValueError("likes_media_likes was not found.")
     return [x for i,v in enumerate(raw) if isinstance(v,dict) and (x:=normalize_item(v,i)) and x["media_id"] is not None]
+def access_ok():
+    if not ACCESS_PASSWORD:
+        return True
+    supplied=str(request.headers.get("X-Mahi-Access",""))
+    return bool(supplied) and hmac.compare_digest(supplied, ACCESS_PASSWORD)
+
+def guard():
+    if not access_ok():
+        return jsonify(ok=False,error="Site access key is required."),403
+    return None
+
 def job(token): 
     with LOCK:return JOBS.get(token,{"running":False,"processed":0,"total":0,"success":0,"failed":0,"remaining":0,"message":"Idle"})
 
@@ -36,6 +49,8 @@ def job(token):
 def index():return render_template("index.html")
 @app.post("/api/login")
 def login():
+    blocked=guard()
+    if blocked:return blocked
     b=request.get_json(silent=True) or {}; u=str(b.get("username") or "").strip(); p=str(b.get("password") or "")
     if not u or not p:return jsonify(ok=False,error="Username and password are required."),400
     try:
@@ -46,6 +61,8 @@ def login():
     except Exception as e:return jsonify(ok=False,error=f"Instagram login failed: {e}"),401
 @app.post("/api/import")
 def imp():
+    blocked=guard()
+    if blocked:return blocked
     t=request.headers.get("X-Mahi-Token","")
     with LOCK:s=SESSIONS.get(t)
     if not s:return jsonify(ok=False,error="Please log in first."),401
@@ -58,6 +75,8 @@ def imp():
     except Exception as e:return jsonify(ok=False,error=f"Invalid Instagram export: {e}"),400
 @app.get("/api/items")
 def items():
+    blocked=guard()
+    if blocked:return blocked
     t=request.headers.get("X-Mahi-Token","")
     with LOCK:s=SESSIONS.get(t); likes=list(s.get("likes",[])) if s else []
     if not s:return jsonify(ok=False,error="Please log in first."),401
@@ -66,6 +85,8 @@ def items():
     return jsonify(ok=True,total=len(out),items=out)
 @app.post("/api/unlike")
 def unlike():
+    blocked=guard()
+    if blocked:return blocked
     t=request.headers.get("X-Mahi-Token",""); b=request.get_json(silent=True) or {}
     with LOCK:s=SESSIONS.get(t); likes=list(s.get("likes",[])) if s else []
     if not s:return jsonify(ok=False,error="Please log in first."),401
@@ -90,11 +111,15 @@ def unlike():
     threading.Thread(target=worker,daemon=True).start(); return jsonify(ok=True,total=len(chosen))
 @app.get("/api/progress")
 def progress():
+    blocked=guard()
+    if blocked:return blocked
     t=request.headers.get("X-Mahi-Token","")
     if t not in SESSIONS:return jsonify(ok=False,error="Not authenticated."),401
     return jsonify(ok=True,**job(t))
 @app.post("/api/logout")
 def logout():
+    blocked=guard()
+    if blocked:return blocked
     t=request.headers.get("X-Mahi-Token","")
     with LOCK:SESSIONS.pop(t,None); JOBS.pop(t,None)
     return jsonify(ok=True)
