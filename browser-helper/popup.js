@@ -120,7 +120,7 @@ function renderProgress(data){
   const pct=total?Math.max(0,Math.min(100,current/total*100)):(data.done?100:25);
   bar.style.setProperty('--progress',pct+'%');bar.classList.toggle('indeterminate',!total&&!data.done);
   const parts=[];if(data.phase)parts.push(data.phase);
-  if(data.job==='nonFollowers')parts.push('scanned '+current+(total?' / '+total:''));
+  if(data.job==='nonFollowers'){parts.push('scanned '+current+(total?' / '+total:''));if(total)parts.push(Math.max(0,total-current)+' remaining');}
   else if(data.job==='likes')parts.push('scanned '+current);
   else{parts.push('processed '+current+(total?' / '+total:''));if(data.success!=null)parts.push('✓ '+data.success);if(data.failed!=null)parts.push('✕ '+data.failed);if(data.remaining!=null)parts.push(data.remaining+' left');}
   label.textContent=parts.join('  ·  ');
@@ -285,6 +285,7 @@ $('scanComments').onclick=async function(){
 
 $('commentAll').onclick=function(){state.comments.forEach(function(x){state.commentSelected.add(x.id)});renderComments()};
 $('commentNone').onclick=function(){state.commentSelected.clear();renderComments()};
+$('commentNone2').onclick=function(){state.commentSelected.clear();renderComments()};
 
 $('deleteComments').onclick=async function(){
   const ids=[...state.commentSelected],limit=state.settings.comments.limit;
