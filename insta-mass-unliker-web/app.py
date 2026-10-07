@@ -1,126 +1,238 @@
 from flask import Flask, render_template, request, jsonify
-import os, hmac
 from datetime import datetime, timezone
-import json, secrets, threading, time, random
-app=Flask(__name__); app.config["MAX_CONTENT_LENGTH"]=25*1024*1024
-ACCESS_PASSWORD=os.environ.get("APP_ACCESS_PASSWORD","").strip()
-SESSIONS={}; JOBS={}; LOCK=threading.Lock()
+import json, secrets, threading
+
+app = Flask(__name__)
+app.config["MAX_CONTENT_LENGTH"] = 25 * 1024 * 1024
+
+SESSIONS = {}
+JOBS = {}
+LOCK = threading.Lock()
 
 def media_id_from_shortcode(code):
-    alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"; code=code.rstrip("/").split("/")[-1]; value=0
-    for ch in code: value=value*64+alphabet.index(ch)
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
+    code = code.rstrip("/").split("/")[-1]
+    value = 0
+    for ch in code:
+        value = value * 64 + alphabet.index(ch)
     return value
+
 def parse_ts(raw):
-    try:return datetime.fromtimestamp(int(raw),tz=timezone.utc)
-    except:return None
-def normalize_item(item,i):
-    d=item.get("string_list_data") or []; first=d[0] if d else {}; href=str(first.get("href") or "").strip()
-    if not href:return None
-    dt=parse_ts(first.get("timestamp")); path=href.lower(); kind="reel" if "/reel/" in path else ("post" if "/p/" in path else "other")
-    shortcode=href.rstrip("/").split("/")[-1]
-    try:mid=media_id_from_shortcode(shortcode)
-    except:mid=None
-    return {"id":f"{i}-{shortcode}","media_id":mid,"url":href,"shortcode":shortcode,"kind":kind,
-            "timestamp":int(first["timestamp"]) if str(first.get("timestamp","")).isdigit() else None,
-            "date":dt.strftime("%Y-%m-%d") if dt else "","time":dt.strftime("%H:%M:%S UTC") if dt else "",
-            "value":str(first.get("value") or "")}
+    try:
+        return datetime.fromtimestamp(int(raw), tz=timezone.utc)
+    except Exception:
+        return None
+
+def normalize_item(item, i):
+    data = item.get("string_list_data") or []
+    first = data[0] if data else {}
+    href = str(first.get("href") or "").strip()
+    if not href:
+        return None
+    dt = parse_ts(first.get("timestamp"))
+    path = href.lower()
+    kind = "reel" if "/reel/" in path else ("post" if "/p/" in path else "other")
+    shortcode = href.rstrip("/").split("/")[-1]
+    try:
+        media_id = media_id_from_shortcode(shortcode)
+    except Exception:
+        media_id = None
+    if media_id is None:
+        return None
+    raw_ts = first.get("timestamp")
+    timestamp = int(raw_ts) if str(raw_ts).isdigit() else None
+    return {
+        "id": f"{i}-{shortcode}",
+        "media_id": media_id,
+        "url": href,
+        "shortcode": shortcode,
+        "kind": kind,
+        "timestamp": timestamp,
+        "date": dt.strftime("%Y-%m-%d") if dt else "",
+        "time": dt.strftime("%H:%M:%S UTC") if dt else "",
+        "value": str(first.get("value") or ""),
+    }
+
 def parse_likes(payload):
-    raw=payload.get("likes_media_likes") if isinstance(payload,dict) else payload
-    if raw is None and isinstance(payload,dict):
-        for v in payload.values():
-            if isinstance(v,list): raw=v; break
-    if not isinstance(raw,list): raise ValueError("likes_media_likes was not found.")
-    return [x for i,v in enumerate(raw) if isinstance(v,dict) and (x:=normalize_item(v,i)) and x["media_id"] is not None]
-def access_ok():
-    if not ACCESS_PASSWORD:
-        return True
-    supplied=str(request.headers.get("X-Mahi-Access",""))
-    return bool(supplied) and hmac.compare_digest(supplied, ACCESS_PASSWORD)
+    raw = payload.get("likes_media_likes") if isinstance(payload, dict) else payload
+    if raw is None and isinstance(payload, dict):
+        for value in payload.values():
+            if isinstance(value, list):
+                raw = value
+                break
+    if not isinstance(raw, list):
+        raise ValueError("likes_media_likes was not found in this export.")
+    output = []
+    for i, value in enumerate(raw):
+        if isinstance(value, dict):
+            item = normalize_item(value, i)
+            if item:
+                output.append(item)
+    return output
 
-def guard():
-    if not access_ok():
-        return jsonify(ok=False,error="Site access key is required."),403
-    return None
+def get_session(token):
+    with LOCK:
+        return SESSIONS.get(token)
 
-def job(token): 
-    with LOCK:return JOBS.get(token,{"running":False,"processed":0,"total":0,"success":0,"failed":0,"remaining":0,"message":"Idle"})
+def get_job(token, job_id):
+    with LOCK:
+        session_jobs = JOBS.get(token, {})
+        return session_jobs.get(job_id)
 
 @app.get("/")
-def index():return render_template("index.html")
-@app.post("/api/login")
-def login():
-    blocked=guard()
-    if blocked:return blocked
-    b=request.get_json(silent=True) or {}; u=str(b.get("username") or "").strip(); p=str(b.get("password") or "")
-    if not u or not p:return jsonify(ok=False,error="Username and password are required."),400
-    try:
-        from ensta import Web
-        c=Web(u,p); a=c.private_info(); t=secrets.token_urlsafe(32)
-        with LOCK:SESSIONS[t]={"username":u,"password":p,"client":c,"likes":[]}
-        return jsonify(ok=True,token=t,username=getattr(a,"username",u))
-    except Exception as e:return jsonify(ok=False,error=f"Instagram login failed: {e}"),401
+def index():
+    return render_template("index.html")
+
+@app.post("/api/session")
+def create_session():
+    token = secrets.token_urlsafe(32)
+    with LOCK:
+        SESSIONS[token] = {"likes": []}
+        JOBS[token] = {}
+    return jsonify(ok=True, token=token)
+
 @app.post("/api/import")
-def imp():
-    blocked=guard()
-    if blocked:return blocked
-    t=request.headers.get("X-Mahi-Token","")
-    with LOCK:s=SESSIONS.get(t)
-    if not s:return jsonify(ok=False,error="Please log in first."),401
-    f=request.files.get("file")
-    if not f:return jsonify(ok=False,error="Upload liked_posts.json first."),400
+def import_likes():
+    token = request.headers.get("X-Mahi-Token", "")
+    session = get_session(token)
+    if not session:
+        return jsonify(ok=False, error="Session expired. Reload the page."), 401
+
+    file = request.files.get("file")
+    if not file:
+        return jsonify(ok=False, error="Choose liked_posts.json first."), 400
+
     try:
-        likes=parse_likes(json.load(f.stream))
-        with LOCK:s["likes"]=likes
-        return jsonify(ok=True,total=len(likes),reels=sum(x["kind"]=="reel" for x in likes),posts=sum(x["kind"]=="post" for x in likes))
-    except Exception as e:return jsonify(ok=False,error=f"Invalid Instagram export: {e}"),400
+        likes = parse_likes(json.load(file.stream))
+        with LOCK:
+            session["likes"] = likes
+        return jsonify(
+            ok=True,
+            total=len(likes),
+            reels=sum(x["kind"] == "reel" for x in likes),
+            posts=sum(x["kind"] == "post" for x in likes),
+        )
+    except Exception as exc:
+        return jsonify(ok=False, error=f"Invalid Instagram export: {exc}"), 400
+
 @app.get("/api/items")
 def items():
-    blocked=guard()
-    if blocked:return blocked
-    t=request.headers.get("X-Mahi-Token","")
-    with LOCK:s=SESSIONS.get(t); likes=list(s.get("likes",[])) if s else []
-    if not s:return jsonify(ok=False,error="Please log in first."),401
-    kind=request.args.get("kind","reel"); start=request.args.get("start",""); end=request.args.get("end",""); q=request.args.get("q","").lower().strip()
-    out=[x for x in likes if (kind=="all" or x["kind"]==kind) and (not start or not x["date"] or x["date"]>=start) and (not end or not x["date"] or x["date"]<=end) and (not q or q in (x["value"]+" "+x["url"]).lower())]
-    return jsonify(ok=True,total=len(out),items=out)
-@app.post("/api/unlike")
-def unlike():
-    blocked=guard()
-    if blocked:return blocked
-    t=request.headers.get("X-Mahi-Token",""); b=request.get_json(silent=True) or {}
-    with LOCK:s=SESSIONS.get(t); likes=list(s.get("likes",[])) if s else []
-    if not s:return jsonify(ok=False,error="Please log in first."),401
-    ids=list(dict.fromkeys(b.get("ids") or [])); limit=max(1,min(100,int(b.get("limit") or len(ids) or 1)))
-    mn=max(.5,min(300,float(b.get("minDelay") or 2))); mx=max(mn,min(300,float(b.get("maxDelay") or 5))); ids=ids[:limit]
-    byid={x["id"]:x for x in likes}; chosen=[byid[x] for x in ids if x in byid and byid[x].get("media_id")]
-    if not chosen:return jsonify(ok=False,error="No valid items selected."),400
+    token = request.headers.get("X-Mahi-Token", "")
+    session = get_session(token)
+    if not session:
+        return jsonify(ok=False, error="Session expired. Reload the page."), 401
+
+    kind = request.args.get("kind", "reel")
+    start = request.args.get("start", "")
+    end = request.args.get("end", "")
+    query = request.args.get("q", "").lower().strip()
+
     with LOCK:
-        if JOBS.get(t,{}).get("running"):return jsonify(ok=False,error="An unlike job is already running."),409
-        JOBS[t]={"running":True,"processed":0,"total":len(chosen),"success":0,"failed":0,"remaining":len(chosen),"message":"Starting…"}
-    def worker():
-        client=s["client"]; okids=[]
-        for i,item in enumerate(chosen):
-            try:client.unlike(item["media_id"]); ok=True; err=""; okids.append(item["id"])
-            except Exception as e:ok=False; err=str(e)
-            with LOCK:
-                j=JOBS[t]; j["processed"]=i+1; j["success"]+=int(ok); j["failed"]+=int(not ok); j["remaining"]=len(chosen)-i-1
-                j["message"]=("Unliked" if ok else "Failed")+" · "+item["date"]+" · "+item["url"]+((" · "+err) if err else "")
-            if i<len(chosen)-1:time.sleep(random.uniform(mn,mx))
-        with LOCK:
-            s["likes"]=[x for x in s["likes"] if x["id"] not in okids]; JOBS[t]["running"]=False; JOBS[t]["message"]="Complete"
-    threading.Thread(target=worker,daemon=True).start(); return jsonify(ok=True,total=len(chosen))
-@app.get("/api/progress")
-def progress():
-    blocked=guard()
-    if blocked:return blocked
-    t=request.headers.get("X-Mahi-Token","")
-    if t not in SESSIONS:return jsonify(ok=False,error="Not authenticated."),401
-    return jsonify(ok=True,**job(t))
+        likes = list(session["likes"])
+
+    filtered = [
+        item for item in likes
+        if (kind == "all" or item["kind"] == kind)
+        and (not start or not item["date"] or item["date"] >= start)
+        and (not end or not item["date"] or item["date"] <= end)
+        and (not query or query in (item["value"] + " " + item["url"]).lower())
+    ]
+    return jsonify(ok=True, total=len(filtered), items=filtered)
+
+@app.post("/api/queue")
+def queue():
+    token = request.headers.get("X-Mahi-Token", "")
+    session = get_session(token)
+    if not session:
+        return jsonify(ok=False, error="Session expired. Reload the page."), 401
+
+    body = request.get_json(silent=True) or {}
+    ids = list(dict.fromkeys(body.get("ids") or []))
+    limit = max(1, min(100, int(body.get("limit") or len(ids) or 1)))
+    min_delay = max(1.0, min(300.0, float(body.get("minDelay") or 2)))
+    max_delay = max(min_delay, min(300.0, float(body.get("maxDelay") or 5)))
+    ids = ids[:limit]
+
+    with LOCK:
+        by_id = {item["id"]: item for item in session["likes"]}
+        chosen = [by_id[value] for value in ids if value in by_id]
+        if not chosen:
+            return jsonify(ok=False, error="No valid items selected."), 400
+        job_id = secrets.token_urlsafe(18)
+        JOBS[token][job_id] = {
+            "id": job_id,
+            "running": True,
+            "processed": 0,
+            "total": len(chosen),
+            "success": 0,
+            "failed": 0,
+            "remaining": len(chosen),
+            "message": "Waiting for Mahi Browser Helper…",
+            "items": chosen,
+            "minDelay": min_delay,
+            "maxDelay": max_delay,
+            "doneIds": [],
+        }
+
+    return jsonify(ok=True, jobId=job_id, total=len(chosen), items=chosen,
+                   minDelay=min_delay, maxDelay=max_delay)
+
+@app.get("/api/queue/<job_id>")
+def queue_status(job_id):
+    token = request.headers.get("X-Mahi-Token", "")
+    if not get_session(token):
+        return jsonify(ok=False, error="Session expired. Reload the page."), 401
+    job = get_job(token, job_id)
+    if not job:
+        return jsonify(ok=False, error="Job not found."), 404
+    with LOCK:
+        data = {k: v for k, v in job.items() if k != "items"}
+    return jsonify(ok=True, **data)
+
+@app.post("/api/queue/<job_id>/event")
+def queue_event(job_id):
+    token = request.headers.get("X-Mahi-Token", "")
+    if not get_session(token):
+        return jsonify(ok=False, error="Session expired."), 401
+    body = request.get_json(silent=True) or {}
+    item_id = str(body.get("itemId") or "")
+    success = bool(body.get("success"))
+    message = str(body.get("message") or "")
+    with LOCK:
+        job = JOBS.get(token, {}).get(job_id)
+        if not job or not job["running"]:
+            return jsonify(ok=False, error="Job is not running."), 404
+        if item_id and item_id not in job["doneIds"]:
+            job["doneIds"].append(item_id)
+            job["processed"] += 1
+            job["success"] += int(success)
+            job["failed"] += int(not success)
+            job["remaining"] = max(0, job["total"] - job["processed"])
+        job["message"] = message or ("Unliked" if success else "Failed")
+        if job["processed"] >= job["total"]:
+            job["running"] = False
+            job["message"] = "Complete"
+    return jsonify(ok=True)
+
+@app.post("/api/queue/<job_id>/cancel")
+def queue_cancel(job_id):
+    token = request.headers.get("X-Mahi-Token", "")
+    with LOCK:
+        job = JOBS.get(token, {}).get(job_id)
+        if not job:
+            return jsonify(ok=False, error="Job not found."), 404
+        job["running"] = False
+        job["message"] = "Cancelled"
+    return jsonify(ok=True)
+
 @app.post("/api/logout")
 def logout():
-    blocked=guard()
-    if blocked:return blocked
-    t=request.headers.get("X-Mahi-Token","")
-    with LOCK:SESSIONS.pop(t,None); JOBS.pop(t,None)
+    token = request.headers.get("X-Mahi-Token", "")
+    with LOCK:
+        SESSIONS.pop(token, None)
+        JOBS.pop(token, None)
     return jsonify(ok=True)
-if __name__=="__main__":app.run(host="127.0.0.1",port=5050,debug=False)
+
+if __name__ == "__main__":
+    import os
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", "5050")), debug=False)
