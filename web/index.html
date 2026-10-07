@@ -24,20 +24,76 @@
 .toast{position:fixed;left:50%;bottom:22px;z-index:20;transform:translate(-50%,18px);opacity:0;pointer-events:none;padding:10px 14px;border-radius:999px;background:rgba(22,21,29,.95);border:1px solid var(--line);box-shadow:0 16px 50px rgba(0,0,0,.4);color:#dedbe3;font-size:9px;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:900px){.shell{padding:12px 14px 86px}.header{height:48px}.hero{padding:34px 1px 17px}.grid{grid-template-columns:1fr}.info{min-height:auto}.service-strip{grid-template-columns:repeat(4,minmax(205px,1fr));overflow-x:auto;padding:1px 1px 7px;scroll-snap-type:x mandatory}.service{scroll-snap-align:start}.service::-webkit-scrollbar,.service-strip::-webkit-scrollbar{height:4px}.service-strip::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:99px}}
 @media(max-width:620px){.brand small{display:none}.secure{font-size:8px}.secure i{width:5px;height:5px}.hero h1{font-size:47px}.hero p{font-size:10px}.service-strip{grid-template-columns:repeat(4,74vw)}.service{padding:16px}.service h2{font-size:17px}.grid{gap:12px}.info{padding:21px}.info h3{font-size:27px}.login{padding:18px}.two{grid-template-columns:1fr}.linkrow{grid-template-columns:1fr}.footer{font-size:7px}}
+
+/* iOS-first app shell */
+:root{--glass:rgba(20,19,27,.64);--glass-strong:rgba(27,25,35,.84)}
+body{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent}
+.shell{max-width:1180px;padding:14px 20px 110px}
+.header{height:52px}
+.brand strong{letter-spacing:-.045em}
+.ios-top{display:flex;align-items:center;gap:7px;padding:7px 9px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:rgba(255,255,255,.035);box-shadow:inset 0 1px rgba(255,255,255,.035)}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 12px rgba(82,227,154,.8)}
+.avatar{width:25px;height:25px;border-radius:50%;background:linear-gradient(135deg,#ff4b7c,#9a62ff,#53a7ff);display:grid;place-items:center;font:700 10px 'Space Grotesk';box-shadow:0 0 0 2px rgba(255,255,255,.06)}
+.appbar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;margin-bottom:4px}
+.appbar-center{justify-self:center;padding:7px 14px;border:1px solid rgba(255,255,255,.07);border-radius:999px;background:rgba(255,255,255,.025);font:600 9px 'Space Grotesk';letter-spacing:.09em;text-transform:uppercase;color:#a6a2ae}
+.appbar-right{justify-self:end;display:flex;align-items:center;gap:8px}
+.icon-btn{width:34px;height:34px;border:1px solid var(--line);border-radius:50%;background:rgba(255,255,255,.035);color:#c9c5cf;display:grid;place-items:center;transition:.2s}
+.icon-btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.06)}
+.hero{padding:34px 2px 16px}
+.hero h1{max-width:770px}
+.hero-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:19px}
+.meta-pill{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.03);border:1px solid var(--line);color:#817e8a;font-size:8px}
+.service-strip{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:13px;position:sticky;top:7px;z-index:5;padding:6px;background:rgba(7,7,11,.38);backdrop-filter:blur(18px);border-radius:23px}
+.service{min-height:122px;padding:15px;border-radius:19px}
+.service h2{font-size:16px;margin:10px 0 4px}
+.service.active{box-shadow:0 16px 48px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.05)}
+.workspace{margin-top:15px}
+.card{box-shadow:0 25px 80px rgba(0,0,0,.26)}
+.info{min-height:330px;padding:28px}
+.info h3{font-size:29px}
+.login{padding:22px}
+.utility-row{display:grid;grid-template-columns:1.2fr .8fr;gap:11px;margin-top:13px}
+.quick-card{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.025);cursor:pointer;transition:.2s}
+.quick-card:hover{transform:translateY(-1px);background:rgba(255,255,255,.045)}
+.quick-card b{font-size:10px}.quick-card span{font-size:8px;color:#74717c;line-height:1.5}
+.quick-chevron{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.05);color:#aaa6b1}
+.dock{position:fixed;left:50%;bottom:14px;z-index:30;transform:translateX(-50%);display:flex;align-items:center;gap:4px;padding:7px;border:1px solid rgba(255,255,255,.11);border-radius:25px;background:rgba(17,16,23,.78);backdrop-filter:blur(24px);box-shadow:0 22px 65px rgba(0,0,0,.45);width:min(94vw,520px)}
+.dock button{flex:1;height:42px;border:0;border-radius:17px;background:transparent;color:#7e7a87;font-size:8px;display:flex;align-items:center;justify-content:center;gap:6px;transition:.2s}
+.dock button.active{background:rgba(255,255,255,.07);color:#fff}
+.dock .home-icon{font-size:15px;line-height:1}
+.dock .center{flex:0 0 54px;height:54px;margin-top:-18px;border-radius:20px;background:linear-gradient(135deg,#ff356b,#975dff 64%,#4d9fff);box-shadow:0 14px 35px rgba(255,53,107,.23);color:#fff}
+.overlay{position:fixed;inset:0;z-index:40;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.45);backdrop-filter:blur(9px)}
+.overlay.open{display:flex;animation:overlayIn .24s ease}
+.sheet{width:min(100%,560px);padding:18px 18px calc(20px + env(safe-area-inset-bottom));border:1px solid rgba(255,255,255,.1);border-bottom:0;border-radius:28px 28px 0 0;background:rgba(18,17,24,.94);box-shadow:0 -20px 70px rgba(0,0,0,.45);animation:sheetIn .32s cubic-bezier(.2,.8,.2,1)}
+.sheet-handle{width:38px;height:4px;border-radius:99px;background:rgba(255,255,255,.16);margin:0 auto 17px}
+.sheet-head{display:flex;justify-content:space-between;align-items:center}.sheet-head strong{font:600 18px 'Space Grotesk'}
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:10px}.setting-row span{color:#85818d;font-size:8px;margin-top:4px;display:block;line-height:1.5}
+.switch{position:relative;width:42px;height:24px;border-radius:999px;background:#34313a;border:0}.switch:after{content:'';position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}.switch.on{background:linear-gradient(100deg,#ff356b,#975dff)}.switch.on:after{transform:translateX(18px)}
+.activity-empty{padding:36px;text-align:center;color:#85818d}.activity-icon{width:50px;height:50px;margin:0 auto 12px;border-radius:17px;display:grid;place-items:center;background:rgba(255,255,255,.04);font-size:20px}
+.reduce-motion *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+@keyframes overlayIn{from{opacity:0}to{opacity:1}}@keyframes sheetIn{from{transform:translateY(22px);opacity:.7}to{transform:none;opacity:1}}
+@media(max-width:900px){.shell{padding:10px 13px 104px}.service-strip{grid-template-columns:repeat(4,minmax(190px,1fr));top:4px}.utility-row{grid-template-columns:1fr}.dock{bottom:calc(10px + env(safe-area-inset-bottom))}}
+@media(max-width:620px){.appbar{grid-template-columns:1fr auto}.appbar-center{display:none}.hero{padding:27px 1px 13px}.hero h1{font-size:45px}.service-strip{grid-template-columns:repeat(4,70vw);overflow-x:auto}.service{min-height:116px}.info{padding:21px}.info h3{font-size:26px}.login{padding:18px}.header{height:47px}.secure{display:none}.dock{width:calc(100vw - 18px);border-radius:24px}.dock button{height:40px}.dock .center{flex-basis:51px;height:51px;border-radius:18px}}
 </style>
 </head>
 <body>
 <div id="bg"></div><div class="aurora"></div>
 <div class="shell">
-<header class="header">
-  <div class="brand"><div class="mark"></div><div><strong>MAHI SOCIAL CLEANER</strong><small>instagram utility workspace</small></div></div>
-  <div class="secure"><i></i>PRIVATE SESSION FLOW</div>
+<header class="header appbar">
+  <div class="brand"><div class="mark"></div><div><strong>MAHI</strong><small>social cleaner</small></div></div>
+  <div class="appbar-center">PRIVATE WORKSPACE</div>
+  <div class="appbar-right">
+    <button class="icon-btn" id="openActivity" type="button" aria-label="Activity">◌</button>
+    <button class="icon-btn" id="openSettings" type="button" aria-label="Settings">⋯</button>
+    <div class="ios-top"><i class="live-dot"></i><div class="avatar">M</div></div>
+  </div>
 </header>
 
 <section class="hero">
   <div class="eyebrow">ONE APP · FOUR SERVICES</div>
-  <h1>Everything you need to <span class="grad">clean up.</span></h1>
-  <p>Four focused Instagram utility services, kept together on one mobile-first screen. Pick a service from the top and use its own connection or automation workspace.</p>
+  <h1>Your social account,<br><span class="grad">under your control.</span></h1>
+  <p>A polished, mobile-first control center for personal Instagram cleanup and utility workflows.</p>
+  <div class="hero-meta"><span class="meta-pill">● Ready</span><span class="meta-pill">4 tools connected</span><span class="meta-pill">Private workspace</span></div>
 </section>
 
 <nav class="service-strip" aria-label="Cleanup services">
@@ -46,6 +102,10 @@
   <button class="service" data-service="nonfollowers" type="button"><div class="num">03</div><h2>Non-Followers</h2><p>Find people who do not follow you back and review them.</p><span class="mini">INSTAGRAM SESSION</span></button>
 <button class="service" data-service="instapy" type="button"><div class="num">04</div><h2>InstaPy Automation</h2><p>Build personal automation actions from the InstaPy workflow.</p><span class="mini">AUTOMATION CENTER</span></button>
 </nav>
+<div class="utility-row">
+  <div class="quick-card" data-service-jump="likes"><div><b>Quick cleanup</b><span>Jump straight to Like Cleanup</span></div><div class="quick-chevron">›</div></div>
+  <div class="quick-card" id="settingsQuick"><div><b>App settings</b><span>Motion, preferences & workspace</span></div><div class="quick-chevron">⚙</div></div>
+</div>
 
 <section id="likes" class="workspace active">
  <div class="grid">
@@ -137,13 +197,48 @@
 </div>
 <div class="toast" id="toast" role="status"></div>
 
+<nav class="dock" aria-label="Main navigation">
+  <button class="dock-tab active" data-dock="home" type="button"><span class="home-icon">⌂</span><span>Home</span></button>
+  <button class="dock-tab" data-dock="tools" type="button"><span class="home-icon">✦</span><span>Tools</span></button>
+  <button class="dock-tab center" id="dockQuick" type="button" aria-label="Quick actions">＋</button>
+  <button class="dock-tab" data-dock="activity" type="button"><span class="home-icon">◌</span><span>Activity</span></button>
+  <button class="dock-tab" data-dock="settings" type="button"><span class="home-icon">⚙</span><span>Settings</span></button>
+</nav>
+
+<div class="overlay" id="activityOverlay">
+ <section class="sheet"><div class="sheet-handle"></div><div class="sheet-head"><strong>Activity</strong><button class="icon-btn" data-close="activityOverlay" type="button">×</button></div>
+  <div class="activity-empty"><div class="activity-icon">◌</div><b id="activityTitle">No active jobs</b><p id="activityText">Your current cleanup run will appear here while it is running.</p></div>
+ </section>
+</div>
+<div class="overlay" id="settingsOverlay">
+ <section class="sheet"><div class="sheet-handle"></div><div class="sheet-head"><strong>App Settings</strong><button class="icon-btn" data-close="settingsOverlay" type="button">×</button></div>
+  <div class="setting-row"><div><b>Reduce motion</b><span>Use a calmer animation profile.</span></div><button class="switch" id="motionSwitch" type="button" aria-label="Reduce motion"></button></div>
+  <div class="setting-row"><div><b>Compact UI</b><span>Keep cards and controls tighter on small screens.</span></div><button class="switch on" id="compactSwitch" type="button" aria-label="Compact UI"></button></div>
+  <div style="padding-top:16px"><button class="btn secondary full" id="resetUi" type="button">RESET UI PREFERENCES</button></div>
+ </section>
+</div>
+
 <script>
-const services=[...document.querySelectorAll('.service')],pages={likes:'likes',comments:'comments',nonfollowers:'nonfollowers',instapy:'instapy'},crumb=document.querySelector('.brand small');
+const services=[...document.querySelectorAll('.service')],pages={likes:'likes',comments:'comments',nonfollowers:'nonfollowers',instapy:'instapy'};
 function activate(key){services.forEach(s=>s.classList.toggle('active',s.dataset.service===key));Object.values(pages).forEach(id=>document.getElementById(id).classList.toggle('active',id===pages[key]));document.querySelector('#'+pages[key]).scrollIntoView({behavior:'smooth',block:'start'})}
 services.forEach(s=>s.addEventListener('click',()=>activate(s.dataset.service)));
+document.querySelectorAll('[data-service-jump]').forEach(x=>x.addEventListener('click',()=>activate(x.dataset.serviceJump)));
 
 const toast=document.getElementById('toast');let tt;
 function showToast(t){toast.textContent=t;toast.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('show'),2400)}
+const activityOverlay=document.getElementById('activityOverlay'),settingsOverlay=document.getElementById('settingsOverlay');
+function openOverlay(el){el.classList.add('open')}function closeOverlay(el){el.classList.remove('open')}
+document.getElementById('openActivity').onclick=()=>openOverlay(activityOverlay);
+document.getElementById('openSettings').onclick=()=>openOverlay(settingsOverlay);
+document.getElementById('settingsQuick').onclick=()=>openOverlay(settingsOverlay);
+document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeOverlay(document.getElementById(b.dataset.close))));
+[activityOverlay,settingsOverlay].forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeOverlay(o)}));
+const motionSwitch=document.getElementById('motionSwitch'),compactSwitch=document.getElementById('compactSwitch');
+motionSwitch.onclick=()=>{motionSwitch.classList.toggle('on');document.body.classList.toggle('reduce-motion');localStorage.setItem('mahi_reduce_motion',document.body.classList.contains('reduce-motion'))};
+if(localStorage.getItem('mahi_reduce_motion')==='true'){motionSwitch.classList.add('on');document.body.classList.add('reduce-motion')}
+document.getElementById('resetUi').onclick=()=>{localStorage.removeItem('mahi_reduce_motion');document.body.classList.remove('reduce-motion');motionSwitch.classList.remove('on');compactSwitch.classList.add('on');showToast('Preferences reset');closeOverlay(settingsOverlay)};
+document.querySelectorAll('.dock-tab[data-dock]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.dock-tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');const k=b.dataset.dock;if(k==='activity')openOverlay(activityOverlay);else if(k==='settings')openOverlay(settingsOverlay);else if(k==='tools'){document.querySelector('.service-strip').scrollIntoView({behavior:'smooth',block:'start'});showToast('Choose a service') } else if(k==='home'){window.scrollTo({top:0,behavior:'smooth'});}}));
+document.getElementById('dockQuick').onclick=()=>{activate('likes');showToast('Quick action: Like Cleanup')};
 const instagramLogin=()=>window.open('https://www.instagram.com/accounts/login/','_blank','noopener');
 document.getElementById('instagramLoginComments').onclick=()=>instagramLogin();
 document.getElementById('instagramLoginNonFollowers').onclick=()=>instagramLogin();
@@ -265,7 +360,7 @@ if(window.THREE && !reduceMotion){
 }
 
 const form=document.getElementById('form'),start=document.getElementById('start'),stop=document.getElementById('stop'),progress=document.getElementById('progress'),fill=document.getElementById('fill'),pct=document.getElementById('pct'),msg=document.getElementById('msg'),label=document.getElementById('label');let job=null,timer=null;
-function updateJob(j){const p=Math.max(0,Math.min(100,Number(j.progress||0)));fill.style.width=p+'%';pct.textContent=p+'%';label.textContent=String(j.status||'WORKING').toUpperCase();msg.textContent=j.error||j.message||'';if(['complete','error','cancelled'].includes(j.status)){clearInterval(timer);start.disabled=false;stop.disabled=true}}
+function updateJob(j){const p=Math.max(0,Math.min(100,Number(j.progress||0)));fill.style.width=p+'%';pct.textContent=p+'%';label.textContent=String(j.status||'WORKING').toUpperCase();msg.textContent=j.error||j.message||'';const at=document.getElementById('activityTitle'),ax=document.getElementById('activityText');if(j.status&&j.status!=='complete'&&j.status!=='error'&&j.status!=='cancelled'){at.textContent='Like Cleanup is running';ax.textContent=(j.message||'Working…')+' · '+p+'%'}else if(j.status==='complete'){at.textContent='Last run complete';ax.textContent=j.message||'Cleanup finished.'}else if(j.status==='error'){at.textContent='Run needs attention';ax.textContent=j.error||'The cleanup stopped with an error.'}if(['complete','error','cancelled'].includes(j.status)){clearInterval(timer);start.disabled=false;stop.disabled=true}}
 form.addEventListener('submit',async e=>{e.preventDefault();start.disabled=true;stop.disabled=false;progress.classList.add('show');msg.textContent='Connecting…';try{const d=await(await fetch('/api/start',{method:'POST',body:new FormData(form)})).json();if(!d.job_id){msg.textContent=d.error||'Unable to start';start.disabled=false;stop.disabled=true;return}job=d.job_id;clearInterval(timer);timer=setInterval(async()=>{try{updateJob(await(await fetch('/api/status/'+job)).json())}catch(_){msg.textContent='Status check failed.'}},1000);showToast('Like cleanup started')}catch(e){msg.textContent='Unable to start: '+e.message;start.disabled=false;stop.disabled=true}});
 stop.addEventListener('click',async()=>{if(job)await fetch('/api/stop/'+job,{method:'POST'});stop.disabled=true;msg.textContent='Stopping…';showToast('Stopping run')});
 </script>
