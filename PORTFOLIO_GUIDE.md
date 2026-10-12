@@ -1,35 +1,22 @@
-# Personal portfolio — project guide
+# Mahi Personal Website Hub
 
-The public homepage is `web/index.html`. The portfolio is a lightweight, responsive, single-file frontend with CSS animations, a rotating headline, project filters, scroll reveals, a theme switcher, and custom CSS artwork. It does not depend on a frontend framework or third-party font/image CDN.
+All public website pages are served from the single Flask app in this repository, from GitHub's `main` branch.
 
-## Add a new website or tool
+## Public routes
 
-Open `web/index.html` and find the `var projects = [` array inside the script near the bottom. Add a new object before the closing `];`:
+- `/` — animated Mahi portfolio / project directory.
+- `/mahiflix/` — the MahiFlix movie and web-series discovery site.
+- `/linkora/` — the Linkora / WinForge Windows scripts library.
+- `/instagram-cleaner.html` — the preserved original Mahi Social Cleaner dashboard.
+- `/privacy` and `/health` — existing routes.
 
-```js
-{
-  id: "my-new-site",
-  title: "My New Site",
-  type: "website", // use "website" or "tool"
-  label: "05 / Category",
-  status: "Live",
-  description: "A short, clear explanation of what the project does.",
-  url: "https://example.com",
-  repo: "https://github.com/mahimahfud-ui/my-new-site",
-  art: "cinema", // use "cinema", "linkora", "social", or "browser"
-  tags: ["Website", "Project"]
-}
-```
+The websites are kept under `web/mahiflix/` and `web/linkora/`. Their assets use path prefixes so they work under the same domain. Linkora's BAT downloads are served from `/linkora/downloads/`.
 
-Use a unique lowercase `id`, your real project URL and repository URL, and an accurate status. Use `local: true` only for a project served by this same app (like `/instagram-cleaner.html`). Existing artwork styles can be reused, or new CSS art can be added in the stylesheet.
+## Add another site later
 
-Commit the edit to `main`. The connected Render service is configured for automatic deploys when active; if the service is suspended, a code commit alone will not make the website live.
+1. Add its static website files to `web/<site-slug>/`.
+2. Add a Flask route for `/<site-slug>/` in `app.py`, using `send_from_directory(os.path.join(app.root_path, "web", "<site-slug>"), "index.html")`, plus a redirect from `/<site-slug>` to the trailing-slash path.
+3. Add a new project object to the `projects` array in `web/index.html`, with its local URL `/<site-slug>/`, description, category, artwork and GitHub source.
+4. Commit and push to `main`. The unified Render service is connected to that branch for automatic deployment.
 
-## Routes
-
-- `/` — personal project portfolio.
-- `/instagram-cleaner.html` — preserved original Mahi Social Cleaner dashboard.
-- `/privacy` — existing privacy page.
-- `/health` — existing Flask health endpoint.
-
-The original Flask API and project files are intentionally left intact.
+This means new projects can share the same purchased domain and deployment. The existing Instagram automation still needs a persistent Python web service; it should not be converted to a static-only host because its job runner uses background threads.

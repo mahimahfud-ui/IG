@@ -1,0 +1,23 @@
+window.MAHIFLIX_LOGOS = {
+  "freekz.to": "/mahiflix/assets/logos/freekz.svg",
+  "bingr.one": "/mahiflix/assets/logos/bingr.svg",
+  "cinegram.tv": "/mahiflix/assets/logos/cinegram.svg",
+  "m4uhd.gold": "/mahiflix/assets/logos/m4uhd.svg",
+  "cinehd.vc": "/mahiflix/assets/logos/cinehd.svg",
+  "pvrplay.online": "/mahiflix/assets/logos/pvrplay.svg",
+  "nightflix.vg": "/mahiflix/assets/logos/nightflix.svg",
+  "watchott.org": "/mahiflix/assets/logos/watchott.svg",
+  "1tube.org": "/mahiflix/assets/logos/1tube.svg",
+  "cinejoy.to": "/mahiflix/assets/logos/cinejoy.svg",
+  "7movies.ac": "/mahiflix/assets/logos/7movies.svg",
+  "7reels.cc": "/mahiflix/assets/logos/7reel.svg",
+  "filmtvapp.com": "/mahiflix/assets/logos/filmtv.svg",
+  "nuvixapp.in": "/mahiflix/assets/logos/nuvix.svg",
+  "github.com": "/mahiflix/assets/logos/vega.svg",
+  "netmirror.gg": "/mahiflix/assets/logos/netmirror.svg",
+  "cinehd.dev": "/mahiflix/assets/logos/cinehd.svg",
+  "moviboxapk.com": "/mahiflix/assets/logos/moviboxapk.svg",
+  "hdghartv.com.pk": "/mahiflix/assets/logos/hdghartv.svg",
+  "anivortex.in": "/mahiflix/assets/logos/anivortex.svg",
+  "nxsha.app": "/mahiflix/assets/logos/nxsha.svg"
+};

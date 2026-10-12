@@ -6,7 +6,7 @@ import time
 import uuid
 from datetime import datetime, timezone
 
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, redirect, request, send_from_directory
 from werkzeug.exceptions import RequestEntityTooLarge
 
 app = Flask(__name__, static_folder="web", static_url_path="")
@@ -265,6 +265,50 @@ def worker(job_id, username, password, liked_data, config):
 @app.get("/")
 def index():
     return send_from_directory("web", "index.html")
+
+
+@app.get("/mahiflix")
+def mahiflix_redirect():
+    return redirect("/mahiflix/", code=308)
+
+
+@app.get("/mahiflix/")
+def mahiflix_index():
+    return send_from_directory(os.path.join(app.root_path, "web", "mahiflix"), "index.html")
+
+
+@app.get("/linkora")
+def linkora_redirect():
+    return redirect("/linkora/", code=308)
+
+
+@app.get("/linkora/")
+def linkora_index():
+    return send_from_directory(os.path.join(app.root_path, "web", "linkora"), "index.html")
+
+
+# These existing app-download cards used root-level server routes. Keep them
+# working in the unified site by forwarding to each project's public download page.
+APP_DOWNLOAD_PAGES = {
+    "filmtv": "https://www.filmtvapp.com/",
+    "nuvix": "https://nuvixapp.in/",
+    "vega": "https://github.com/vega-org/vega-app",
+    "netmirror": "https://netmirror.gg/",
+    "cinehd": "https://cinehd.dev/",
+    "moviboxapk": "https://moviboxapk.com/",
+    "pvrplay": "https://pvrplay.online/",
+    "hdghartv": "https://hdghartv.com.pk/",
+    "anivortex": "https://anivortex.in/",
+    "nxsha": "https://nxsha.app/",
+}
+
+
+@app.get("/download/app/<slug>")
+def download_app_redirect(slug):
+    destination = APP_DOWNLOAD_PAGES.get(slug.lower())
+    if destination is None:
+        return redirect("/mahiflix/", code=302)
+    return redirect(destination, code=302)
 
 
 @app.get("/api/config")
