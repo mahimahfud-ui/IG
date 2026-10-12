@@ -257,6 +257,27 @@ footer{border-top:1px solid var(--line);padding:24px 0 30px}
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
   .reveal,.js-enabled .reveal:not(.visible){opacity:1;transform:none}
 }
+
+/* Centered layout and Android-TV-style hover/focus lift */
+.nav-links a{display:inline-flex;align-items:center;padding:9px 13px;border-radius:999px;transition:transform .28s cubic-bezier(.2,.8,.2,1),background .28s,box-shadow .28s,color .28s}
+.nav-links a:hover,.nav-links a:focus-visible{transform:translateY(-4px) scale(1.06);background:color-mix(in srgb,var(--panel) 92%,var(--lime));box-shadow:0 12px 25px rgba(0,0,0,.17);color:var(--text)}
+.hero{grid-template-columns:1fr;min-height:auto;text-align:center;gap:0;padding-block:76px 98px}.hero-content{display:flex;flex-direction:column;align-items:center}.hero .eyebrow{justify-content:center}.hero h1{max-width:none;margin-inline:auto}.type-line{text-align:center}.hero-copy{text-align:center;margin-inline:auto}.hero-actions,.hero-meta{justify-content:center}.hero-visual{width:100%;max-width:610px;margin:18px auto 0;min-height:450px}.scroll-cue{left:50%;transform:translateX(-50%);white-space:nowrap}
+.section-heading{flex-direction:column;align-items:center;text-align:center;max-width:850px;margin:0 auto 34px}.section-heading p{text-align:center;margin-inline:auto}.filters{justify-content:center}
+.about-layout{grid-template-columns:1fr;gap:32px;text-align:center;max-width:850px;margin-inline:auto}.about-layout>div{width:100%}.about-title{margin-inline:auto}.about-copy{text-align:center;max-width:760px;margin-inline:auto}.principles{max-width:650px;margin:30px auto 0;text-align:left}
+.connect-card{flex-direction:column;align-items:center;text-align:center}.connect-copy p{margin-inline:auto}.connect-actions{justify-content:center}
+.project-card{transform:translateZ(0);transition:transform .32s cubic-bezier(.2,.8,.2,1),border-color .28s,box-shadow .32s}.project-card:hover,.project-card:focus-within{transform:translateY(-8px) scale(1.025);border-color:color-mix(in srgb,var(--lime) 52%,var(--line));box-shadow:var(--shadow)}
+.project-meta{justify-content:center}.project-info h3,.project-info p{text-align:center;margin-left:auto;margin-right:auto}.project-tags{justify-content:center}.project-footer{flex-direction:column;align-items:center;justify-content:center;gap:16px}.project-actions{justify-content:center}
+.btn:hover,.filter-btn:hover,.theme-toggle:hover,.menu-toggle:hover{transform:translateY(-4px) scale(1.045);box-shadow:0 12px 25px rgba(0,0,0,.2)}
+.art-apps{background:radial-gradient(ellipse at 50% 50%,#403b80 0%,#17192c 47%,#0c1119 100%)}
+.apps-spark{position:absolute;width:170px;height:170px;border:1px solid rgba(193,174,255,.35);border-radius:50%;box-shadow:0 0 0 22px rgba(193,174,255,.035),0 0 0 48px rgba(193,174,255,.025),0 0 65px rgba(150,125,255,.16);animation:appsOrbit 16s linear infinite}
+.apps-emblem{position:absolute;left:50%;top:50%;width:92px;height:92px;border-radius:29px;display:grid;place-items:center;transform:translate(-50%,-50%) rotate(-8deg);background:linear-gradient(145deg,#dcf7ff,#aaa2ff 55%,#7262dd);color:#17162a;font-size:42px;font-weight:900;box-shadow:0 24px 65px rgba(0,0,0,.4);animation:appsFloat 4.5s ease-in-out infinite}
+.apps-orb{position:absolute;width:34px;height:34px;border-radius:12px;display:grid;place-items:center;color:#fff;background:rgba(192,177,255,.16);border:1px solid rgba(220,210,255,.28);backdrop-filter:blur(10px);font-size:18px}
+.apps-orb.one{left:27%;top:28%;animation:appsFloat 5.2s ease-in-out infinite}.apps-orb.two{right:25%;top:31%;animation:appsFloat 4.7s ease-in-out -1.5s infinite}.apps-orb.three{left:31%;bottom:24%;animation:appsFloat 5.6s ease-in-out -2s infinite}.apps-orb.four{right:29%;bottom:23%;animation:appsFloat 4.3s ease-in-out -.7s infinite}
+.apps-wave{position:absolute;left:50%;bottom:18%;transform:translateX(-50%);display:flex;align-items:center;gap:5px;height:40px}.apps-wave i{display:block;width:4px;border-radius:6px;background:linear-gradient(180deg,#e1ddff,#8d85fc);height:var(--h);animation:wavePulse .9s ease-in-out infinite alternate;animation-delay:var(--d)}
+@keyframes appsOrbit{to{transform:rotate(360deg)}}@keyframes appsFloat{0%,100%{translate:0 0}50%{translate:0 -10px}}@keyframes wavePulse{to{height:calc(var(--h)*.42);opacity:.56}}
+@media(max-width:700px){.hero{padding-block:58px 84px}.hero-visual{min-height:370px;max-width:480px}.section-heading{margin-bottom:26px}.connect-card{padding:32px 20px}.project-info{text-align:center}}
+@media(prefers-reduced-motion:reduce){.apps-spark,.apps-emblem,.apps-orb,.apps-wave i{animation:none!important}.nav-links a,.project-card,.btn,.filter-btn,.theme-toggle,.menu-toggle{transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -385,10 +406,16 @@ footer{border-top:1px solid var(--line);padding:24px 0 30px}
       tags:["Movies","Web series","Discovery"]
     },
     {
+      id:"apps", title:"Apps", type:"website", label:"03 / Apps collection", status:"Live",
+      description:"A separate, animated app directory for movie apps and music players—all in one place.",
+      url:"/apps/", local:true, repo:"https://github.com/mahimahfud-ui/IG", art:"apps",
+      tags:["Movie apps","Music apps","Android"]
+    },
+    {
       id:"linkora",
       title:"Linkora",
       type:"website",
-      label:"02 / Windows & utilities",
+      label:"03 / Windows & utilities",
       status:"Live",
       description:"A growing library of practical Windows scripts, workflow helpers and ready-to-run utilities.",
       url:"/linkora/",
@@ -401,7 +428,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 30px}
       id:"social-cleaner",
       title:"Mahi Social Cleaner",
       type:"tool",
-      label:"03 / Instagram tools",
+      label:"04 / Instagram tools",
       status:"In this repo",
       description:"An Instagram workspace for account cleanup and local data insights. The original dashboard stays available alongside this portfolio.",
       url:"/instagram-cleaner.html",
@@ -414,7 +441,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 30px}
       id:"browser-helper",
       title:"Browser Helper",
       type:"tool",
-      label:"04 / Browser extension",
+      label:"05 / Browser extension",
       status:"Source",
       description:"A companion browser extension maintained in the same project, with its code and setup notes available on GitHub.",
       url:"https://github.com/mahimahfud-ui/IG/tree/main/browser-helper",
@@ -439,6 +466,8 @@ footer{border-top:1px solid var(--line);padding:24px 0 30px}
       content = '<div class="visual-spark"></div><div class="poster-stack"><div class="poster poster-two"><small>MAHI SELECTS</small><strong>AFTER<br>DARK</strong><em>FIND YOUR NEXT STORY</em></div><div class="poster poster-one"><small>NOW SHOWING</small><strong>NEW<br>WORLDS</strong><em>THE NEXT WATCH</em></div></div><div class="art-wordmark">Mahi<span>Flix</span></div><div class="art-caption">A world beyond the watchlist</div>';
     } else if(p.art === "linkora"){
       content = '<div class="terminal"><div class="terminal-head"><i></i><i></i><i></i><span style="margin-left:6px">windows / tools</span></div><div class="terminal-body"><div><span class="prompt">C:\\&gt;</span> winget upgrade --all</div><div class="comment"># make the routine simpler</div><div><span class="prompt">C:\\&gt;</span> run useful-tools.bat</div><div class="success">✓ Ready for the next task</div></div></div><div class="terminal-sticker">Less busywork. ↗</div><div class="art-caption">Utilities for the everyday</div>';
+    } else if(p.art === "apps"){
+      content = '<div class="apps-spark"></div><div class="apps-emblem">♪</div><span class="apps-orb one">▶</span><span class="apps-orb two">♫</span><span class="apps-orb three">▣</span><span class="apps-orb four">♪</span><div class="apps-wave">' + [14,25,17,34,22,39,18,29,13,32,20,26,14].map(function(h,i){return '<i style="--h:'+h+'px;--d:'+(i*.06)+'s"></i>'}).join('') + '</div><div class="art-caption">Music & movies, one tap away</div>';
     } else if(p.art === "social"){
       content = '<div class="social-window"><div class="social-top"><span class="social-avatar">M</span><span>Social workspace</span></div><div class="social-bars"></div><div class="social-bars short"></div><div class="social-stat"><span><b>01</b>Review</span><span><b>02</b>Organize</span><span><b>03</b>Clean up</span></div></div><div class="social-heart">✳</div><div class="art-caption">A calmer way to manage your data</div>';
     } else {

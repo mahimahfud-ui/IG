@@ -287,6 +287,16 @@ def linkora_index():
     return send_from_directory(os.path.join(app.root_path, "web", "linkora"), "index.html")
 
 
+@app.get("/apps")
+def apps_redirect():
+    return redirect("/apps/", code=308)
+
+
+@app.get("/apps/")
+def apps_index():
+    return send_from_directory(os.path.join(app.root_path, "web", "apps"), "index.html")
+
+
 # These existing app-download cards used root-level server routes. Keep them
 # working in the unified site by forwarding to each project's public download page.
 APP_DOWNLOAD_PAGES = {

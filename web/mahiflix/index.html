@@ -19,7 +19,7 @@ try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&!sessionStorage.
 *{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth;scroll-padding-top:80px}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}a{color:inherit;text-decoration:none}button,input{font:inherit}button{cursor:pointer}:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .logo{display:flex;align-items:center;justify-content:center;width:38px;height:38px}.logo img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 0 8px rgba(229,9,20,.22))}
 nav{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:center;gap:24px;padding:15px 4%;background:linear-gradient(180deg,rgba(0,0,0,.92),transparent);transition:background .55s cubic-bezier(.22,1,.36,1),box-shadow .55s cubic-bezier(.22,1,.36,1);will-change:background,box-shadow}
-nav.solid{background:rgba(20,20,20,.98);box-shadow:0 8px 30px rgba(0,0,0,.18)}nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0;font-size:14px}nav ul a{color:#ddd}nav ul a.on,nav ul a:hover{color:#fff;font-weight:700}
+nav.solid{background:rgba(20,20,20,.98);box-shadow:0 8px 30px rgba(0,0,0,.18)}nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0;font-size:14px}nav ul a{color:#ddd;display:inline-flex;align-items:center;padding:8px 12px;border-radius:999px;transition:transform .32s cubic-bezier(.22,1,.36,1),background .32s,box-shadow .32s,color .32s}nav ul a.on,nav ul a:hover{color:#fff;font-weight:700}nav ul a:hover,nav ul a:focus-visible{transform:translateY(-4px) scale(1.07);background:rgba(255,255,255,.09);box-shadow:0 12px 26px rgba(0,0,0,.32)}
 .nav-tools{position:absolute;right:4%;display:flex;align-items:center;gap:8px}.search{display:flex;align-items:center;border:1px solid transparent;padding:6px 8px}.search.open{border-color:#fff;background:#090909}.search button{border:0;background:none;color:#fff;display:grid;place-items:center;padding:0}.search input{width:0;opacity:0;border:0;outline:0;background:none;color:#fff;transition:width .45s cubic-bezier(.22,1,.36,1),opacity .35s ease,margin-left .45s cubic-bezier(.22,1,.36,1)}.search.open input{width:180px;opacity:1;margin-left:8px}
 .hero{position:relative;min-height:0;display:flex;align-items:center;padding:82px 4% 8px;background:radial-gradient(ellipse at 78% 24%,rgba(229,9,20,.5),transparent 34%),linear-gradient(90deg,rgba(0,0,0,.86),rgba(0,0,0,.18) 76%),linear-gradient(0deg,var(--bg),transparent 48%),#25070a}
 .hero-in{max-width:760px;width:100%;margin:0 auto;text-align:center;padding-top:0}.hero-meta,.btns{justify-content:center}.hero h1{font:400 clamp(64px,11vw,118px)/.9 "Bebas Neue",Impact,sans-serif;margin:0 0 12px;letter-spacing:.015em;text-shadow:0 4px 20px rgba(0,0,0,.6)}.hero p{font-size:clamp(14px,1.7vw,19px);line-height:1.5;color:#eee;max-width:650px;margin:0 auto 16px}.hero-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}.pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:99px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12);font-size:11px;font-weight:700;color:#e8e8e8}.pill.green{color:#9ef0b1}.pill.yellow{color:#ffe18a}.pill.red{color:#ff9a9f}
@@ -37,6 +37,8 @@ footer{text-align:center;color:#666;padding:30px 4% 44px;font-size:12px}footer .
 @media(min-width:761px){.card.live{transform-origin:center center}.card.live:hover,.card.live:focus-within{transform:translate3d(0,-10px,0) scale(1.065)}}
 @media(max-width:760px){nav{gap:12px;padding:12px 4%}nav .logo{font-size:31px}nav ul{display:none}.search.open input{width:145px}.hero{min-height:0;padding:78px 4% 6px}.hero h1{font-size:70px}.mode-wrap{margin:4px 4% 14px}.mode{padding:11px 15px}.arrow{display:none}.card.live:hover,.card.live:focus-within{transform:translateY(-4px) scale(1.035)}.card .more{display:none}.card .cap{display:block!important}.row h2{font-size:17px}.row-note{display:none}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+nav .apps-shortcut{display:none;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:7px 10px;font-size:10px;font-weight:800;transition:transform .3s,background .3s}nav .apps-shortcut:hover{transform:translateY(-3px) scale(1.06);background:rgba(255,255,255,.1)}
+@media(max-width:600px){nav .apps-shortcut{display:inline-flex;align-items:center}}
 </style>
 </head>
 <body>
@@ -46,29 +48,23 @@ footer{text-align:center;color:#666;padding:30px 4% 44px;font-size:12px}footer .
   <a class="logo" href="#top" aria-label="MahiFlix"><img src="/mahiflix/m-logo-v2.svg" alt="MahiFlix"></a>
   <ul>
     <li><a href="#top" data-nav="home" class="on">Home</a></li>
+    <li><a href="/apps/">Apps</a></li>
   </ul>
   <div class="nav-tools">
+    <a class="apps-shortcut" href="/apps/">Apps ↗</a>
     <div class="search" id="search"><button id="sbtn" aria-label="Search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button><input id="q" type="search" placeholder="Search" autocomplete="off"></div>
   </div>
 </nav>
 
 <header class="hero" id="top">
   <div class="hero-in">
-    <p id="heroDesc">A curated collection of the best movie &amp; web-series websites and apps.</p>
+    <p id="heroDesc">A curated collection of movie &amp; web-series websites. Discover a website for your next story.</p>
     <a class="ig-link" href="https://www.instagram.com/mahimahfud/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="igBgHero" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="2" y="2" width="20" height="20" rx="6" fill="url(#igBgHero)"/><rect x="6.3" y="6.3" width="11.4" height="11.4" rx="3.5" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="12" cy="12" r="2.7" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="16.35" cy="7.65" r="1.05" fill="#fff"/></svg></a>
   </div>
 </header>
 
-<div class="mode-wrap" id="browse">
-  <div class="mode-switch" role="tablist" aria-label="MahiFlix categories">
-    <button class="mode active" data-mode="sites" role="tab" aria-selected="true">WEBSITES</button>
-    <button class="mode" data-mode="apps" role="tab" aria-selected="false">APPS</button>
-  </div>
-</div>
-
 <main>
   <div id="sitesView" class="view active"></div>
-  <div id="appsView" class="view"></div>
   <p id="empty" class="empty">Nothing matched your search.</p>
 </main>
 
@@ -89,19 +85,6 @@ const S=[
 {name:"Cinegram",url:"https://cinegram.tv/home",domain:"cinegram.tv",ads:1,pop:77,smooth:75,langs:76,new:false,desc:"Movies and series streaming platform.",logoSources:["https://cinegram.tv/sizes/fav-192.png","https://cinegram.tv/favicon.ico","https://cinegram.tv/favicon.png"]},
 {name:"Watchott",url:"https://watchott.org/",domain:"watchott.org",ads:1,pop:58,smooth:58,langs:65,new:false,desc:"Movie and TV streaming website.",logoSources:["https://watchott.org/favicon.svg","https://watchott.org/favicon.ico","https://watchott.org/favicon.png"]},
 {name:"1tube",url:"https://www.1tube.org/",domain:"1tube.org",ads:2,pop:84,smooth:66,langs:82,new:false,desc:"Movies, TV and other streaming content.",logoSources:["https://www.1tube.org/logo.png","https://www.1tube.org/favicon.ico","https://www.1tube.org/favicon.png"]}
-];
-
-const A=[
-{name:"FilmTV",url:"/download/app/filmtv",domain:"filmtvapp.com",ads:0,pop:84,smooth:88,langs:86,new:true,desc:"FilmTV Android app with direct APK download.",logoSources:["https://www.filmtvapp.com/favicon.ico","https://www.filmtvapp.com/favicon.png","https://www.filmtvapp.com/icon-192.png"]},
-{name:"Nuvix",url:"/download/app/nuvix",domain:"nuvixapp.in",ads:0,pop:82,smooth:88,langs:86,new:true,desc:"Nuvix Android app with direct APK download.",logoSources:["https://www.nuvixapp.in/favicon.ico","https://www.nuvixapp.in/favicon.png","https://www.nuvixapp.in/icon-192.png"]},
-{name:"Vega",url:"/download/app/vega",domain:"github.com",ads:0,pop:88,smooth:91,langs:92,new:true,desc:"Open-source Android media streaming app with ad-free streaming and downloads.",logoSources:["https://raw.githubusercontent.com/vega-org/vega-app/main/assets/adaptive_icon.png"]},
-{name:"NetMirror",url:"/download/app/netmirror",domain:"netmirror.gg",ads:2,pop:90,smooth:66,langs:84,new:true,desc:"Android streaming app with movie and series sources.",logoSources:["https://netmirror.gg/favicon.ico","https://netmirror.gg/favicon.png","https://netmiirror.app/wp-content/uploads/2026/10/cropped-NetMirror-1-192x192.webp","https://netmiirror.app/wp-content/uploads/2026/10/cropped-NetMirror-1-180x180.webp"]},
-{name:"CineHD",url:"/download/app/cinehd",domain:"cinehd.dev",ads:2,pop:86,smooth:60,langs:78,new:false,desc:"Android movie and series streaming app.",logoSources:["https://cinehd.vc/icon-192x192.png","https://cinehd.dev/images/favicon.ico"]},
-{name:"Moviboxapk",url:"/download/app/moviboxapk",domain:"moviboxapk.com",ads:2,pop:77,smooth:63,langs:76,new:false,desc:"Android movie and series streaming app.",logoSources:["https://moviboxapk.com/wp-content/uploads/2026/06/cropped-cropped-moviebox-icon-192x192.webp","https://moviboxapk.com/wp-content/uploads/2026/06/cropped-cropped-moviebox-icon-180x180.webp","https://moviboxapk.com/favicon.ico","https://moviboxapk.com/favicon.png"]},
-{name:"PvrPlay",url:"/download/app/pvrplay",domain:"pvrplay.online",ads:2,pop:75,smooth:64,langs:74,new:false,desc:"Android app for movies and web series.",logoSources:["https://pvrplay.online/favicon.ico","https://pvrplay.online/favicon.png"]},
-{name:"Hdghartv",url:"/download/app/hdghartv",domain:"hdghartv.com.pk",ads:0,pop:72,smooth:86,langs:70,new:false,desc:"Free Android movies and TV app; its site advertises an ad-free experience.",logoSources:["https://hdghartv.com.pk/wp-content/uploads/2026/08/hdghartv-logo.png","https://hdghartv.com.pk/logo.png","https://hdghartv.com.pk/favicon.png","https://hdghartv.com.pk/favicon.ico"]},
-{name:"Anivortex",url:"/download/app/anivortex",domain:"anivortex.in",ads:1,pop:70,smooth:72,langs:80,new:false,desc:"Anime-focused streaming app.",logoSources:["https://anivortex.in/images/anivortex_logo.webp","https://anivortex.in/images/anivortex_logo_transparent.webp","https://anivortex.in/favicon.ico","https://anivortex.in/favicon.png"]},
-{name:"Nxsha",url:"/download/app/nxsha",domain:"nxsha.app",ads:1,pop:74,smooth:84,langs:90,new:false,desc:"Movies, TV, anime and K-drama discovery app.",logoSources:["https://nxsha.app/favicon.ico","https://nxsha.app/favicon.png","https://nxsha.app/icon-192.png"]}
 ];
 
 const adLabel=["No / minimal ads","Some ads","More / heavier ads"];
@@ -157,7 +140,7 @@ function card(it,i,isTop){
   const url=linkOf(it);
   return "<div class='card logo-card live' tabindex='0' role='link' style='--c1:"+c1+";--c2:"+c2+"' data-name='"+clean(it.name.toLowerCase())+"'>"+
     num+logoHTML(it)+nw+ad+
-    "<a class='cap' href='"+url+"' target='_blank' rel='noopener noreferrer'>"+clean(it.name)+(it.kind==="app"?" · App":"")+"</a>"+
+    "<a class='cap' href='"+url+"' target='_blank' rel='noopener noreferrer'>"+clean(it.name)+"</a>"+
     "<div class='more'><div class='actions'><a class='round go' href='"+url+"' target='_blank' rel='noopener noreferrer' aria-label='Open "+clean(it.name)+"'>"+svgPlay()+"</a><button class='round fav' aria-label='Add to My List'>"+svgPlus()+"</button></div>"+
     "<b>"+clean(it.name)+"</b><p>"+clean(it.desc)+"</p><p class='lang'>"+clean(it.langs)+"</p></div></div>";
 }
@@ -168,16 +151,12 @@ function rowHTML(title,items,opts){
   return "<section class='row "+(top?"top10 ":"")+"row-section' data-row='"+clean(title.toLowerCase())+"'><div class='row-head'><h2>"+clean(title)+"</h2><span class='row-note'>"+clean(note)+"</span></div><div class='rail'><button class='arrow l' aria-label='Scroll left'>&#8249;</button><div class='track'>"+items.map((it,i)=>card(Object.assign({},it,{kind:opts&&opts.kind||it.kind}),i,top)).join("")+"</div><button class='arrow r' aria-label='Scroll right'>&#8250;</button></div></div></section>";
 }
 
-function renderView(type){
-  const el=document.getElementById(type==="sites"?"sitesView":"appsView");
-  const data=type==="sites"?S:A;
-  const label=type==="sites"?"Websites":"Apps";
-  const sorted=data.slice().sort((a,b)=>qualityScore(b)-qualityScore(a));
-  el.innerHTML=rowHTML(label,sorted,{kind:type==="sites"?"site":"app",note:"Your curated MahiFlix collection"});
+function renderSites(){
+  const el=document.getElementById("sitesView");
+  const sorted=S.slice().sort((a,b)=>qualityScore(b)-qualityScore(a));
+  el.innerHTML=rowHTML("Websites",sorted,{kind:"site",note:"Curated websites for movie & web-series discovery"});
 }
-
-renderView("sites");
-renderView("apps");
+renderSites();
 document.querySelectorAll('.track').forEach(function(t){t.querySelectorAll('.card').forEach(function(card,i){card.style.animationDelay=(Math.min(i,8)*55)+'ms'})});
 function svgPlay(){return "<svg viewBox='0 0 24 24' fill='currentColor'><path d='M6 4l14 8-14 8z'/></svg>"}
 function svgPlus(){return "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round'><path d='M12 5v14M5 12h14'/></svg>"}
@@ -189,18 +168,6 @@ function rowHTML(title,items,opts){
 }
 
 function setHero(type){}
-
-document.querySelectorAll(".mode").forEach(function(btn){
-  btn.addEventListener("click",function(){
-    document.querySelectorAll(".mode").forEach(function(x){x.classList.remove("active");x.setAttribute("aria-selected","false")});
-    btn.classList.add("active");btn.setAttribute("aria-selected","true");
-    var mode=btn.dataset.mode;
-    document.getElementById("sitesView").classList.toggle("active",mode==="sites");
-    document.getElementById("appsView").classList.toggle("active",mode==="apps");
-    document.getElementById("q").value="";
-    document.getElementById("empty").style.display="none";
-      });
-});
 
 document.querySelectorAll(".rail").forEach(function(r){
   var t=r.querySelector(".track");
@@ -218,7 +185,7 @@ document.addEventListener("click",function(e){
   var cardEl=e.target.closest(".card");
   if(cardEl && !e.target.closest("a,button")){
     var name=cardEl.dataset.name||"";
-    var current=(document.querySelector(".view.active")===document.getElementById("appsView"))?A:S;
+    var current=S;
     var item=current.find(function(x){return x.name.toLowerCase()===name;});
     if(item && item.url)window.open(item.url,"_blank","noopener,noreferrer");
   }
@@ -229,7 +196,7 @@ document.addEventListener("keydown",function(e){
   if(!cardEl || e.target.closest("a,button"))return;
   e.preventDefault();
   var name=cardEl.dataset.name||"";
-  var current=(document.querySelector(".view.active")===document.getElementById("appsView"))?A:S;
+  var current=S;
   var item=current.find(function(x){return x.name.toLowerCase()===name;});
   if(item && item.url)window.open(item.url,"_blank","noopener,noreferrer");
 });
