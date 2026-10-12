@@ -16,7 +16,7 @@ header{position:sticky;top:0;z-index:20;border-bottom:1px solid transparent;back
 .hero{text-align:center;position:relative;padding:82px 0 36px;animation:enter .8s cubic-bezier(.2,.7,.2,1) both}.kicker{display:inline-flex;align-items:center;gap:9px;padding:7px 12px;border-radius:999px;border:1px solid #b9a7ff35;background:#b9a7ff0c;color:#d9d1ff;font-size:9px;text-transform:uppercase;letter-spacing:.18em;font-weight:800}.pulse{width:6px;height:6px;border-radius:50%;background:#82e4fa;box-shadow:0 0 12px #82e4fa}
 h1{font-size:clamp(49px,8vw,88px);line-height:.99;letter-spacing:-.085em;font-weight:790;margin:24px auto 18px;max-width:900px}h1 .grad{background:linear-gradient(100deg,#d7ccff,#82e4fa 48%,#e8a9ff);color:transparent;background-clip:text;-webkit-background-clip:text}.hero p{font-size:14px;line-height:1.9;color:var(--muted);max-width:620px;margin:0 auto}
 .equalizer{height:57px;display:flex;gap:5px;align-items:center;justify-content:center;margin:31px auto 0}.equalizer i{width:5px;border-radius:9px;background:linear-gradient(180deg,#d2baff,#73e4f7);height:var(--h);animation:equalize 1.05s ease-in-out infinite;animation-delay:var(--d);opacity:.86}
-.switch-wrap{display:flex;justify-content:center;margin:18px 0 27px}.switch{display:inline-flex;gap:5px;padding:5px;border:1px solid var(--line);border-radius:16px;background:#101326d9;box-shadow:0 20px 55px #0003}.switch button{border:1px solid transparent;background:transparent;color:var(--muted);padding:13px 19px;border-radius:11px;font-size:11px;font-weight:800;cursor:pointer;transition:transform .28s cubic-bezier(.2,.8,.2,1),background .25s,color .25s,box-shadow .25s}.switch button:hover{transform:translateY(-3px) scale(1.04);color:var(--text)}.switch button.active{color:#141329;background:linear-gradient(110deg,#d7ccff,#8ce5f4);box-shadow:0 8px 25px #82e4fa1e}
+.switch-wrap{display:flex;justify-content:center;margin:18px 0 27px}.switch{display:inline-flex;flex-wrap:wrap;justify-content:center;max-width:100%;gap:5px;padding:5px;border:1px solid var(--line);border-radius:16px;background:#101326d9;box-shadow:0 20px 55px #0003}.switch button{border:1px solid transparent;background:transparent;color:var(--muted);padding:13px 19px;border-radius:11px;font-size:11px;font-weight:800;cursor:pointer;transition:transform .28s cubic-bezier(.2,.8,.2,1),background .25s,color .25s,box-shadow .25s}.switch button:hover{transform:translateY(-3px) scale(1.04);color:var(--text)}.switch button.active{color:#141329;background:linear-gradient(110deg,#d7ccff,#8ce5f4);box-shadow:0 8px 25px #82e4fa1e}
 .search-row{display:flex;justify-content:center;margin:0 auto 28px}.search-box{width:min(450px,100%);display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:15px;background:#ffffff05;padding:0 15px;transition:border-color .25s,box-shadow .25s}.search-box:focus-within{border-color:#b9a7ff90;box-shadow:0 0 0 4px #b9a7ff0b}.search-box svg{flex:none;color:var(--muted)}.search-box input{width:100%;height:48px;background:transparent;border:0;outline:0;color:var(--text);font-size:12px}.search-box input::placeholder{color:var(--faint)}
 .results-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 15px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.14em}.results-bar strong{color:var(--text);font-weight:800}.collection-title{display:flex;align-items:center;gap:12px;margin:0 auto 19px;font-size:13px;font-weight:800;letter-spacing:.04em}.collection-title:before,.collection-title:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--line))}.collection-title:after{background:linear-gradient(90deg,var(--line),transparent)}
 .apps-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;padding-bottom:80px}.app-card{position:relative;isolation:isolate;min-width:0;border:1px solid var(--line);border-radius:22px;background:linear-gradient(155deg,#171a31e8,#101322f5 72%);padding:22px 20px 17px;overflow:hidden;text-align:center;transition:transform .32s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .32s}.app-card:before{content:"";position:absolute;inset:-1px;z-index:-1;opacity:0;background:radial-gradient(circle at 50% 0%,var(--accent-glow),transparent 62%);transition:opacity .3s}.app-card:hover,.app-card:focus-within{transform:translateY(-8px) scale(1.035);border-color:var(--accent);box-shadow:0 24px 55px #0006,0 0 28px var(--accent-glow)}.app-card:hover:before,.app-card:focus-within:before{opacity:1}.app-card:focus-within{z-index:4}
@@ -45,10 +45,10 @@ h1{font-size:clamp(49px,8vw,88px);line-height:.99;letter-spacing:-.085em;font-we
 <header id="header"><div class="wrap nav"><a class="brand" href="/" aria-label="Mahi homepage"><span class="brand-mark">M.</span><span>Mahi <span style="color:var(--muted);font-weight:550">/ Apps</span></span></a><nav class="nav-links" aria-label="Site navigation"><a href="/">Home</a><a href="/mahiflix/">MahiFlix</a><a href="/linkora/">Linkora</a></nav></div></header>
 <main class="wrap"><section class="hero"><div class="kicker"><span class="pulse"></span> The app shelf · Curated by Mahi</div><h1>Small icons.<br><span class="grad">Big worlds.</span></h1><p>One place for entertainment on your phone or TV. Explore movie apps, find a music player that fits your mood, and open each app's website or official Play Store search.</p>
 <div class="equalizer" aria-hidden="true"><i style="--h:15px;--d:-.2s"></i><i style="--h:27px;--d:-.6s"></i><i style="--h:39px;--d:-.3s"></i><i style="--h:22px;--d:-.8s"></i><i style="--h:46px;--d:-.1s"></i><i style="--h:31px;--d:-.5s"></i><i style="--h:19px;--d:-.4s"></i><i style="--h:37px;--d:-.9s"></i><i style="--h:24px;--d:-.2s"></i><i style="--h:44px;--d:-.7s"></i><i style="--h:17px;--d:-.4s"></i><i style="--h:30px;--d:-.8s"></i><i style="--h:14px;--d:-.1s"></i></div></section>
-<div class="switch-wrap"><div class="switch" role="tablist" aria-label="App category"><button class="active" data-category="movie" type="button" role="tab" aria-selected="true">▣ Movie apps</button><button data-category="music" type="button" role="tab" aria-selected="false">♫ Music apps</button></div></div>
+<div class="switch-wrap"><div class="switch" role="tablist" aria-label="App category"><button class="active" data-category="movie" type="button" role="tab" aria-selected="true">▣ Movie apps</button><button data-category="music" type="button" role="tab" aria-selected="false">♫ Music apps</button><button data-category="project" type="button" role="tab" aria-selected="false">✦ My projects</button></div></div>
 <div class="search-row"><label class="search-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="query" type="search" placeholder="Search apps..." autocomplete="off" aria-label="Search apps"></label></div>
 <div class="results-bar"><span id="activeTitle">Movie apps</span><span><strong id="count">10</strong> apps</span></div><h2 class="collection-title" id="collectionTitle">For your next watch</h2><section class="apps-grid" id="grid" aria-live="polite"></section><p class="empty" id="empty">No apps matched that search.</p></main>
-<footer><div class="wrap">A little space for good sound and good stories · <span id="year"></span><div class="links"><a href="/">Personal site</a><a href="/mahiflix/">MahiFlix websites</a><a href="https://github.com/mahimahfud-ui/IG" target="_blank" rel="noopener noreferrer">Source ↗</a></div></div></footer>
+<footer><div class="wrap">A little space for good sound and good stories · <span id="year"></span><div class="links"><a href="/">Personal site</a><a href="/mahiflix/">MahiFlix websites</a><a href="https://github.com/mahimahfud-ui/mahicloud" target="_blank" rel="noopener noreferrer">Source ↗</a></div></div></footer>
 <script src="/mahiflix/logo-manifest.js"></script>
 <script>
 (function(){
@@ -76,6 +76,14 @@ const musicApps=[
 {name:"VLC",short:"VLC",description:"A versatile local media player for music and video files.",url:playStore("VLC for Android"),accent:"#ffb34b",accent2:"#e47a2e",tags:["Local files","Audio","Video"]},
 {name:"TIDAL",short:"TD",description:"Music streaming with high-quality audio options and curated releases.",url:playStore("TIDAL Music"),accent:"#9edfff",accent2:"#5377dd",tags:["Audio quality","Albums","Streaming"]}
 ];
+const projectApps=[
+{name:"MahiFlix",short:"MF",kind:"Website",description:"Your local cinematic directory for discovering movie and web-series websites.",url:"/mahiflix/",accent:"#ff6b6b",accent2:"#8e202d",tags:["Movies","Web series","Hosted here"]},
+{name:"Linkora",short:"LI",kind:"Tool",description:"A curated Windows utility library with ready-to-run scripts and workflow helpers.",url:"/linkora/",accent:"#d7ff79",accent2:"#43885c",tags:["Windows","Scripts","Utilities"]},
+{name:"Mahi Social Cleaner",short:"SC",kind:"Tool",description:"The existing Instagram cleanup workspace and data-processing dashboard.",url:"/instagram-cleaner.html",accent:"#ff927d",accent2:"#a34b61",tags:["Instagram","Dashboard","Flask"]},
+{name:"Unfollowers Checker",short:"UC",kind:"Tool",description:"Compare followers and following JSON exports on this device. Your password is never requested and files stay in your browser.",url:"/unfollowers/",accent:"#88e7ee",accent2:"#4a63c5",tags:["Privacy-first","JSON export","Local-only"]},
+{name:"LUMR",short:"LM",kind:"Source",description:"A cinematic, media-first gallery for photos, video and creator profiles. Live accounts and uploads need Supabase configuration.",url:"https://github.com/mahimahfud-ui/LUMR",accent:"#bba5ff",accent2:"#7053c1",tags:["Creator gallery","Photo & video","Setup needed"]},
+{name:"Browser Helper",short:"BH",kind:"Extension",description:"A companion browser extension with a popup dashboard and automation helpers. Source and setup notes are on GitHub.",url:"https://github.com/mahimahfud-ui/mahicloud/tree/main/browser-helper",accent:"#8bdaf7",accent2:"#377aa4",tags:["Browser","Extension","Source"]}
+];
 let category="movie";const grid=document.getElementById("grid"),query=document.getElementById("query"),count=document.getElementById("count"),title=document.getElementById("activeTitle"),collectionTitle=document.getElementById("collectionTitle"),empty=document.getElementById("empty");
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function qualityScore(it){
@@ -96,11 +104,13 @@ function nextLogo(img){
 }
 function render(){
  const isMovie=category==="movie";
- const data=isMovie?movieApps.slice().sort((a,b)=>qualityScore(b)-qualityScore(a)):musicApps;
+ const isMusic=category==="music";
+ const isProject=category==="project";
+ const data=isMovie?movieApps.slice().sort((a,b)=>qualityScore(b)-qualityScore(a)):(isMusic?musicApps:projectApps);
  const q=query.value.trim().toLowerCase();
  const shown=data.filter(x=>(x.name+" "+(x.desc||x.description||"")+" "+(x.domain||"")+" "+(x.tags||[]).join(" ")).toLowerCase().includes(q));
- title.textContent=isMovie?"Movie apps":"Music apps";
- collectionTitle.textContent=isMovie?"For your next watch":"For every kind of mood";
+ title.textContent=isMovie?"Movie apps":(isMusic?"Music apps":"My projects");
+ collectionTitle.textContent=isMovie?"For your next watch":(isMusic?"For every kind of mood":"Your tools, all in one place");
  count.textContent=String(shown.length).padStart(2,"0");
  empty.style.display=shown.length?"none":"block";
  grid.innerHTML=shown.map((x,i)=>{
@@ -124,13 +134,13 @@ function render(){
   }else{
    icon='<div class="app-icon" aria-hidden="true">'+esc(x.short||x.name.slice(0,2).toUpperCase())+'</div>';
    tagMarkup='<div class="tags">'+(x.tags||[]).map(t=>'<span>'+esc(t)+'</span>').join("")+'</div>';
-   sublabel="Google Play search";
+   sublabel=isProject?(x.kind||"Personal project"):"Google Play search";
   }
   const destination=x.url||"#";
   return '<article class="app-card" style="--accent:'+esc(accent)+';--accent2:'+esc(accent2)+';--accent-glow:'+esc(accent)+'30;animation:enter .45s ease both;animation-delay:'+Math.min(i,8)*35+'ms">'+
-    '<div class="card-top">'+icon+'<span class="kind">'+(isMovie?"Movie & TV":"Music")+'</span></div>'+
+    '<div class="card-top">'+icon+'<span class="kind">'+(isMovie?"Movie & TV":(isProject?(x.kind||"Project"):"Music"))+'</span></div>'+
     '<h3>'+esc(x.name)+'</h3><p>'+esc(description)+'</p>'+tagMarkup+
-    '<div class="card-footer"><small>'+esc(sublabel)+'</small><a class="open-link" href="'+esc(destination)+'" target="_blank" rel="noopener noreferrer">'+(isMovie?"Visit app page":"Find app")+' <span aria-hidden="true">↗</span></a></div>'+
+    '<div class="card-footer"><small>'+esc(sublabel)+'</small><a class="open-link" href="'+esc(destination)+'" target="_blank" rel="noopener noreferrer">'+(isMovie?"Visit app page":(isProject?"Open project":"Find app"))+' <span aria-hidden="true">↗</span></a></div>'+
   '</article>';
  }).join("");
  grid.querySelectorAll(".movie-app-logo").forEach(img=>img.addEventListener("error",()=>nextLogo(img)));

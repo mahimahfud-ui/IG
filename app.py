@@ -297,6 +297,16 @@ def apps_index():
     return send_from_directory(os.path.join(app.root_path, "web", "apps"), "index.html")
 
 
+@app.get("/unfollowers")
+def unfollowers_redirect():
+    return redirect("/unfollowers/", code=308)
+
+
+@app.get("/unfollowers/")
+def unfollowers_index():
+    return send_from_directory(os.path.join(app.root_path, "web", "unfollowers"), "index.html")
+
+
 # These existing app-download cards used root-level server routes. Keep them
 # working in the unified site by forwarding to each project's public download page.
 APP_DOWNLOAD_PAGES = {
