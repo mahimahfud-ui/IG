@@ -27,6 +27,19 @@ h1{font-size:clamp(49px,8vw,88px);line-height:.99;letter-spacing:-.085em;font-we
 @media(max-width:900px){.apps-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding-top:69px}}
 @media(max-width:600px){.wrap{width:calc(100% - 28px)}.nav{height:65px;justify-content:center;gap:0}.brand{position:absolute;left:0}.nav-links{gap:0;margin-left:38px}.nav-links a{font-size:10px;padding:8px 8px}.hero{padding:55px 0 27px}h1{font-size:clamp(46px,12vw,68px)}.apps-grid{grid-template-columns:1fr;gap:12px}.app-card{padding:20px}.app-card p{min-height:0}.switch button{padding:12px 14px;font-size:10px}.switch-wrap{margin-top:12px}.glow-ball.a{width:240px;height:240px}.glow-ball.b{width:190px;height:190px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.app-card:hover,.app-card:focus-within,.nav-links a:hover{transform:none}}
+
+/* Original MahiFlix app artwork: use the repository's local logo assets first. */
+.app-icon.movie-logo{width:74px;height:74px;display:block;flex:none;background:transparent;box-shadow:none;border-radius:19px;overflow:visible;letter-spacing:0}
+.app-icon.movie-logo:after{display:none}
+.movie-app-logo{position:relative;width:100%;height:100%;display:block;object-fit:contain;background:#050505;padding:8px;border-radius:18px;box-shadow:0 9px 24px rgba(0,0,0,.36);transition:transform .45s cubic-bezier(.2,.8,.2,1),filter .4s ease}
+.app-card:hover .movie-app-logo,.app-card:focus-within .movie-app-logo{transform:scale(1.055);filter:brightness(1.08)}
+.movie-app-tags{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;margin-top:15px}
+.movie-app-tags span{font-size:8px;border:1px solid var(--line);border-radius:999px;padding:5px 7px;color:#a7abc7}
+.movie-app-tags .fresh{color:#9ef0b1;border-color:#46d3694d}
+.movie-app-tags .ad-low{color:#9ef0b1;border-color:#46d3694d}
+.movie-app-tags .ad-mid{color:#ffe18a;border-color:#f5c5184d}
+.movie-app-tags .ad-high{color:#ffadb0;border-color:#e509144d}
+
 </style></head>
 <body><div class="ambient" aria-hidden="true"><span class="glow-ball a"></span><span class="glow-ball b"></span></div>
 <header id="header"><div class="wrap nav"><a class="brand" href="/" aria-label="Mahi homepage"><span class="brand-mark">M.</span><span>Mahi <span style="color:var(--muted);font-weight:550">/ Apps</span></span></a><nav class="nav-links" aria-label="Site navigation"><a href="/">Home</a><a href="/mahiflix/">MahiFlix</a><a href="/linkora/">Linkora</a></nav></div></header>
@@ -36,20 +49,21 @@ h1{font-size:clamp(49px,8vw,88px);line-height:.99;letter-spacing:-.085em;font-we
 <div class="search-row"><label class="search-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="query" type="search" placeholder="Search apps..." autocomplete="off" aria-label="Search apps"></label></div>
 <div class="results-bar"><span id="activeTitle">Movie apps</span><span><strong id="count">10</strong> apps</span></div><h2 class="collection-title" id="collectionTitle">For your next watch</h2><section class="apps-grid" id="grid" aria-live="polite"></section><p class="empty" id="empty">No apps matched that search.</p></main>
 <footer><div class="wrap">A little space for good sound and good stories · <span id="year"></span><div class="links"><a href="/">Personal site</a><a href="/mahiflix/">MahiFlix websites</a><a href="https://github.com/mahimahfud-ui/IG" target="_blank" rel="noopener noreferrer">Source ↗</a></div></div></footer>
+<script src="/mahiflix/logo-manifest.js"></script>
 <script>
 (function(){
 "use strict";
 const movieApps=[
-{name:"FilmTV",short:"FT",description:"Movie and series app entry from the entertainment collection.",url:"/download/app/filmtv",accent:"#f067a5",accent2:"#a54fff",tags:["Movies","Series","Android"]},
-{name:"Nuvix",short:"NV",description:"Entertainment app listing for movie and television discovery.",url:"/download/app/nuvix",accent:"#63b8ff",accent2:"#6c75ec",tags:["Movies","Series","Android"]},
-{name:"Vega",short:"VG",description:"Open-source media app project; check its source/community page.",url:"/download/app/vega",accent:"#45d7c6",accent2:"#3c83c8",tags:["Media","Open source","Android"]},
-{name:"NetMirror",short:"NM",description:"Movie and series app entry. Review the destination before installing.",url:"/download/app/netmirror",accent:"#ff986e",accent2:"#e65b89",tags:["Movies","Series","Android"]},
-{name:"CineHD",short:"CH",description:"Movie and television app listing from the former MahiFlix collection.",url:"/download/app/cinehd",accent:"#ff7b70",accent2:"#b34ce6",tags:["Movies","TV","Android"]},
-{name:"Movibox",short:"MB",description:"Movie and series app listing. Review its source and permissions first.",url:"/download/app/moviboxapk",accent:"#ffc476",accent2:"#ee7f4d",tags:["Movies","Series","Android"]},
-{name:"PvrPlay",short:"PV",description:"Entertainment app listing for movie and web-series browsing.",url:"/download/app/pvrplay",accent:"#9f92ff",accent2:"#5c64cf",tags:["Movies","Series","Android"]},
-{name:"HDGHAR TV",short:"HD",description:"Movie and television app entry in the consolidated collection.",url:"/download/app/hdghartv",accent:"#f1c86d",accent2:"#d27b3b",tags:["Movies","TV","Android"]},
-{name:"AniVortex",short:"AV",description:"Anime-focused app entry for animation fans.",url:"/download/app/anivortex",accent:"#fa89c5",accent2:"#9868f5",tags:["Anime","Animation","Android"]},
-{name:"Nxsha",short:"NX",description:"Entertainment discovery app listing with movies, television and anime.",url:"/download/app/nxsha",accent:"#65dba5",accent2:"#4282a9",tags:["Movies","Anime","Android"]}
+{name:"FilmTV",url:"/download/app/filmtv",domain:"filmtvapp.com",ads:0,pop:84,smooth:88,langs:86,new:true,desc:"FilmTV Android app with direct APK download.",logoSources:["https://www.filmtvapp.com/favicon.ico","https://www.filmtvapp.com/favicon.png","https://www.filmtvapp.com/icon-192.png"]},
+{name:"Nuvix",url:"/download/app/nuvix",domain:"nuvixapp.in",ads:0,pop:82,smooth:88,langs:86,new:true,desc:"Nuvix Android app with direct APK download.",logoSources:["https://www.nuvixapp.in/favicon.ico","https://www.nuvixapp.in/favicon.png","https://www.nuvixapp.in/icon-192.png"]},
+{name:"Vega",url:"/download/app/vega",domain:"github.com",ads:0,pop:88,smooth:91,langs:92,new:true,desc:"Open-source Android media streaming app with ad-free streaming and downloads.",logoSources:["https://raw.githubusercontent.com/vega-org/vega-app/main/assets/adaptive_icon.png"]},
+{name:"NetMirror",url:"/download/app/netmirror",domain:"netmirror.gg",ads:2,pop:90,smooth:66,langs:84,new:true,desc:"Android streaming app with movie and series sources.",logoSources:["https://netmirror.gg/favicon.ico","https://netmirror.gg/favicon.png","https://netmiirror.app/wp-content/uploads/2026/10/cropped-NetMirror-1-192x192.webp","https://netmiirror.app/wp-content/uploads/2026/10/cropped-NetMirror-1-180x180.webp"]},
+{name:"CineHD",url:"/download/app/cinehd",domain:"cinehd.dev",ads:2,pop:86,smooth:60,langs:78,new:false,desc:"Android movie and series streaming app.",logoSources:["https://cinehd.vc/icon-192x192.png","https://cinehd.dev/images/favicon.ico"]},
+{name:"Moviboxapk",url:"/download/app/moviboxapk",domain:"moviboxapk.com",ads:2,pop:77,smooth:63,langs:76,new:false,desc:"Android movie and series streaming app.",logoSources:["https://moviboxapk.com/wp-content/uploads/2026/06/cropped-cropped-moviebox-icon-192x192.webp","https://moviboxapk.com/wp-content/uploads/2026/06/cropped-cropped-moviebox-icon-180x180.webp","https://moviboxapk.com/favicon.ico","https://moviboxapk.com/favicon.png"]},
+{name:"PvrPlay",url:"/download/app/pvrplay",domain:"pvrplay.online",ads:2,pop:75,smooth:64,langs:74,new:false,desc:"Android app for movies and web series.",logoSources:["https://pvrplay.online/favicon.ico","https://pvrplay.online/favicon.png"]},
+{name:"Hdghartv",url:"/download/app/hdghartv",domain:"hdghartv.com.pk",ads:0,pop:72,smooth:86,langs:70,new:false,desc:"Free Android movies and TV app; its site advertises an ad-free experience.",logoSources:["https://hdghartv.com.pk/wp-content/uploads/2026/08/hdghartv-logo.png","https://hdghartv.com.pk/logo.png","https://hdghartv.com.pk/favicon.png","https://hdghartv.com.pk/favicon.ico"]},
+{name:"Anivortex",url:"/download/app/anivortex",domain:"anivortex.in",ads:1,pop:70,smooth:72,langs:80,new:false,desc:"Anime-focused streaming app.",logoSources:["https://anivortex.in/images/anivortex_logo.webp","https://anivortex.in/images/anivortex_logo_transparent.webp","https://anivortex.in/favicon.ico","https://anivortex.in/favicon.png"]},
+{name:"Nxsha",url:"/download/app/nxsha",domain:"nxsha.app",ads:1,pop:74,smooth:84,langs:90,new:false,desc:"Movies, TV, anime and K-drama discovery app.",logoSources:["https://nxsha.app/favicon.ico","https://nxsha.app/favicon.png","https://nxsha.app/icon-192.png"]}
 ];
 const playStore=q=>"https://play.google.com/store/search?q="+encodeURIComponent(q)+"&c=apps";
 const musicApps=[
@@ -64,10 +78,62 @@ const musicApps=[
 ];
 let category="movie";const grid=document.getElementById("grid"),query=document.getElementById("query"),count=document.getElementById("count"),title=document.getElementById("activeTitle"),collectionTitle=document.getElementById("collectionTitle"),empty=document.getElementById("empty");
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function qualityScore(it){
+ return (it.pop*.42)+(it.smooth*.30)+(it.langs*.18)+((2-it.ads)*10);
+}
+function nextLogo(img){
+ let sources=[];
+ try{sources=JSON.parse(img.getAttribute("data-logo-sources")||"[]");}catch(_){}
+ let idx=Number(img.getAttribute("data-logo-index")||"0")+1;
+ if(idx<sources.length){
+  img.setAttribute("data-logo-index",String(idx));
+  img.src=sources[idx];
+ }else{
+  const wrap=img.closest(".app-icon");
+  if(wrap)wrap.textContent=(img.alt||"App").replace(/\s+logo$/i,"").slice(0,2).toUpperCase();
+  img.remove();
+ }
+}
 function render(){
- const data=category==="movie"?movieApps:musicApps,q=query.value.trim().toLowerCase(),shown=data.filter(x=>(x.name+" "+x.description+" "+x.tags.join(" ")).toLowerCase().includes(q));
- title.textContent=category==="movie"?"Movie apps":"Music apps";collectionTitle.textContent=category==="movie"?"For your next watch":"For every kind of mood";count.textContent=String(shown.length).padStart(2,"0");empty.style.display=shown.length?"none":"block";
- grid.innerHTML=shown.map((x,i)=>'<article class="app-card" style="--accent:'+esc(x.accent)+';--accent2:'+esc(x.accent2)+';--accent-glow:'+esc(x.accent)+'30;animation:enter .45s ease both;animation-delay:'+Math.min(i,8)*35+'ms"><div class="card-top"><div class="app-icon" aria-hidden="true">'+esc(x.short)+'</div><span class="kind">'+(category==="movie"?"Movie & TV":"Music")+'</span></div><h3>'+esc(x.name)+'</h3><p>'+esc(x.description)+'</p><div class="tags">'+x.tags.map(t=>'<span>'+esc(t)+'</span>').join("")+'</div><div class="card-footer"><small>'+(category==="movie"?"External app site":"Google Play search")+'</small><a class="open-link" href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+(category==="movie"?"Visit site":"Find app")+' <span aria-hidden="true">↗</span></a></div></article>').join("");
+ const isMovie=category==="movie";
+ const data=isMovie?movieApps.slice().sort((a,b)=>qualityScore(b)-qualityScore(a)):musicApps;
+ const q=query.value.trim().toLowerCase();
+ const shown=data.filter(x=>(x.name+" "+(x.desc||x.description||"")+" "+(x.domain||"")+" "+(x.tags||[]).join(" ")).toLowerCase().includes(q));
+ title.textContent=isMovie?"Movie apps":"Music apps";
+ collectionTitle.textContent=isMovie?"For your next watch":"For every kind of mood";
+ count.textContent=String(shown.length).padStart(2,"0");
+ empty.style.display=shown.length?"none":"block";
+ grid.innerHTML=shown.map((x,i)=>{
+  const accent=x.accent||"#aaa2ff", accent2=x.accent2||"#7262dd";
+  let icon="";
+  let tagMarkup="";
+  let description=x.description||x.desc||"";
+  let sublabel="";
+  if(isMovie){
+   const local=(window.MAHIFLIX_LOGOS||{})[x.domain];
+   const sources=Array.from(new Set([local].concat(x.logoSources||[]).concat([
+    "https://"+x.domain+"/favicon.ico",
+    "https://"+x.domain+"/favicon.png",
+    "https://"+x.domain+"/favicon.svg",
+    "https://www.google.com/s2/favicons?sz=256&domain="+encodeURIComponent(x.domain)
+   ]).filter(Boolean)));
+   icon='<div class="app-icon movie-logo"><img class="movie-app-logo" loading="eager" decoding="async" alt="'+esc(x.name)+' logo" src="'+esc(sources[0])+'" data-logo-sources="'+esc(JSON.stringify(sources))+'" data-logo-index="0"></div>';
+   const ads=x.ads===0?'<span class="ad-low">No / minimal ads</span>':x.ads===1?'<span class="ad-mid">Some ads</span>':'<span class="ad-high">More ads</span>';
+   tagMarkup='<div class="movie-app-tags">'+(x.new?'<span class="fresh">NEW</span>':'')+ads+'<span>'+esc(x.domain)+'</span></div>';
+   sublabel="App website";
+  }else{
+   icon='<div class="app-icon" aria-hidden="true">'+esc(x.short||x.name.slice(0,2).toUpperCase())+'</div>';
+   tagMarkup='<div class="tags">'+(x.tags||[]).map(t=>'<span>'+esc(t)+'</span>').join("")+'</div>';
+   sublabel="Google Play search";
+  }
+  const destination=x.url||"#";
+  return '<article class="app-card" style="--accent:'+esc(accent)+';--accent2:'+esc(accent2)+';--accent-glow:'+esc(accent)+'30;animation:enter .45s ease both;animation-delay:'+Math.min(i,8)*35+'ms">'+
+    '<div class="card-top">'+icon+'<span class="kind">'+(isMovie?"Movie & TV":"Music")+'</span></div>'+
+    '<h3>'+esc(x.name)+'</h3><p>'+esc(description)+'</p>'+tagMarkup+
+    '<div class="card-footer"><small>'+esc(sublabel)+'</small><a class="open-link" href="'+esc(destination)+'" target="_blank" rel="noopener noreferrer">'+(isMovie?"Visit app page":"Find app")+' <span aria-hidden="true">↗</span></a></div>'+
+  '</article>';
+ }).join("");
+ grid.querySelectorAll(".movie-app-logo").forEach(img=>img.addEventListener("error",()=>nextLogo(img)));
 }
 document.querySelectorAll("[data-category]").forEach(btn=>btn.addEventListener("click",()=>{category=btn.dataset.category;document.querySelectorAll("[data-category]").forEach(other=>{const active=other===btn;other.classList.toggle("active",active);other.setAttribute("aria-selected",active?"true":"false");});render();}));
 query.addEventListener("input",render);const header=document.getElementById("header");addEventListener("scroll",()=>header.classList.toggle("scrolled",scrollY>6),{passive:true});document.getElementById("year").textContent=new Date().getFullYear();
