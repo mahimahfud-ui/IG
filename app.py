@@ -307,6 +307,25 @@ def unfollowers_index():
     return send_from_directory(os.path.join(app.root_path, "web", "unfollowers"), "index.html")
 
 
+@app.get("/lumr")
+def lumr_redirect():
+    return redirect("/lumr/", code=308)
+
+
+@app.get("/lumr/")
+def lumr_index():
+    return send_from_directory(os.path.join(app.root_path, "web", "lumr"), "index.html")
+
+
+@app.get("/lumr/api/config")
+def lumr_config():
+    return jsonify({
+        "supabaseUrl": os.environ.get("SUPABASE_URL", ""),
+        "publishableKey": os.environ.get("SUPABASE_PUBLISHABLE_KEY") or os.environ.get("SUPABASE_ANON_KEY", ""),
+        "youtubeUrl": os.environ.get("YOUTUBE_URL", ""),
+    })
+
+
 # These existing app-download cards used root-level server routes. Keep them
 # working in the unified site by forwarding to each project's public download page.
 APP_DOWNLOAD_PAGES = {
