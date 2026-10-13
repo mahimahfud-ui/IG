@@ -1,6 +1,6 @@
 // MahiFlix cinema scene: a projector beam, dust lit inside it, and drifting film ribbons.
 // Original work. No external assets; everything is generated in shaders.
-import * as THREE from '/vendor/three.module.min.js';
+import * as THREE from '/mahiflix/vendor/three.module.min.js';
 import { clamp, smooth } from './state.js';
 
 // ---- shared GLSL: one definition of the beam so background, dust and film all agree ----
