@@ -1,10 +1,14 @@
 import json
 import os
 import random
+import re
 import threading
 import time
 import uuid
+from urllib.parse import urljoin, urlparse
 from datetime import datetime, timezone
+
+import requests
 
 from flask import Flask, jsonify, redirect, request, send_from_directory
 from werkzeug.exceptions import RequestEntityTooLarge
@@ -326,28 +330,149 @@ def lumr_config():
     })
 
 
-# These existing app-download cards used root-level server routes. Keep them
-# working in the unified site by forwarding to each project's public download page.
-APP_DOWNLOAD_PAGES = {
-    "filmtv": "https://www.filmtvapp.com/",
-    "nuvix": "https://nuvixapp.in/",
-    "vega": "https://github.com/vega-org/vega-app",
-    "netmirror": "https://netmirror.gg/",
-    "cinehd": "https://cinehd.dev/",
-    "moviboxapk": "https://moviboxapk.com/",
-    "pvrplay": "https://pvrplay.online/",
-    "hdghartv": "https://hdghartv.com.pk/",
-    "anivortex": "https://anivortex.in/",
-    "nxsha": "https://nxsha.app/",
+
+# Direct APK resolver ported from the original MahiFlix download workflow.
+# Resolved URLs must be HTTPS, APK/XAPK files, and served by an explicitly allow-listed host.
+APP_DOWNLOADS = {
+    "7reel": {"page":"https://7reels.cc/download","fallback":None,"allowed_hosts":["7reels.cc"],"patterns":[r"https?://[^\"']+\.apk(?:\?[^\"']*)?"]},
+    "filmtv": {"page":"https://www.filmtvapp.com/","fallback":None,"allowed_hosts":["www.filmtvapp.com","filmtvapp.com"],"patterns":[r"https?://[^\"'\s<>]+\.apk(?:\?[^\"'\s<>]*)?"]},
+    "nuvix": {"page":"https://www.nuvixapp.in/","fallback":None,"allowed_hosts":["www.nuvixapp.in","nuvixapp.in"],"patterns":[r"https?://[^\"'\s<>]+\.apk(?:\?[^\"'\s<>]*)?"]},
+    "vega": {"page":"https://api.github.com/repos/vega-org/vega-app/releases/latest","allowed_hosts":["github.com","objects.githubusercontent.com","release-assets.githubusercontent.com"],"github_latest":True,"asset_pattern":r"\.apk$"},
+    "netmirror": {"page":"https://netmirror.gg/10/en-us","fallback":"https://netmirror.gg/NetMirror.apk","allowed_hosts":["netmirror.gg"],"patterns":[r"https?://[^\"'\s<>]+\.apk[^\"'\s<>]*"]},
+    "cinehd": {"page":"https://cinehd.dev/","fallback":None,"allowed_hosts":["cinehd.dev"],"patterns":[r"https?://[^\"'\s<>]*CineHD[^\"'\s<>]*Universal[^\"'\s<>]*\.apk[^\"'\s<>]*"]},
+    "moviboxapk": {"page":"https://moviboxapk.com/","fallback":None,"allowed_hosts":["moviboxapk.com","file.dxmaxapk.com"],"patterns":[r"https?://[^\"'\s<>]+moviebox[^\"'\s<>]*\.apk[^\"'\s<>]*"]},
+    "pvrplay": {"page":"https://pvrplay.online/","fallback":"https://stream.phoasy.com/app/PvrPlay.apk","allowed_hosts":["pvrplay.online","stream.phoasy.com"],"patterns":[r"https?://[^\"'\s<>]*PvrPlay[^\"'\s<>]*\.apk[^\"'\s<>]*"]},
+    "hdghartv": {"page":"https://hdghartv.com.pk/apk/","fallback":None,"allowed_hosts":["watch.hdghartv.com.pk","hdghartv.com.pk","download.hdghartv.com.pk"],"patterns":[r"https?://[^\"'\s<>]+HDGharTV[^\"'\s<>]*\.apk[^\"'\s<>]*"]},
+    "anivortex": {"page":"https://anivortex.in/","fallback":None,"allowed_hosts":["anivortex.in"],"patterns":[r"https?://[^\"'\s<>]*/apk/[^\"'\s<>]+\.apk[^\"'\s<>]*"]},
+    "nxsha": {"page":"https://api.github.com/repos/dev-alessiorizzo/nxsha-apk/releases/latest","allowed_hosts":["github.com","objects.githubusercontent.com","release-assets.githubusercontent.com"],"github_latest":True,"asset_pattern":r".*\.Universal\.apk$"},
+    "dooflix": {"page":"https://dooflixapk.com/","fallback":None,"allowed_hosts":["dooflixapk.com","www.dooflixapk.com"],"patterns":[]},
+    "bitchord": {"page":"https://api.github.com/repos/kushagrasinghx/BitChord/releases/latest","allowed_hosts":["github.com","objects.githubusercontent.com","release-assets.githubusercontent.com"],"github_latest":True,"asset_pattern":r"BitChord-v[^_]*\.apk$"},
+    "echo-music": {"page":"https://api.github.com/repos/EchoMusicApp/Echo-Music/releases/latest","allowed_hosts":["github.com","objects.githubusercontent.com","release-assets.githubusercontent.com"],"github_latest":True,"asset_pattern":r"EchoMusic\.apk$"},
+    "echo-nightly": {"page":"https://api.github.com/repos/itsmechinmoy/echo-nightly/releases/latest","allowed_hosts":["github.com","objects.githubusercontent.com","release-assets.githubusercontent.com"],"github_latest":True,"asset_pattern":r"app-release\.apk$"},
+    "spotube": {"page":"https://api.github.com/repos/team-spotube/spotube/releases/latest","allowed_hosts":["github.com","objects.githubusercontent.com","release-assets.githubusercontent.com"],"github_latest":True,"asset_pattern":r"Spotube-android-all-arch\.apk$"},
+    "outertune": {"page":"https://api.github.com/repos/OuterTune/OuterTune/releases/latest","allowed_hosts":["github.com","objects.githubusercontent.com","release-assets.githubusercontent.com"],"github_latest":True,"asset_pattern":r".*full-release-.*\.apk$"},
+    "lastwave": {"page":"https://api.github.com/repos/Clash-Projects/LastWave-Native/releases/latest","allowed_hosts":["github.com","objects.githubusercontent.com","release-assets.githubusercontent.com"],"github_latest":True,"asset_pattern":r".*-universal\.apk$"},
 }
+_APP_DOWNLOAD_CACHE = {}
+_APP_DOWNLOAD_CACHE_TTL = 300
+_APP_DOWNLOAD_NEGATIVE_TTL = 15
+_APP_DOWNLOAD_TIMEOUT = 12
+_APP_DOWNLOAD_HEADERS = {"User-Agent":"MahiCloud-App-Download-Resolver/1.0","Accept":"text/html,application/xhtml+xml,application/json"}
+
+
+def _normalise_download_url(raw_url, base_url=None):
+    if not isinstance(raw_url, str) or not raw_url.strip():
+        return None
+    value = raw_url.replace("&amp;", "&").replace("\\", "").strip().rstrip(".,;")
+    if base_url:
+        value = urljoin(base_url, value)
+    parsed = urlparse(value)
+    if parsed.scheme.lower() != "https" or not parsed.hostname:
+        return None
+    return parsed
+
+
+def _allowed_apk_url(raw_url, config, base_url=None):
+    parsed = _normalise_download_url(raw_url, base_url)
+    if not parsed or parsed.hostname.lower() not in config["allowed_hosts"]:
+        return None
+    if not parsed.path.lower().endswith((".apk", ".xapk")):
+        return None
+    return parsed.geturl()
+
+
+def _fetch_download_page(config):
+    current = config["page"]
+    for _ in range(6):
+        parsed = urlparse(current)
+        if parsed.scheme.lower() != "https" or parsed.hostname not in config["allowed_hosts"]:
+            return None, None
+        try:
+            response = requests.get(current, headers=_APP_DOWNLOAD_HEADERS, timeout=_APP_DOWNLOAD_TIMEOUT, allow_redirects=False)
+        except requests.RequestException:
+            return None, None
+        if 300 <= response.status_code < 400:
+            location = response.headers.get("Location")
+            if not location:
+                return None, None
+            next_url = urljoin(current, location)
+            next_parsed = urlparse(next_url)
+            if next_parsed.scheme.lower() != "https" or next_parsed.hostname not in config["allowed_hosts"]:
+                return None, None
+            current = next_url
+            continue
+        if response.status_code < 200 or response.status_code >= 300:
+            return None, None
+        return response.text, current
+    return None, None
+
+
+def _resolve_app_download_uncached(slug, config):
+    if config.get("github_latest"):
+        try:
+            response = requests.get(config["page"], headers={"User-Agent":_APP_DOWNLOAD_HEADERS["User-Agent"],"Accept":"application/vnd.github+json"}, timeout=_APP_DOWNLOAD_TIMEOUT, allow_redirects=False)
+            if 200 <= response.status_code < 300:
+                payload = response.json()
+                matcher = re.compile(config["asset_pattern"], re.IGNORECASE)
+                assets = payload.get("assets", []) if isinstance(payload, dict) else []
+                for asset in assets:
+                    if not isinstance(asset, dict):
+                        continue
+                    name = str(asset.get("name") or "")
+                    target = asset.get("browser_download_url")
+                    if target and matcher.search(name):
+                        safe_target = _allowed_apk_url(target, config)
+                        if safe_target:
+                            return safe_target
+        except (requests.RequestException, ValueError, TypeError):
+            pass
+        return None
+
+    html, final_url = _fetch_download_page(config)
+    if html is not None and final_url:
+        candidates = []
+        for pattern in config.get("patterns", []):
+            candidates.extend(re.findall(pattern, html, re.IGNORECASE))
+        candidates.extend(re.findall(r"""(?:href|src|data-href|data-url)\s*=\s*["']([^"']+\.(?:apk|xapk)(?:\?[^"']*)?)["']""", html, re.IGNORECASE))
+        candidates.extend(re.findall(r"""["']((?:https?://|/)[^"'\s<>]+?\.(?:apk|xapk)(?:\?[^"'\s<>]*)?)["']""", html, re.IGNORECASE))
+        safe_candidates = []
+        for candidate in candidates:
+            safe_target = _allowed_apk_url(candidate, config, final_url)
+            if safe_target and safe_target not in safe_candidates:
+                safe_candidates.append(safe_target)
+        if safe_candidates:
+            safe_candidates.sort(key=lambda url: 0 if "universal" in url.lower() else 1)
+            return safe_candidates[0]
+    fallback = config.get("fallback")
+    return _allowed_apk_url(fallback, config) if fallback else None
+
+
+def resolve_app_download(slug):
+    config = APP_DOWNLOADS.get(slug)
+    if not config:
+        return None
+    now = time.monotonic()
+    cached = _APP_DOWNLOAD_CACHE.get(slug)
+    if cached:
+        value, checked_at = cached
+        max_age = _APP_DOWNLOAD_CACHE_TTL if value else _APP_DOWNLOAD_NEGATIVE_TTL
+        if now - checked_at < max_age:
+            return value
+    target = _resolve_app_download_uncached(slug, config)
+    _APP_DOWNLOAD_CACHE[slug] = (target, now)
+    return target
 
 
 @app.get("/download/app/<slug>")
 def download_app_redirect(slug):
-    destination = APP_DOWNLOAD_PAGES.get(slug.lower())
-    if destination is None:
-        return redirect("/mahiflix/", code=302)
-    return redirect(destination, code=302)
+    app_id = str(slug or "").strip().lower()
+    if app_id not in APP_DOWNLOADS:
+        return ("App not found.", 404, {"Content-Type":"text/plain; charset=utf-8","Cache-Control":"no-store"})
+    target = resolve_app_download(app_id)
+    if target:
+        return redirect(target, code=302)
+    message = "A verified direct download is not available from the app source right now. Please try again later."
+    return (message, 502, {"Content-Type":"text/plain; charset=utf-8","Cache-Control":"no-store"})
 
 
 @app.get("/api/config")

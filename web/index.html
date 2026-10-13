@@ -10,6 +10,9 @@
 <meta property="og:type" content="website">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>Mahi — Digital Projects</title>
+<script>
+try { if(!matchMedia("(prefers-reduced-motion: reduce)").matches && !sessionStorage.getItem("mahi-cloud-intro-seen")) document.documentElement.classList.add("mahi-intro-pending"); } catch (_) {}
+</script>
 <style>
 :root{
   color-scheme:dark;
@@ -278,9 +281,45 @@ footer{border-top:1px solid var(--line);padding:24px 0 30px}
 @media(max-width:700px){.hero{padding-block:58px 84px}.hero-visual{min-height:370px;max-width:480px}.section-heading{margin-bottom:26px}.connect-card{padding:32px 20px}.project-info{text-align:center}}
 @media(prefers-reduced-motion:reduce){.apps-spark,.apps-emblem,.apps-orb,.apps-wave i{animation:none!important}.nav-links a,.project-card,.btn,.filter-btn,.theme-toggle,.menu-toggle{transition:none!important}}
 
+
+:root.mahi-intro-pending{overflow:hidden}
+.mahi-cloud-intro{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;overflow:hidden;background:#050706;color:#f1f4e9;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .85s cubic-bezier(.2,.75,.2,1);isolation:isolate}
+.mahi-intro-pending .mahi-cloud-intro{opacity:1;visibility:visible;pointer-events:auto}.mahi-intro-leaving .mahi-cloud-intro{opacity:0;visibility:visible;pointer-events:none}
+.ci-grid{position:absolute;inset:-30%;z-index:-3;background-image:linear-gradient(rgba(215,255,121,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(215,255,121,.05) 1px,transparent 1px);background-size:54px 54px;mask-image:radial-gradient(ellipse at center,#000,transparent 70%);transform:perspective(650px) rotateX(64deg) scale(1.6);animation:ciGrid 16s linear infinite}
+.ci-glow{position:absolute;width:min(78vw,760px);aspect-ratio:1;border-radius:50%;z-index:-2;background:radial-gradient(circle,rgba(215,255,121,.13),rgba(187,165,255,.08) 34%,transparent 68%);filter:blur(15px);animation:ciGlow 4.8s ease-in-out infinite alternate}
+.ci-orbit{position:absolute;width:min(74vw,570px);height:min(74vw,570px);border:1px solid rgba(215,255,121,.13);border-radius:50%;z-index:-1;animation:ciOrbit 24s linear infinite}
+.ci-orbit:before,.ci-orbit:after{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:#d7ff79;box-shadow:0 0 26px #d7ff79cc;top:14%;left:20%}.ci-orbit:after{background:#bba5ff;top:auto;left:auto;right:13%;bottom:20%}
+.ci-content{width:min(580px,calc(100% - 34px));display:flex;align-items:center;flex-direction:column;text-align:center;padding:26px 0;animation:ciArrival 1.25s cubic-bezier(.2,.75,.2,1) both}
+.ci-mark{width:86px;height:86px;display:grid;place-items:center;border-radius:26px;border:1px solid rgba(215,255,121,.4);background:linear-gradient(145deg,rgba(215,255,121,.18),rgba(187,165,255,.06));box-shadow:0 0 65px rgba(215,255,121,.11),inset 0 0 28px rgba(215,255,121,.08);color:#e8ffc1;font-size:32px;font-weight:950;letter-spacing:-.12em;position:relative;margin-bottom:28px}
+.ci-mark:before,.ci-mark:after{content:"";position:absolute;inset:-9px;border:1px solid rgba(215,255,121,.13);border-radius:31px;animation:ciPulse 2.6s ease-out infinite}.ci-mark:after{inset:-19px;border-color:rgba(187,165,255,.13);animation-delay:.85s}
+.ci-kicker{font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#b7c5a0;font-weight:800;margin:0 0 14px;animation:ciTextIn .8s .22s both}
+.ci-title{font-size:clamp(45px,9.5vw,88px);line-height:.92;letter-spacing:-.085em;font-weight:880;margin:0;text-shadow:0 8px 40px #0006;animation:ciTextIn .9s .36s both}.ci-title span{background:linear-gradient(100deg,#d7ff79,#bba5ff 75%);color:transparent;background-clip:text;-webkit-background-clip:text}
+.ci-subtitle{font-size:12px;line-height:1.8;color:#a5aa9a;max-width:360px;margin:20px auto 28px;animation:ciTextIn .8s .5s both}
+.ci-actions{display:flex;flex-direction:column;align-items:center;gap:14px;animation:ciTextIn .8s .62s both}
+.ci-enter{min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:0 21px;border-radius:999px;border:1px solid rgba(215,255,121,.7);background:#d7ff79;color:#171b0e;font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 10px 38px rgba(215,255,121,.12);cursor:pointer;transition:transform .25s,box-shadow .25s,background .25s}
+.ci-enter:hover{transform:translateY(-3px) scale(1.025);background:#e5ffac;box-shadow:0 18px 50px rgba(215,255,121,.2)}.ci-enter:disabled{opacity:.7;cursor:wait;transform:none}.ci-enter svg{width:16px;height:16px}
+.ci-skip{border:0;background:transparent;color:#878d7e;font-size:10px;padding:5px 12px;cursor:pointer}.ci-skip:hover{color:#fff}
+.ci-footnote{position:absolute;bottom:26px;left:16px;right:16px;text-align:center;color:#5d6457;font-size:8px;letter-spacing:.16em;text-transform:uppercase}
+.ci-sound-bars{display:flex;align-items:center;justify-content:center;gap:3px;height:18px;margin-top:20px;opacity:.7}.ci-sound-bars i{display:block;width:2px;height:var(--h);background:linear-gradient(#d7ff79,#bba5ff);border-radius:9px;animation:ciWave 1s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes ciGrid{to{background-position:54px 54px}}@keyframes ciGlow{to{transform:scale(1.14);opacity:.65}}@keyframes ciOrbit{to{transform:rotate(360deg)}}
+@keyframes ciPulse{0%{transform:scale(.88);opacity:.65}85%,100%{transform:scale(1.2);opacity:0}}
+@keyframes ciArrival{from{opacity:0;transform:translateY(16px) scale(.975);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes ciTextIn{from{opacity:0;transform:translateY(10px);filter:blur(5px)}to{opacity:1;transform:none;filter:blur(0)}}@keyframes ciWave{0%,100%{transform:scaleY(.42);opacity:.55}50%{transform:scaleY(1);opacity:1}}
+@media(max-width:520px){.ci-mark{width:73px;height:73px;border-radius:23px}.ci-subtitle{font-size:11px}.ci-footnote{bottom:17px}}
+@media(prefers-reduced-motion:reduce){.mahi-cloud-intro,.mahi-cloud-intro *{animation:none!important;transition:none!important}}
+
 </style>
 </head>
 <body>
+
+<div class="mahi-cloud-intro" id="cloudIntro" role="dialog" aria-modal="true" aria-label="MahiCloud cinematic introduction">
+<div class="ci-grid" aria-hidden="true"></div><div class="ci-glow" aria-hidden="true"></div><div class="ci-orbit" aria-hidden="true"></div>
+<div class="ci-content"><div class="ci-mark" aria-hidden="true">M.</div><p class="ci-kicker">A world of things, made by Mahi</p>
+<h2 class="ci-title">MAHI<span>CLOUD</span></h2><p class="ci-subtitle">One universe for cinematic discoveries, creative experiments, and tools worth keeping.</p>
+<div class="ci-actions"><button class="ci-enter" id="cloudIntroEnter" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg> ENTER WITH SOUND</button><button class="ci-skip" id="cloudIntroSkip" type="button">Continue silently</button></div>
+<div class="ci-sound-bars" aria-hidden="true"><i style="--h:7px;--d:-.2s"></i><i style="--h:14px;--d:-.6s"></i><i style="--h:10px;--d:-.4s"></i><i style="--h:17px;--d:-.1s"></i><i style="--h:8px;--d:-.7s"></i><i style="--h:13px;--d:-.3s"></i><i style="--h:6px;--d:-.5s"></i></div></div>
+<div class="ci-footnote">An original cinematic welcome · Sound starts when you enter</div>
+</div>
 <div class="progress" id="progress" aria-hidden="true"></div>
 <header id="siteHeader">
   <div class="wrap navbar">
@@ -630,6 +669,54 @@ footer{border-top:1px solid var(--line);padding:24px 0 30px}
   var year = document.getElementById("year");
   if(year) year.textContent = String(new Date().getFullYear());
   document.documentElement.classList.add("js-enabled");
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var root=document.documentElement,overlay=document.getElementById("cloudIntro");
+if(!overlay||!root.classList.contains("mahi-intro-pending"))return;
+var enterButton=document.getElementById("cloudIntroEnter"),skipButton=document.getElementById("cloudIntroSkip"),timer=0,finished=false,soundStarted=false;
+function playCinematicSound(){
+ if(soundStarted)return true;soundStarted=true;
+ var C=window.AudioContext||window.webkitAudioContext;if(!C)return false;
+ var ctx;
+ try{
+  ctx=new C();if(ctx.state==="suspended")ctx.resume();
+  var master=ctx.createGain();master.gain.setValueAtTime(.72,ctx.currentTime);master.connect(ctx.destination);
+  var start=ctx.currentTime+.025;
+  function note(freq,type,delay,duration,volume,endFreq){
+   var osc=ctx.createOscillator(),env=ctx.createGain(),t=start+delay;
+   osc.type=type;osc.frequency.setValueAtTime(freq,t);osc.frequency.exponentialRampToValueAtTime(Math.max(1,endFreq||freq),t+duration);
+   env.gain.setValueAtTime(.0001,t);env.gain.exponentialRampToValueAtTime(Math.max(.0002,volume),t+Math.min(.16,duration*.3));env.gain.exponentialRampToValueAtTime(.0001,t+duration);
+   osc.connect(env);env.connect(master);osc.start(t);osc.stop(t+duration+.05);
+  }
+  note(78,"sine",0,1.65,.18,42);note(174.61,"triangle",.12,1.7,.065,261.63);note(392,"sine",.43,1.25,.05,523.25);note(523.25,"sine",.82,1.08,.043,783.99);note(659.25,"sine",1.18,.85,.024,880);
+  var buffer=ctx.createBuffer(1,Math.floor(ctx.sampleRate*1.55),ctx.sampleRate),data=buffer.getChannelData(0);
+  for(var i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*.45;
+  var noise=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),sweep=ctx.createGain();
+  filter.type="lowpass";filter.frequency.setValueAtTime(420,start);filter.frequency.exponentialRampToValueAtTime(3600,start+1);filter.frequency.exponentialRampToValueAtTime(850,start+1.5);
+  sweep.gain.setValueAtTime(.0001,start);sweep.gain.exponentialRampToValueAtTime(.023,start+.32);sweep.gain.exponentialRampToValueAtTime(.0001,start+1.52);
+  noise.buffer=buffer;noise.connect(filter);filter.connect(sweep);sweep.connect(master);noise.start(start);noise.stop(start+1.56);
+  window.setTimeout(function(){try{ctx.close()}catch(_){}},3200);return true;
+ }catch(_){try{if(ctx)ctx.close()}catch(__){}return false}
+}
+function finish(){
+ if(finished)return;finished=true;window.clearTimeout(timer);
+ try{sessionStorage.setItem("mahi-cloud-intro-seen","1")}catch(_){}
+ root.classList.add("mahi-intro-leaving");root.classList.remove("mahi-intro-pending");
+ window.setTimeout(function(){if(overlay.parentNode)overlay.parentNode.removeChild(overlay);root.classList.remove("mahi-intro-leaving")},1000);
+}
+enterButton.addEventListener("click",function(){
+ if(finished)return;enterButton.disabled=true;enterButton.textContent="WELCOME TO MAHICLOUD";
+ var played=playCinematicSound();
+ if(!played){enterButton.textContent="ENTERING SILENTLY";timer=window.setTimeout(finish,350);return}
+ timer=window.setTimeout(finish,2050);
+});
+skipButton.addEventListener("click",finish);
+overlay.addEventListener("keydown",function(event){if(event.key==="Escape")finish()});
+timer=window.setTimeout(finish,6800);
 })();
 </script>
 </body>

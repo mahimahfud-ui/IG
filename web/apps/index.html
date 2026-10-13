@@ -40,12 +40,49 @@ h1{font-size:clamp(49px,8vw,88px);line-height:.99;letter-spacing:-.085em;font-we
 .movie-app-tags .ad-mid{color:#ffe18a;border-color:#f5c5184d}
 .movie-app-tags .ad-high{color:#ffadb0;border-color:#e509144d}
 
+
+/* Separate motion language for each app collection. */
+body[data-category="movie"]{--scene-a:#ff796e;--scene-b:#b7a2ff}body[data-category="music"]{--scene-a:#73e6ef;--scene-b:#c1a1ff}
+body[data-category="movie"] .ambient:before{background:conic-gradient(from 34deg at 50% 50%,transparent,rgba(255,103,94,.12),transparent,rgba(177,147,255,.12),transparent,#ff846b14,transparent)}
+body[data-category="music"] .ambient:before{background:conic-gradient(from 30deg at 50% 50%,transparent,#7560df1f,transparent,#74e8ff20,transparent,#da91ff20,transparent)}
+.scene-motion{position:relative;width:min(630px,100%);height:158px;margin:25px auto 0;display:grid;place-items:center;isolation:isolate;perspective:900px}
+.movie-scene,.music-scene{position:absolute;inset:0;display:none;align-items:center;justify-content:center;gap:12px}
+body[data-category="movie"] .movie-scene{display:flex}body[data-category="music"] .music-scene{display:flex}
+.movie-scene:before{content:"";position:absolute;left:8%;right:8%;top:50%;height:1px;background:linear-gradient(90deg,transparent,var(--scene-a),var(--scene-b),transparent);box-shadow:0 0 25px var(--scene-a);opacity:.55}
+.movie-beam{position:absolute;top:0;bottom:0;left:50%;width:130px;background:linear-gradient(90deg,transparent,rgba(255,121,110,.07),transparent);transform:translateX(-50%) skewX(-17deg);animation:movieBeam 4.8s ease-in-out infinite alternate}
+.film-poster{position:relative;width:92px;height:120px;flex:none;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.16);box-shadow:0 20px 40px #0005;background:linear-gradient(150deg,#71404b,#171725 67%,#d98b6e);text-align:left;padding:11px;display:flex;flex-direction:column;justify-content:space-between;animation:posterFloat 4.5s ease-in-out infinite}
+.film-poster:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 75% 18%,rgba(255,207,170,.65),transparent 34%),linear-gradient(180deg,transparent 25%,rgba(0,0,0,.76));opacity:.9}
+.film-poster:after{content:"";position:absolute;left:0;right:0;height:25px;top:-28px;background:linear-gradient(transparent,rgba(255,255,255,.18),transparent);animation:posterScan 3.8s ease-in-out infinite}
+.film-poster span,.film-poster b,.film-poster small{position:relative;z-index:1}.film-poster span{font-size:6px;letter-spacing:.13em;color:#fff9}.film-poster b{font-size:14px;line-height:.92;letter-spacing:-.065em;color:#fff}.film-poster small{font-size:6px;letter-spacing:.16em;color:#fff9}
+.poster-back{transform:translateY(9px) rotateY(16deg) rotateZ(-7deg) scale(.82);opacity:.58;animation-delay:-1.8s;background:linear-gradient(150deg,#5b477e,#131520 63%,#82a7bc)}
+.poster-center{z-index:2;transform:translateY(-7px) rotateY(-4deg) scale(1.04);background:linear-gradient(155deg,#9b3d46,#1b1727 60%,#e8ad83);animation-delay:-.8s}
+.poster-front{transform:translateY(9px) rotateY(-16deg) rotateZ(7deg) scale(.82);opacity:.68;animation-delay:-2.6s;background:linear-gradient(150deg,#397d88,#111a24 64%,#b6a0ff)}
+.film-perforations{position:absolute;left:6%;right:6%;bottom:1px;height:5px;opacity:.65;background:repeating-linear-gradient(90deg,rgba(255,255,255,.5) 0 6px,transparent 6px 17px);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.music-scene{gap:28px}.vinyl-disc{position:relative;width:125px;height:125px;flex:none;border-radius:50%;background:repeating-radial-gradient(circle at center,#181a2e 0 4px,#4c477c 4.5px 5px,#151729 5.5px 9px);border:1px solid rgba(193,161,255,.58);box-shadow:0 0 0 8px rgba(193,161,255,.045),0 0 42px rgba(115,230,239,.15);animation:vinylSpin 10s linear infinite}
+.vinyl-disc:before{content:"";position:absolute;inset:20%;border-radius:50%;border:1px solid rgba(255,255,255,.13);background:conic-gradient(from 40deg,rgba(115,230,239,.55),#45345e,rgba(255,255,255,.18),#202034,rgba(193,161,255,.6))}
+.vinyl-disc:after{content:"";position:absolute;width:13px;height:13px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:#090b16;border:2px solid rgba(255,255,255,.6);box-shadow:0 0 12px rgba(115,230,239,.35)}
+.music-visualizer{display:flex;align-items:center;justify-content:center;gap:5px;height:120px;max-width:340px;flex:1}.music-visualizer i{width:5px;height:var(--h);border-radius:9px;background:linear-gradient(180deg,#d7ccff,#73e6ef);box-shadow:0 0 13px rgba(115,230,239,.17);animation:equalize 1.05s ease-in-out infinite;animation-delay:var(--d);transform-origin:center}
+.app-icon.music-logo{width:74px;height:74px;display:block;flex:none;background:transparent;box-shadow:none;border-radius:19px;overflow:visible;letter-spacing:0}.app-icon.music-logo:after,.app-icon.movie-logo:after{display:none}
+.movie-app-logo{object-fit:contain}.movie-app-tags .download-tag{color:#a9eefa;border-color:#73e6ef55}
+@keyframes movieBeam{0%{opacity:.25;transform:translateX(-85%) skewX(-17deg)}100%{opacity:1;transform:translateX(40%) skewX(-17deg)}}
+@keyframes posterFloat{0%,100%{filter:brightness(.92)}50%{filter:brightness(1.12)}}@keyframes posterScan{0%,100%{transform:translateY(0);opacity:0}20%,80%{opacity:.8}60%{transform:translateY(170px);opacity:.16}}@keyframes vinylSpin{to{transform:rotate(360deg)}}
+@media(max-width:600px){.scene-motion{height:138px;margin-top:18px}.film-poster{width:76px;height:104px;padding:9px}.film-poster b{font-size:12px}.vinyl-disc{width:103px;height:103px}.music-scene{gap:17px}.music-visualizer{height:104px;gap:4px}.music-visualizer i{width:4px}}
+@media(prefers-reduced-motion:reduce){.scene-motion *{animation:none!important}.vinyl-disc{transform:none}}
+
 </style></head>
-<body><div class="ambient" aria-hidden="true"><span class="glow-ball a"></span><span class="glow-ball b"></span></div>
+<body data-category="movie"><div class="ambient" aria-hidden="true"><span class="glow-ball a"></span><span class="glow-ball b"></span></div>
 <header id="header"><div class="wrap nav"><a class="brand" href="/" aria-label="Mahi homepage"><span class="brand-mark">M.</span><span>Mahi <span style="color:var(--muted);font-weight:550">/ Apps</span></span></a><nav class="nav-links" aria-label="Site navigation"><a href="/">Home</a><a href="/mahiflix/">MahiFlix</a><a href="/linkora/">Linkora</a></nav></div></header>
-<main class="wrap"><section class="hero"><div class="kicker"><span class="pulse"></span> The app shelf · Curated by Mahi</div><h1>Small icons.<br><span class="grad">Big worlds.</span></h1><p>One place for entertainment on your phone or TV. Explore movie apps, find a music player that fits your mood, and open each app's website or official Play Store search.</p>
-<div class="equalizer" aria-hidden="true"><i style="--h:15px;--d:-.2s"></i><i style="--h:27px;--d:-.6s"></i><i style="--h:39px;--d:-.3s"></i><i style="--h:22px;--d:-.8s"></i><i style="--h:46px;--d:-.1s"></i><i style="--h:31px;--d:-.5s"></i><i style="--h:19px;--d:-.4s"></i><i style="--h:37px;--d:-.9s"></i><i style="--h:24px;--d:-.2s"></i><i style="--h:44px;--d:-.7s"></i><i style="--h:17px;--d:-.4s"></i><i style="--h:30px;--d:-.8s"></i><i style="--h:14px;--d:-.1s"></i></div></section>
-<div class="switch-wrap"><div class="switch" role="tablist" aria-label="App category"><button class="active" data-category="movie" type="button" role="tab" aria-selected="true">▣ Movie apps</button><button data-category="music" type="button" role="tab" aria-selected="false">♫ Music apps</button><button data-category="project" type="button" role="tab" aria-selected="false">✦ My projects</button></div></div>
+<main class="wrap"><section class="hero"><div class="kicker"><span class="pulse"></span> The app shelf · Curated by Mahi</div><h1 id="heroTitle">Screen worlds.<br><span class="grad">Next watch.</span></h1><p id="heroDescription">A curated shelf of movie and TV apps, with original logos and direct download workflow.</p>
+
+<div class="scene-motion" id="sceneMotion" aria-hidden="true">
+<div class="movie-scene"><div class="movie-beam"></div>
+<div class="film-poster poster-back"><span>01 / STORY</span><b>Beyond<br>the frame</b><small>DISCOVER</small></div>
+<div class="film-poster poster-center"><span>02 / CINEMA</span><b>Find your<br>next world</b><small>FEATURED</small></div>
+<div class="film-poster poster-front"><span>03 / SERIES</span><b>One more<br>episode</b><small>COLLECTION</small></div><div class="film-perforations"></div></div>
+<div class="music-scene"><div class="vinyl-disc"><span></span></div>
+<div class="music-visualizer"><i style="--h:20px;--d:-.2s"></i><i style="--h:44px;--d:-.6s"></i><i style="--h:28px;--d:-.3s"></i><i style="--h:64px;--d:-.8s"></i><i style="--h:37px;--d:-.1s"></i><i style="--h:53px;--d:-.5s"></i><i style="--h:25px;--d:-.4s"></i><i style="--h:70px;--d:-.9s"></i><i style="--h:34px;--d:-.2s"></i><i style="--h:54px;--d:-.7s"></i><i style="--h:22px;--d:-.4s"></i><i style="--h:40px;--d:-.8s"></i><i style="--h:27px;--d:-.1s"></i></div></div>
+</div></section>
+<div class="switch-wrap"><div class="switch" role="tablist" aria-label="App category"><button class="active" data-category="movie" type="button" role="tab" aria-selected="true">▣ Movie apps</button><button data-category="music" type="button" role="tab" aria-selected="false">♫ Music apps</button></div></div>
 <div class="search-row"><label class="search-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="query" type="search" placeholder="Search apps..." autocomplete="off" aria-label="Search apps"></label></div>
 <div class="results-bar"><span id="activeTitle">Movie apps</span><span><strong id="count">10</strong> apps</span></div><h2 class="collection-title" id="collectionTitle">For your next watch</h2><section class="apps-grid" id="grid" aria-live="polite"></section><p class="empty" id="empty">No apps matched that search.</p></main>
 <footer><div class="wrap">A little space for good sound and good stories · <span id="year"></span><div class="links"><a href="/">Personal site</a><a href="/mahiflix/">MahiFlix websites</a><a href="https://github.com/mahimahfud-ui/mahicloud" target="_blank" rel="noopener noreferrer">Source ↗</a></div></div></footer>
@@ -54,27 +91,31 @@ h1{font-size:clamp(49px,8vw,88px);line-height:.99;letter-spacing:-.085em;font-we
 (function(){
 "use strict";
 const movieApps=[
-{name:"FilmTV",url:"/download/app/filmtv",domain:"filmtvapp.com",ads:0,pop:84,smooth:88,langs:86,new:true,desc:"FilmTV Android app with direct APK download.",logoSources:["https://www.filmtvapp.com/favicon.ico","https://www.filmtvapp.com/favicon.png","https://www.filmtvapp.com/icon-192.png"]},
-{name:"Nuvix",url:"/download/app/nuvix",domain:"nuvixapp.in",ads:0,pop:82,smooth:88,langs:86,new:true,desc:"Nuvix Android app with direct APK download.",logoSources:["https://www.nuvixapp.in/favicon.ico","https://www.nuvixapp.in/favicon.png","https://www.nuvixapp.in/icon-192.png"]},
+{name:"7reel",url:"/download/app/7reel",domain:"7reels.cc",ads:1,pop:78,smooth:76,langs:78,new:true,desc:"7reel Android app download page.",logoSources:["https://7reels.cc/favicon-192x192.png","https://7reels.cc/apple-touch-icon.png","https://7reels.cc/favicon.png","https://7reels.cc/favicon.ico"]},
+{name:"FilmTV",url:"/download/app/filmtv",domain:"filmtvapp.com",ads:0,pop:84,smooth:88,langs:86,new:true,desc:"FilmTV Android app with direct APK download.",logoSources:["https://www.filmtvapp.com/icon-192.png","https://www.filmtvapp.com/apple-touch-icon.png","https://www.filmtvapp.com/favicon.png","https://www.filmtvapp.com/favicon.ico"]},
+{name:"Nuvix",url:"/download/app/nuvix",domain:"nuvixapp.in",ads:0,pop:82,smooth:88,langs:86,new:true,desc:"Nuvix Android app — official APK download page.",logoSources:["https://www.nuvixapp.in/img/nuvix-logo.webp","https://www.nuvixapp.in/icon-192.png","https://www.nuvixapp.in/apple-touch-icon.png","https://www.nuvixapp.in/favicon.png","https://www.nuvixapp.in/favicon.ico"]},
 {name:"Vega",url:"/download/app/vega",domain:"github.com",ads:0,pop:88,smooth:91,langs:92,new:true,desc:"Open-source Android media streaming app with ad-free streaming and downloads.",logoSources:["https://raw.githubusercontent.com/vega-org/vega-app/main/assets/adaptive_icon.png"]},
-{name:"NetMirror",url:"/download/app/netmirror",domain:"netmirror.gg",ads:2,pop:90,smooth:66,langs:84,new:true,desc:"Android streaming app with movie and series sources.",logoSources:["https://netmirror.gg/favicon.ico","https://netmirror.gg/favicon.png","https://netmiirror.app/wp-content/uploads/2026/10/cropped-NetMirror-1-192x192.webp","https://netmiirror.app/wp-content/uploads/2026/10/cropped-NetMirror-1-180x180.webp"]},
-{name:"CineHD",url:"/download/app/cinehd",domain:"cinehd.dev",ads:2,pop:86,smooth:60,langs:78,new:false,desc:"Android movie and series streaming app.",logoSources:["https://cinehd.vc/icon-192x192.png","https://cinehd.dev/images/favicon.ico"]},
-{name:"Moviboxapk",url:"/download/app/moviboxapk",domain:"moviboxapk.com",ads:2,pop:77,smooth:63,langs:76,new:false,desc:"Android movie and series streaming app.",logoSources:["https://moviboxapk.com/wp-content/uploads/2026/06/cropped-cropped-moviebox-icon-192x192.webp","https://moviboxapk.com/wp-content/uploads/2026/06/cropped-cropped-moviebox-icon-180x180.webp","https://moviboxapk.com/favicon.ico","https://moviboxapk.com/favicon.png"]},
-{name:"PvrPlay",url:"/download/app/pvrplay",domain:"pvrplay.online",ads:2,pop:75,smooth:64,langs:74,new:false,desc:"Android app for movies and web series.",logoSources:["https://pvrplay.online/favicon.ico","https://pvrplay.online/favicon.png"]},
-{name:"Hdghartv",url:"/download/app/hdghartv",domain:"hdghartv.com.pk",ads:0,pop:72,smooth:86,langs:70,new:false,desc:"Free Android movies and TV app; its site advertises an ad-free experience.",logoSources:["https://hdghartv.com.pk/wp-content/uploads/2026/08/hdghartv-logo.png","https://hdghartv.com.pk/logo.png","https://hdghartv.com.pk/favicon.png","https://hdghartv.com.pk/favicon.ico"]},
-{name:"Anivortex",url:"/download/app/anivortex",domain:"anivortex.in",ads:1,pop:70,smooth:72,langs:80,new:false,desc:"Anime-focused streaming app.",logoSources:["https://anivortex.in/images/anivortex_logo.webp","https://anivortex.in/images/anivortex_logo_transparent.webp","https://anivortex.in/favicon.ico","https://anivortex.in/favicon.png"]},
-{name:"Nxsha",url:"/download/app/nxsha",domain:"nxsha.app",ads:1,pop:74,smooth:84,langs:90,new:false,desc:"Movies, TV, anime and K-drama discovery app.",logoSources:["https://nxsha.app/favicon.ico","https://nxsha.app/favicon.png","https://nxsha.app/icon-192.png"]}
+{name:"NetMirror",url:"/download/app/netmirror",domain:"netmirror.gg",ads:2,pop:90,smooth:66,langs:84,new:true,desc:"Android streaming app with movie and series sources.",logoSources:["https://netmirror.gg/logo.png","https://netmirror.gg/apple-touch-icon.png","https://netmirror.gg/favicon-192x192.png","https://netmirror.gg/favicon.png","https://netmirror.gg/favicon.ico"]},
+{name:"CineHD",url:"/download/app/cinehd",domain:"cinehd.dev",ads:2,pop:86,smooth:60,langs:78,new:false,desc:"Android movie and series streaming app.",logoSources:["https://cinehd.dev/images/logo.png","https://cinehd.dev/apple-touch-icon.png","https://cinehd.dev/icon-192x192.png","https://cinehd.dev/favicon-192x192.png","https://cinehd.dev/images/favicon.ico"]},
+{name:"Moviboxapk",url:"/download/app/moviboxapk",domain:"moviboxapk.com",ads:2,pop:77,smooth:63,langs:76,new:false,desc:"Android movie and series streaming app.",logoSources:["https://moviboxapk.com/wp-content/uploads/2026/06/cropped-cropped-moviebox-icon.webp","https://moviboxapk.com/wp-content/uploads/2026/06/cropped-cropped-moviebox-icon-192x192.webp","https://moviboxapk.com/wp-content/uploads/2026/06/cropped-cropped-moviebox-icon-180x180.webp","https://moviboxapk.com/favicon.png","https://moviboxapk.com/favicon.ico"]},
+{name:"PvrPlay",url:"/download/app/pvrplay",domain:"pvrplay.online",ads:2,pop:75,smooth:64,langs:74,new:false,desc:"PvrPlay Android APK — direct download.",logoSources:["https://pvrplay.online/logo.png","https://pvrplay.online/apple-touch-icon.png","https://pvrplay.online/favicon-192x192.png","https://pvrplay.online/favicon.png","https://pvrplay.online/favicon.ico"]},
+{name:"Hdghartv",url:"/download/app/hdghartv",domain:"hdghartv.com.pk",ads:0,pop:72,smooth:86,langs:70,new:false,desc:"Free Android movies and TV app; its site advertises an ad-free experience.",logoSources:["https://hdghartv.com.pk/wp-content/uploads/2026/08/hdghartv-logo.png","https://hdghartv.com.pk/logo.png","https://hdghartv.com.pk/apple-touch-icon.png","https://hdghartv.com.pk/favicon.png","https://hdghartv.com.pk/favicon.ico"]},
+{name:"Anivortex",url:"/download/app/anivortex",domain:"anivortex.in",ads:1,pop:70,smooth:72,langs:80,new:false,desc:"Anime-focused streaming app.",logoSources:["https://anivortex.in/images/anivortex_logo_transparent.webp","https://anivortex.in/images/anivortex_logo.webp","https://anivortex.in/apple-touch-icon.png","https://anivortex.in/favicon.png","https://anivortex.in/favicon.ico"]},
+{name:"Nxsha",url:"/download/app/nxsha",domain:"nxsha.app",ads:1,pop:74,smooth:84,langs:90,new:false,desc:"Movies, TV, anime and K-drama discovery app.",logoSources:["https://nxsha.app/apple-touch-icon.png","https://nxsha.app/icon-192.png","https://nxsha.app/favicon.png","https://nxsha.app/favicon.ico"]},
+{name:"DooFlix",url:"/download/app/dooflix",domain:"dooflixapk.com",ads:1,pop:70,smooth:78,langs:76,new:true,desc:"DooFlix Android app — direct APK download.",logoSources:["https://dooflixapk.com/logo.png","https://dooflixapk.com/apple-touch-icon.png","https://dooflixapk.com/favicon.png","https://dooflixapk.com/favicon.ico"]}
 ];
 const playStore=q=>"https://play.google.com/store/search?q="+encodeURIComponent(q)+"&c=apps";
 const musicApps=[
-{name:"Spotify",short:"SP",description:"Playlists, albums, podcasts and personalised recommendations.",url:playStore("Spotify"),accent:"#37d879",accent2:"#167c54",tags:["Playlists","Podcasts","Streaming"]},
-{name:"YouTube Music",short:"YT",description:"Music tracks, videos, mixes and live performances.",url:playStore("YouTube Music"),accent:"#ff6475",accent2:"#bc2145",tags:["Music videos","Mixes","Streaming"]},
-{name:"SoundCloud",short:"SC",description:"Discover independent artists, remixes, DJ sets and emerging music.",url:playStore("SoundCloud"),accent:"#ffad5f",accent2:"#ef603b",tags:["Indie","Remixes","Discovery"]},
-{name:"Audiomack",short:"AM",description:"Music discovery, new releases, mixes and offline-listening options.",url:playStore("Audiomack"),accent:"#ffcf5e",accent2:"#ee853a",tags:["Hip-hop","Mixes","Discovery"]},
-{name:"Deezer",short:"DZ",description:"Explore albums, playlists and a personalised flow of music.",url:playStore("Deezer"),accent:"#c7a5ff",accent2:"#6b50dd",tags:["Playlists","HiFi options","Streaming"]},
-{name:"Apple Music",short:"AM",description:"Music catalogue, curated radio and synced library features.",url:playStore("Apple Music"),accent:"#ff7eae",accent2:"#d63872",tags:["Albums","Radio","Library"]},
-{name:"VLC",short:"VLC",description:"A versatile local media player for music and video files.",url:playStore("VLC for Android"),accent:"#ffb34b",accent2:"#e47a2e",tags:["Local files","Audio","Video"]},
-{name:"TIDAL",short:"TD",description:"Music streaming with high-quality audio options and curated releases.",url:playStore("TIDAL Music"),accent:"#9edfff",accent2:"#5377dd",tags:["Audio quality","Albums","Streaming"]}
+
+
+{name:"Demus",kind:"app",url:"https://en.softonic.com/download/demus/android/post-download?dt=internalDownload",domain:"demus.en.softonic.com",ads:1,pop:76,smooth:82,langs:86,new:true,desc:"Demus music app for Android.",logoSources:["https://images.sftcdn.net/images/t_app-icon-s/p/2b0597be-ed36-477e-990e-7fd7e34cc5c1/1880695670/demus-download-Demus.jpg","https://demus.en.softonic.com/favicon.ico","https://en.softonic.com/favicon.ico"]},
+{name:"Youtify",kind:"app",url:"https://d.apkpure.net/b/XAPK/com.youtify.music?version=latest",domain:"play.google.com",ads:1,pop:72,smooth:78,langs:82,new:true,desc:"Youtify music app — latest XAPK download.",logoSources:["https://image.winudf.com/v2/image1/Y29tLnlvdXRpZnkubXVzaWNfaWNvbl8xNzg4NjgxOTcxXzA4Nw/icon.webp?fakeurl=1&type=.webp&w=512","https://image.winudf.com/v2/image1/Y29tLnlvdXRpZnkubXVzaWNfaWNvbl8xNzg4NjgxOTcxXzA4Nw/icon.webp?fakeurl=1&type=.webp&w=256"]},
+{name:"BitChord",kind:"app",url:"/download/app/bitchord",domain:"github.com",ads:0,pop:72,smooth:84,langs:80,new:true,desc:"BitChord Android music app — direct APK download.",logoSources:["https://raw.githubusercontent.com/kushagrasinghx/BitChord/main/app/src/main/ic_launcher-playstore.png","https://raw.githubusercontent.com/kushagrasinghx/BitChord/main/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp","https://github.com/favicon.ico"]},
+{name:"Echo Music",kind:"app",url:"https://github.com/EchoMusicApp/Echo-Music/releases/latest/download/EchoMusic.apk",domain:"github.com",ads:0,pop:78,smooth:86,langs:82,new:true,desc:"Echo Music Android app — direct APK download.",logoSources:["https://raw.githubusercontent.com/EchoMusicApp/Echo-Music/main/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png","https://raw.githubusercontent.com/EchoMusicApp/Echo-Music/main/app/src/main/res/echo_cat_icon-web.png","https://github.com/favicon.ico"]},
+{name:"Echo Nightly",kind:"app",url:"https://github.com/itsmechinmoy/echo-nightly/releases/latest/download/app-release.apk",domain:"github.com",ads:0,pop:76,smooth:86,langs:80,new:true,desc:"Echo Nightly Android music player — direct APK download.",logoSources:["https://raw.githubusercontent.com/itsmechinmoy/echo-nightly/main/app/src/nightly/res/mipmap-xxxhdpi/ic_launcher.webp","https://raw.githubusercontent.com/itsmechinmoy/echo-nightly/main/app/src/nightly/ic_launcher-playstore.png","https://raw.githubusercontent.com/itsmechinmoy/echo-nightly/main/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp","https://github.com/favicon.ico"]},
+{name:"Spotube",kind:"app",url:"https://spotube.cc/downloads/redirect/?platform=Android&filetype=apk&p=latest%2Fdownload%2FSpotube-android-all-arch.apk",domain:"spotube.cc",ads:0,pop:88,smooth:90,langs:84,new:true,desc:"Spotube — open-source music app, latest universal Android APK.",logoSources:["https://raw.githubusercontent.com/team-spotube/spotube/master/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png","https://raw.githubusercontent.com/team-spotube/spotube/master/assets/branding/spotube-logo.png","https://raw.githubusercontent.com/team-spotube/spotube/master/assets/branding/spotube-logo-light.png","https://github.com/favicon.ico"]},
+{name:"OuterTune",kind:"app",url:"/download/app/outertune",domain:"github.com",ads:0,pop:78,smooth:88,langs:86,new:true,desc:"OuterTune Android music app — direct APK download.",logoSources:["https://raw.githubusercontent.com/OuterTune/OuterTune/lite/fastlane/metadata/android/en-US/images/icon.png","https://raw.githubusercontent.com/OuterTune/OuterTune/lite/app/src/main/ic_launcher-playstore.png","https://github.com/favicon.ico"]},
+{name:"LastWave",kind:"app",url:"/download/app/lastwave",domain:"github.com",ads:0,pop:75,smooth:84,langs:82,new:true,desc:"LastWave Native music app — direct universal APK download.",logoSources:["https://raw.githubusercontent.com/Clash-Projects/LastWave-Native/main/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png","https://raw.githubusercontent.com/Clash-Projects/LastWave-Native/main/lastwave_logo.png","https://github.com/favicon.ico"]}
 ];
 const projectApps=[
 {name:"MahiFlix",short:"MF",kind:"Website",description:"Your local cinematic directory for discovering movie and web-series websites.",url:"/mahiflix/",accent:"#ff6b6b",accent2:"#8e202d",tags:["Movies","Web series","Hosted here"]},
@@ -102,50 +143,49 @@ function nextLogo(img){
   img.remove();
  }
 }
+
 function render(){
  const isMovie=category==="movie";
- const isMusic=category==="music";
- const isProject=category==="project";
- const data=isMovie?movieApps.slice().sort((a,b)=>qualityScore(b)-qualityScore(a)):(isMusic?musicApps:projectApps);
+ const data=(isMovie?movieApps:musicApps).slice().sort((a,b)=>qualityScore(b)-qualityScore(a));
  const q=query.value.trim().toLowerCase();
  const shown=data.filter(x=>(x.name+" "+(x.desc||x.description||"")+" "+(x.domain||"")+" "+(x.tags||[]).join(" ")).toLowerCase().includes(q));
- title.textContent=isMovie?"Movie apps":(isMusic?"Music apps":"My projects");
- collectionTitle.textContent=isMovie?"For your next watch":(isMusic?"For every kind of mood":"Your tools, all in one place");
- count.textContent=String(shown.length).padStart(2,"0");
- empty.style.display=shown.length?"none":"block";
+ document.body.dataset.category=category;
+ const heroTitle=document.getElementById("heroTitle"),heroDescription=document.getElementById("heroDescription");
+ if(isMovie){
+  heroTitle.innerHTML='Screen worlds.<br><span class="grad">Next watch.</span>';
+  heroDescription.textContent="A curated shelf of movie and TV apps, with original logos and a direct APK resolver.";
+  title.textContent="Movie apps";collectionTitle.textContent="For your next watch";
+ }else{
+  heroTitle.innerHTML='Find your rhythm.<br><span class="grad">Feel the sound.</span>';
+  heroDescription.textContent="Music players from the MahiFlix collection, with original artwork and their download links.";
+  title.textContent="Music apps";collectionTitle.textContent="For every kind of mood";
+ }
+ count.textContent=String(shown.length).padStart(2,"0");empty.style.display=shown.length?"none":"block";
  grid.innerHTML=shown.map((x,i)=>{
-  const accent=x.accent||"#aaa2ff", accent2=x.accent2||"#7262dd";
-  let icon="";
-  let tagMarkup="";
-  let description=x.description||x.desc||"";
-  let sublabel="";
-  if(isMovie){
-   const local=(window.MAHIFLIX_LOGOS||{})[x.domain];
-   const sources=Array.from(new Set([local].concat(x.logoSources||[]).concat([
-    "https://"+x.domain+"/favicon.ico",
-    "https://"+x.domain+"/favicon.png",
-    "https://"+x.domain+"/favicon.svg",
-    "https://www.google.com/s2/favicons?sz=256&domain="+encodeURIComponent(x.domain)
-   ]).filter(Boolean)));
-   icon='<div class="app-icon movie-logo"><img class="movie-app-logo" loading="eager" decoding="async" alt="'+esc(x.name)+' logo" src="'+esc(sources[0])+'" data-logo-sources="'+esc(JSON.stringify(sources))+'" data-logo-index="0"></div>';
-   const ads=x.ads===0?'<span class="ad-low">No / minimal ads</span>':x.ads===1?'<span class="ad-mid">Some ads</span>':'<span class="ad-high">More ads</span>';
-   tagMarkup='<div class="movie-app-tags">'+(x.new?'<span class="fresh">NEW</span>':'')+ads+'<span>'+esc(x.domain)+'</span></div>';
-   sublabel="App website";
-  }else{
-   icon='<div class="app-icon" aria-hidden="true">'+esc(x.short||x.name.slice(0,2).toUpperCase())+'</div>';
-   tagMarkup='<div class="tags">'+(x.tags||[]).map(t=>'<span>'+esc(t)+'</span>').join("")+'</div>';
-   sublabel=isProject?(x.kind||"Personal project"):"Google Play search";
-  }
-  const destination=x.url||"#";
-  return '<article class="app-card" style="--accent:'+esc(accent)+';--accent2:'+esc(accent2)+';--accent-glow:'+esc(accent)+'30;animation:enter .45s ease both;animation-delay:'+Math.min(i,8)*35+'ms">'+
-    '<div class="card-top">'+icon+'<span class="kind">'+(isMovie?"Movie & TV":(isProject?(x.kind||"Project"):"Music"))+'</span></div>'+
-    '<h3>'+esc(x.name)+'</h3><p>'+esc(description)+'</p>'+tagMarkup+
-    '<div class="card-footer"><small>'+esc(sublabel)+'</small><a class="open-link" href="'+esc(destination)+'" target="_blank" rel="noopener noreferrer">'+(isMovie?"Visit app page":(isProject?"Open project":"Find app"))+' <span aria-hidden="true">↗</span></a></div>'+
+  const accent=x.accent||(isMovie?"#ff7166":"#80e5f4"),accent2=x.accent2||(isMovie?"#8e202d":"#7253bd");
+  const local=isMovie?(window.MAHIFLIX_LOGOS||{})[x.domain]:null;
+  const sources=Array.from(new Set([local].concat(x.logoSources||[]).concat([
+   "https://"+x.domain+"/favicon.ico","https://"+x.domain+"/favicon.png","https://"+x.domain+"/favicon.svg",
+   "https://www.google.com/s2/favicons?sz=256&domain="+encodeURIComponent(x.domain)
+  ]).filter(Boolean)));
+  const wrapperClass=isMovie?"movie-logo":"music-logo";
+  const icon='<div class="app-icon '+wrapperClass+'"><img class="movie-app-logo" loading="eager" decoding="async" alt="'+esc(x.name)+' logo" src="'+esc(sources[0])+'" data-logo-sources="'+esc(JSON.stringify(sources))+'" data-logo-index="0"></div>';
+  const ads=x.ads===0?'<span class="ad-low">No / minimal ads</span>':x.ads===1?'<span class="ad-mid">Some ads</span>':'<span class="ad-high">More ads</span>';
+  const fresh=x.new?'<span class="fresh">NEW</span>':'';
+  const domain=x.domain?'<span>'+esc(x.domain)+'</span>':'';
+  const tags=isMovie?'<div class="movie-app-tags">'+fresh+ads+domain+'</div>':'<div class="movie-app-tags">'+fresh+'<span class="download-tag">DIRECT DOWNLOAD</span>'+domain+'</div>';
+  const destination=x.url||"#",description=x.desc||x.description||"";
+  const label=isMovie?"Download APK":"Download app";
+  const sublabel=isMovie?"Latest available APK":"Direct app download";
+  return '<article class="app-card" style="--accent:'+esc(accent)+';--accent2:'+esc(accent2)+';--accent-glow:'+esc(accent)+'30;animation:enter .55s cubic-bezier(.2,.7,.2,1) both;animation-delay:'+Math.min(i,8)*42+'ms">'+
+   '<div class="card-top">'+icon+'<span class="kind">'+(isMovie?"MOVIE & TV":"MUSIC")+'</span></div>'+
+   '<h3>'+esc(x.name)+'</h3><p>'+esc(description)+'</p>'+tags+
+   '<div class="card-footer"><small>'+sublabel+'</small><a class="open-link" href="'+esc(destination)+'" target="_blank" rel="noopener noreferrer">'+label+' <span aria-hidden="true">↗</span></a></div>'+
   '</article>';
  }).join("");
  grid.querySelectorAll(".movie-app-logo").forEach(img=>img.addEventListener("error",()=>nextLogo(img)));
 }
-document.querySelectorAll("[data-category]").forEach(btn=>btn.addEventListener("click",()=>{category=btn.dataset.category;document.querySelectorAll("[data-category]").forEach(other=>{const active=other===btn;other.classList.toggle("active",active);other.setAttribute("aria-selected",active?"true":"false");});render();}));
+document.querySelectorAll("[data-category]").forEach(btn=>btn.addEventListener("click",()=>{category=btn.dataset.category==="music"?"music":"movie";document.querySelectorAll("[data-category]").forEach(other=>{const active=other.dataset.category===category;other.classList.toggle("active",active);other.setAttribute("aria-selected",active?"true":"false");});render();}));
 query.addEventListener("input",render);const header=document.getElementById("header");addEventListener("scroll",()=>header.classList.toggle("scrolled",scrollY>6),{passive:true});document.getElementById("year").textContent=new Date().getFullYear();
 })();
 </script></body></html>
