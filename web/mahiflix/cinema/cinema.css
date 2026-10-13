@@ -18,7 +18,7 @@ html{background:var(--bg)}body{background:transparent}
 
 /* ---------- intro: light sweeps through the M ---------- */
 .intro .intro-logo{position:relative}
-.intro .intro-logo:after{content:"";position:absolute;inset:0;-webkit-mask:url(/m-logo-v2.svg) center/contain no-repeat;mask:url(/m-logo-v2.svg) center/contain no-repeat;
+.intro .intro-logo:after{content:"";position:absolute;inset:0;-webkit-mask:url(/mahiflix/m-logo-v2.svg) center/contain no-repeat;mask:url(/mahiflix/m-logo-v2.svg) center/contain no-repeat;
   background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.95) 50%,transparent 58%);background-size:300% 100%;background-position:130% 0;
   animation:sweep 1s cubic-bezier(.65,0,.35,1) 1.05s forwards}
 @keyframes sweep{to{background-position:-30% 0}}
