@@ -13,6 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>
 try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&!sessionStorage.getItem("nf-intro"))document.documentElement.classList.add("intro-on")}catch(e){}
+document.documentElement.classList.add("cin");setTimeout(function(){if(!window.__cinema)document.documentElement.classList.remove("cin")},4000);
 </script>
 <style>
 :root{--bg:#141414;--panel:#181818;--card:#242424;--text:#fff;--dim:#a7a7a7;--muted:#707070;--red:#e50914;--green:#46d369;--yellow:#f5c518;--border:#343434}
@@ -40,8 +41,11 @@ footer{text-align:center;color:#666;padding:30px 4% 44px;font-size:12px}footer .
 nav .apps-shortcut{display:none;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:7px 10px;font-size:10px;font-weight:800;transition:transform .3s,background .3s}nav .apps-shortcut:hover{transform:translateY(-3px) scale(1.06);background:rgba(255,255,255,.1)}
 @media(max-width:600px){nav .apps-shortcut{display:inline-flex;align-items:center}}
 </style>
+<link rel="stylesheet" href="/mahiflix/cinema/cinema.css">
 </head>
 <body>
+<div class="cinema-fallback" aria-hidden="true"></div>
+<canvas id="cinema" aria-hidden="true"></canvas>
 <div class="intro" id="intro" aria-hidden="true"><div class="intro-logo" aria-label="MahiFlix"></div></div>
 
 <nav id="nav">
@@ -58,15 +62,26 @@ nav .apps-shortcut{display:none;border:1px solid rgba(255,255,255,.22);border-ra
 
 <header class="hero" id="top">
   <div class="hero-in">
-    <p id="heroDesc">A curated collection of movie &amp; web-series websites. Discover a website for your next story.</p>
+    <h1><span class="hero-line sm">Unlocking the Universe of</span><span class="hero-line big">Movies &amp; Web Series</span></h1>
+    <p id="heroDesc" class="hero-line">A curated collection of movie &amp; web-series websites. Discover a website for your next story.</p>
     <a class="ig-link" href="https://www.instagram.com/mahimahfud/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="igBgHero" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="2" y="2" width="20" height="20" rx="6" fill="url(#igBgHero)"/><rect x="6.3" y="6.3" width="11.4" height="11.4" rx="3.5" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="12" cy="12" r="2.7" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="16.35" cy="7.65" r="1.05" fill="#fff"/></svg></a>
   </div>
+  <a class="cue" href="#browse" aria-label="Browse websites"><span>Browse</span><i></i></a>
 </header>
 
 <main>
   <div id="sitesView" class="view active"></div>
   <p id="empty" class="empty">Nothing matched your search.</p>
 </main>
+
+<section class="finale" id="finale" aria-label="MahiFlix">
+  <div class="finale-in">
+    <img class="finale-logo" src="/mahiflix/m-logo-v2.svg" alt="" width="128" height="128">
+    <h2>MahiFlix</h2>
+    <p>A curated collection of the best movie &amp; web-series websites.</p>
+    <div class="btns"><a class="btn play" href="#top">Back to top</a><a class="btn info" href="https://www.instagram.com/mahimahfud/" target="_blank" rel="noopener noreferrer">Instagram</a><a class="btn info" href="/apps/">Apps</a></div>
+  </div>
+</section>
 
 <footer>MahiFlix © <span id="yr"></span></footer>
 
@@ -225,5 +240,6 @@ document.getElementById("yr").textContent=new Date().getFullYear();
   document.getElementById("intro").addEventListener("click",end);setTimeout(end,2750)
 })();
 </script>
+<script type="module" src="/mahiflix/cinema/main.js"></script>
 </body>
 </html>
