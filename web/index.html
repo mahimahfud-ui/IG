@@ -8,7 +8,7 @@
 <meta property="og:title" content="Mahi — Digital Projects">
 <meta property="og:description" content="A home for the websites, experiments and useful tools I'm building.">
 <meta property="og:type" content="website">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="https://cdn.dribbble.com/userupload/49108173/file/688be181b0386713c03f33598d1e38fd.jpg" type="image/jpeg"><link rel="apple-touch-icon" href="https://cdn.dribbble.com/userupload/49108173/file/688be181b0386713c03f33598d1e38fd.jpg"><meta property="og:image" content="https://cdn.dribbble.com/userupload/49108173/file/688be181b0386713c03f33598d1e38fd.jpg">
 <title>Mahi — Digital Projects</title>
 <script>
 try { if(!matchMedia("(prefers-reduced-motion: reduce)").matches && !sessionStorage.getItem("mahi-cloud-intro-seen")) document.documentElement.classList.add("mahi-intro-pending"); } catch (_) {}
@@ -43,6 +43,7 @@ header.scrolled{border-bottom-color:var(--line)}
 .navbar{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
 .brand{display:inline-flex;align-items:center;gap:10px;font-size:17px;font-weight:850;letter-spacing:-.07em}
 .brand-mark{width:34px;height:34px;border-radius:11px;background:var(--lime);color:var(--lime-ink);display:grid;place-items:center;font-weight:950;font-size:14px;letter-spacing:-.08em;box-shadow:0 0 32px rgba(215,255,121,.13)}
+.site-brand-logo{display:block;width:auto;height:39px;max-width:164px;object-fit:contain;flex:none;border-radius:7px;filter:drop-shadow(0 5px 12px rgba(0,0,0,.16))}.footer-brand .site-brand-logo{height:26px;max-width:88px}
 .brand-word span{color:var(--muted);font-weight:500}
 .nav-links{display:flex;align-items:center;gap:30px;color:var(--muted);font-size:12px}
 .nav-links a{transition:color .18s}
@@ -290,12 +291,12 @@ footer{border-top:1px solid var(--line);padding:24px 0 30px}
 .ci-orbit{position:absolute;width:min(74vw,570px);height:min(74vw,570px);border:1px solid rgba(215,255,121,.13);border-radius:50%;z-index:-1;animation:ciOrbit 24s linear infinite}
 .ci-orbit:before,.ci-orbit:after{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:#d7ff79;box-shadow:0 0 26px #d7ff79cc;top:14%;left:20%}.ci-orbit:after{background:#bba5ff;top:auto;left:auto;right:13%;bottom:20%}
 .ci-content{width:min(580px,calc(100% - 34px));display:flex;align-items:center;flex-direction:column;text-align:center;padding:26px 0;animation:ciArrival 1.25s cubic-bezier(.2,.75,.2,1) both}
-.ci-mark{width:86px;height:86px;display:grid;place-items:center;border-radius:26px;border:1px solid rgba(215,255,121,.4);background:linear-gradient(145deg,rgba(215,255,121,.18),rgba(187,165,255,.06));box-shadow:0 0 65px rgba(215,255,121,.11),inset 0 0 28px rgba(215,255,121,.08);color:#e8ffc1;font-size:32px;font-weight:950;letter-spacing:-.12em;position:relative;margin-bottom:28px}
+.ci-mark{width:min(236px,72vw);height:118px;display:grid;place-items:center;border-radius:22px;border:0;background:transparent;box-shadow:none;position:relative;margin-bottom:24px}.ci-mark img{display:block;width:100%;height:100%;object-fit:contain;border-radius:8px;filter:drop-shadow(0 12px 24px rgba(0,0,0,.32))}
 .ci-mark:before,.ci-mark:after{content:"";position:absolute;inset:-9px;border:1px solid rgba(215,255,121,.13);border-radius:31px;animation:ciPulse 2.6s ease-out infinite}.ci-mark:after{inset:-19px;border-color:rgba(187,165,255,.13);animation-delay:.85s}
 .ci-kicker{font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#b7c5a0;font-weight:800;margin:0 0 14px;animation:ciTextIn .8s .22s both}
 .ci-title{font-size:clamp(45px,9.5vw,88px);line-height:.92;letter-spacing:-.085em;font-weight:880;margin:0;text-shadow:0 8px 40px #0006;animation:ciTextIn .9s .36s both}.ci-title span{background:linear-gradient(100deg,#d7ff79,#bba5ff 75%);color:transparent;background-clip:text;-webkit-background-clip:text}
 .ci-subtitle{font-size:12px;line-height:1.8;color:#a5aa9a;max-width:360px;margin:20px auto 28px;animation:ciTextIn .8s .5s both}
-.ci-actions{display:flex;flex-direction:column;align-items:center;gap:14px;animation:ciTextIn .8s .62s both}
+.ci-actions{display:flex;flex-direction:column;align-items:center;gap:14px;animation:ciTextIn .8s .62s both}.ci-auto-note{font-size:9px;line-height:1.6;letter-spacing:.1em;text-transform:uppercase;color:#8d9680;margin:0 0 9px;animation:ciTextIn .8s .62s both}
 .ci-enter{min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:0 21px;border-radius:999px;border:1px solid rgba(215,255,121,.7);background:#d7ff79;color:#171b0e;font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 10px 38px rgba(215,255,121,.12);cursor:pointer;transition:transform .25s,box-shadow .25s,background .25s}
 .ci-enter:hover{transform:translateY(-3px) scale(1.025);background:#e5ffac;box-shadow:0 18px 50px rgba(215,255,121,.2)}.ci-enter:disabled{opacity:.7;cursor:wait;transform:none}.ci-enter svg{width:16px;height:16px}
 .ci-skip{border:0;background:transparent;color:#878d7e;font-size:10px;padding:5px 12px;cursor:pointer}.ci-skip:hover{color:#fff}
@@ -305,7 +306,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 30px}
 @keyframes ciPulse{0%{transform:scale(.88);opacity:.65}85%,100%{transform:scale(1.2);opacity:0}}
 @keyframes ciArrival{from{opacity:0;transform:translateY(16px) scale(.975);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
 @keyframes ciTextIn{from{opacity:0;transform:translateY(10px);filter:blur(5px)}to{opacity:1;transform:none;filter:blur(0)}}@keyframes ciWave{0%,100%{transform:scaleY(.42);opacity:.55}50%{transform:scaleY(1);opacity:1}}
-@media(max-width:520px){.ci-mark{width:73px;height:73px;border-radius:23px}.ci-subtitle{font-size:11px}.ci-footnote{bottom:17px}}
+@media(max-width:520px){.ci-mark{width:min(80vw,210px);height:100px;border-radius:18px}.ci-subtitle{font-size:11px}.ci-footnote{bottom:17px}.site-brand-logo{height:34px;max-width:132px}}
 @media(prefers-reduced-motion:reduce){.mahi-cloud-intro,.mahi-cloud-intro *{animation:none!important;transition:none!important}}
 
 </style>
@@ -314,18 +315,17 @@ footer{border-top:1px solid var(--line);padding:24px 0 30px}
 
 <div class="mahi-cloud-intro" id="cloudIntro" role="dialog" aria-modal="true" aria-label="MahiCloud cinematic introduction">
 <div class="ci-grid" aria-hidden="true"></div><div class="ci-glow" aria-hidden="true"></div><div class="ci-orbit" aria-hidden="true"></div>
-<div class="ci-content"><div class="ci-mark" aria-hidden="true">M.</div><p class="ci-kicker">A world of things, made by Mahi</p>
+<div class="ci-content"><div class="ci-mark"><img src="https://cdn.dribbble.com/userupload/49108173/file/688be181b0386713c03f33598d1e38fd.jpg" alt="MahiCloud logo" decoding="async" fetchpriority="high"></div><p class="ci-kicker">A world of things, made by Mahi</p>
 <h2 class="ci-title">MAHI<span>CLOUD</span></h2><p class="ci-subtitle">One universe for cinematic discoveries, creative experiments, and tools worth keeping.</p>
-<div class="ci-actions"><button class="ci-enter" id="cloudIntroEnter" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg> ENTER WITH SOUND</button><button class="ci-skip" id="cloudIntroSkip" type="button">Continue silently</button></div>
-<div class="ci-sound-bars" aria-hidden="true"><i style="--h:7px;--d:-.2s"></i><i style="--h:14px;--d:-.6s"></i><i style="--h:10px;--d:-.4s"></i><i style="--h:17px;--d:-.1s"></i><i style="--h:8px;--d:-.7s"></i><i style="--h:13px;--d:-.3s"></i><i style="--h:6px;--d:-.5s"></i></div></div>
-<div class="ci-footnote">An original cinematic welcome · Sound starts when you enter</div>
+<p class="ci-auto-note">Your welcome soundtrack is starting automatically</p>
+<div class="ci-sound-bars aria-hidden="true"><i style="--h:7px;--d:-.2s"></i><i style="--h:14px;--d:-.6s"></i><i style="--h:10px;--d:-.4s"></i><i style="--h:17px;--d:-.1s"></i><i style="--h:8px;--d:-.7s"></i><i style="--h:13px;--d:-.3s"></i><i style="--h:6px;--d:-.5s"></i></div></div>
+<div class="ci-footnote">A cinematic welcome · Sound starts automatically when supported</div>
 </div>
 <div class="progress" id="progress" aria-hidden="true"></div>
 <header id="siteHeader">
   <div class="wrap navbar">
     <a class="brand" href="#top" aria-label="Mahi home">
-      <span class="brand-mark">M.</span>
-      <span class="brand-word">mahi<span> / digital projects</span></span>
+      <img class="site-brand-logo" src="https://cdn.dribbble.com/userupload/49108173/file/688be181b0386713c03f33598d1e38fd.jpg" alt="Mahi logo" decoding="async">
     </a>
     <nav class="nav-links" id="navLinks" aria-label="Main navigation">
       <a href="#work">Selected work</a>
@@ -423,7 +423,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 30px}
 </main>
 <footer>
   <div class="wrap footer-row">
-    <div class="footer-brand"><span class="brand-mark" style="width:25px;height:25px;border-radius:8px;font-size:11px">M.</span><span>Made with curiosity by <b>Mahi</b> · <span id="year"></span></span></div>
+    <div class="footer-brand"><img class="site-brand-logo" src="https://cdn.dribbble.com/userupload/49108173/file/688be181b0386713c03f33598d1e38fd.jpg" alt="Mahi logo" decoding="async"><span>Made with curiosity by <b>Mahi</b> · <span id="year"></span></span></div>
     <div class="footer-socials"><a href="#top">Back to top ↑</a><a href="https://github.com/mahimahfud-ui" target="_blank" rel="noopener noreferrer">Source ↗</a></div>
   </div>
 </footer>
@@ -677,13 +677,13 @@ footer{border-top:1px solid var(--line);padding:24px 0 30px}
 "use strict";
 var root=document.documentElement,overlay=document.getElementById("cloudIntro");
 if(!overlay||!root.classList.contains("mahi-intro-pending"))return;
-var enterButton=document.getElementById("cloudIntroEnter"),skipButton=document.getElementById("cloudIntroSkip"),timer=0,finished=false,soundStarted=false;
-function playCinematicSound(){
- if(soundStarted)return true;soundStarted=true;
- var C=window.AudioContext||window.webkitAudioContext;if(!C)return false;
- var ctx;
+var timer=0,finished=false,soundStarted=false,audioContext=null;
+var unlockEvents=["pointerdown","keydown","touchstart","wheel"];
+function removeUnlockListeners(){unlockEvents.forEach(function(type){document.removeEventListener(type,onUnlock);});}
+function startSound(ctx){
+ if(soundStarted||finished||!ctx||ctx.state!=="running")return;
+ soundStarted=true;removeUnlockListeners();
  try{
-  ctx=new C();if(ctx.state==="suspended")ctx.resume();
   var master=ctx.createGain();master.gain.setValueAtTime(.72,ctx.currentTime);master.connect(ctx.destination);
   var start=ctx.currentTime+.025;
   function note(freq,type,delay,duration,volume,endFreq){
@@ -699,24 +699,32 @@ function playCinematicSound(){
   filter.type="lowpass";filter.frequency.setValueAtTime(420,start);filter.frequency.exponentialRampToValueAtTime(3600,start+1);filter.frequency.exponentialRampToValueAtTime(850,start+1.5);
   sweep.gain.setValueAtTime(.0001,start);sweep.gain.exponentialRampToValueAtTime(.023,start+.32);sweep.gain.exponentialRampToValueAtTime(.0001,start+1.52);
   noise.buffer=buffer;noise.connect(filter);filter.connect(sweep);sweep.connect(master);noise.start(start);noise.stop(start+1.56);
-  window.setTimeout(function(){try{ctx.close()}catch(_){}},3200);return true;
- }catch(_){try{if(ctx)ctx.close()}catch(__){}return false}
+  window.setTimeout(function(){try{ctx.close()}catch(_){}if(audioContext===ctx)audioContext=null},3000);
+ }catch(_){try{ctx.close()}catch(__){}if(audioContext===ctx)audioContext=null;}
 }
+function attemptSound(){
+ if(finished||soundStarted)return;
+ var AudioCtor=window.AudioContext||window.webkitAudioContext;if(!AudioCtor)return;
+ try{
+  if(!audioContext||audioContext.state==="closed")audioContext=new AudioCtor();
+  var ctx=audioContext;
+  if(ctx.state==="running"){startSound(ctx);return;}
+  var resumed=ctx.resume();
+  if(resumed&&typeof resumed.then==="function")resumed.then(function(){startSound(ctx)}).catch(function(){});
+ }catch(_){}
+}
+function onUnlock(){attemptSound();}
+unlockEvents.forEach(function(type){document.addEventListener(type,onUnlock,{passive:true});});
 function finish(){
- if(finished)return;finished=true;window.clearTimeout(timer);
+ if(finished)return;finished=true;window.clearTimeout(timer);removeUnlockListeners();
  try{sessionStorage.setItem("mahi-cloud-intro-seen","1")}catch(_){}
  root.classList.add("mahi-intro-leaving");root.classList.remove("mahi-intro-pending");
+ if(!soundStarted&&audioContext){try{audioContext.close()}catch(_){}audioContext=null;}
  window.setTimeout(function(){if(overlay.parentNode)overlay.parentNode.removeChild(overlay);root.classList.remove("mahi-intro-leaving")},1000);
 }
-enterButton.addEventListener("click",function(){
- if(finished)return;enterButton.disabled=true;enterButton.textContent="WELCOME TO MAHICLOUD";
- var played=playCinematicSound();
- if(!played){enterButton.textContent="ENTERING SILENTLY";timer=window.setTimeout(finish,350);return}
- timer=window.setTimeout(finish,2050);
-});
-skipButton.addEventListener("click",finish);
 overlay.addEventListener("keydown",function(event){if(event.key==="Escape")finish()});
-timer=window.setTimeout(finish,6800);
+attemptSound();
+timer=window.setTimeout(finish,3200);
 })();
 </script>
 </body>
