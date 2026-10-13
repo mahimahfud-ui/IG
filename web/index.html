@@ -8,7 +8,7 @@
 <meta property="og:title" content="Mahi — Digital Projects">
 <meta property="og:description" content="A home for the websites, experiments and useful tools I'm building.">
 <meta property="og:type" content="website">
-<link rel="icon" href="https://cdn.dribbble.com/userupload/49108173/file/688be181b0386713c03f33598d1e38fd.jpg" type="image/jpeg"><link rel="apple-touch-icon" href="https://cdn.dribbble.com/userupload/49108173/file/688be181b0386713c03f33598d1e38fd.jpg"><meta property="og:image" content="https://cdn.dribbble.com/userupload/49108173/file/688be181b0386713c03f33598d1e38fd.jpg">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta property="og:image" content="https://mahicloud.onrender.com/brand-m.svg">
 <title>Mahi — Digital Projects</title>
 <script>
 try { if(!matchMedia("(prefers-reduced-motion: reduce)").matches && !sessionStorage.getItem("mahi-cloud-intro-seen")) document.documentElement.classList.add("mahi-intro-pending"); } catch (_) {}
@@ -110,7 +110,7 @@ h1 .accent{color:var(--lime);font-style:normal}
 .section-heading h2 em{font-style:normal;color:var(--muted);font-weight:480}
 .section-heading p{max-width:355px;color:var(--muted);font-size:12px;line-height:1.8;margin:0}
 .work-section{border-top:1px solid var(--line)}
-.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.filters{display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;margin-bottom:24px;max-width:100%;padding:2px 1px 8px}.filters::-webkit-scrollbar{display:none}.filters button{flex:0 0 auto;white-space:nowrap}
 .filter-btn{border:1px solid var(--line);background:transparent;color:var(--muted);padding:10px 15px;border-radius:999px;font-size:10px;font-weight:760;cursor:pointer;transition:.2s}
 .filter-btn:hover{color:var(--text);border-color:var(--muted)}
 .filter-btn.active{background:var(--lime);color:var(--lime-ink);border-color:var(--lime)}
@@ -315,7 +315,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 30px}
 
 <div class="mahi-cloud-intro" id="cloudIntro" role="dialog" aria-modal="true" aria-label="MahiCloud cinematic introduction">
 <div class="ci-grid" aria-hidden="true"></div><div class="ci-glow" aria-hidden="true"></div><div class="ci-orbit" aria-hidden="true"></div>
-<div class="ci-content"><div class="ci-mark"><img src="https://cdn.dribbble.com/userupload/49108173/file/688be181b0386713c03f33598d1e38fd.jpg" alt="MahiCloud logo" decoding="async" fetchpriority="high"></div><p class="ci-kicker">A world of things, made by Mahi</p>
+<div class="ci-content"><div class="ci-mark"><img src="/brand-m.svg" alt="MahiCloud logo" decoding="async" fetchpriority="high"></div><p class="ci-kicker">A world of things, made by Mahi</p>
 <h2 class="ci-title">MAHI<span>CLOUD</span></h2><p class="ci-subtitle">One universe for cinematic discoveries, creative experiments, and tools worth keeping.</p>
 <p class="ci-auto-note">Your welcome soundtrack is starting automatically</p>
 <div class="ci-sound-bars aria-hidden="true"><i style="--h:7px;--d:-.2s"></i><i style="--h:14px;--d:-.6s"></i><i style="--h:10px;--d:-.4s"></i><i style="--h:17px;--d:-.1s"></i><i style="--h:8px;--d:-.7s"></i><i style="--h:13px;--d:-.3s"></i><i style="--h:6px;--d:-.5s"></i></div></div>
@@ -325,7 +325,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 30px}
 <header id="siteHeader">
   <div class="wrap navbar">
     <a class="brand" href="#top" aria-label="Mahi home">
-      <img class="site-brand-logo" src="https://cdn.dribbble.com/userupload/49108173/file/688be181b0386713c03f33598d1e38fd.jpg" alt="Mahi logo" decoding="async">
+      <img class="site-brand-logo" src="/brand-m.svg" alt="Mahi logo" decoding="async">
     </a>
     <nav class="nav-links" id="navLinks" aria-label="Main navigation">
       <a href="#work">Selected work</a>
@@ -423,7 +423,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 30px}
 </main>
 <footer>
   <div class="wrap footer-row">
-    <div class="footer-brand"><img class="site-brand-logo" src="https://cdn.dribbble.com/userupload/49108173/file/688be181b0386713c03f33598d1e38fd.jpg" alt="Mahi logo" decoding="async"><span>Made with curiosity by <b>Mahi</b> · <span id="year"></span></span></div>
+    <div class="footer-brand"><img class="site-brand-logo" src="/brand-m.svg" alt="Mahi logo" decoding="async"><span>Made with curiosity by <b>Mahi</b> · <span id="year"></span></span></div>
     <div class="footer-socials"><a href="#top">Back to top ↑</a><a href="https://github.com/mahimahfud-ui" target="_blank" rel="noopener noreferrer">Source ↗</a></div>
   </div>
 </footer>

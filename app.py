@@ -268,7 +268,7 @@ def worker(job_id, username, password, liked_data, config):
 
 @app.get("/")
 def index():
-    return send_from_directory("web", "index.html")
+    return send_from_directory(os.path.join(app.root_path, "web"), "index.html")
 
 
 @app.get("/mahiflix")
@@ -578,7 +578,7 @@ def stop(job_id):
 
 @app.get("/privacy")
 def privacy():
-    return send_from_directory("web", "privacy.html")
+    return send_from_directory(os.path.join(app.root_path, "web"), "privacy.html")
 
 
 @app.get("/health")

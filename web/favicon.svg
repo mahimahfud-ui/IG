@@ -1,1 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="18" fill="#d7ff79"/><path d="M13 48V16h8l11 17 11-17h8v32h-9V31L32 44 22 31v17z" fill="#15190f"/><circle cx="52" cy="48" r="4" fill="#15190f"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="brandTitle">
+<title id="brandTitle">M</title>
+<defs>
+<linearGradient id="brandGradient" x1="70" y1="42" x2="445" y2="470" gradientUnits="userSpaceOnUse"><stop stop-color="#8AF7FF"/><stop offset=".22" stop-color="#28B9FF"/><stop offset=".48" stop-color="#3568FF"/><stop offset=".72" stop-color="#8651FF"/><stop offset="1" stop-color="#F06CF0"/></linearGradient>
+<linearGradient id="brandHighlight" x1="100" y1="70" x2="245" y2="420" gradientUnits="userSpaceOnUse"><stop stop-color="#E8FFFF" stop-opacity=".92"/><stop offset=".38" stop-color="#75E6FF" stop-opacity=".4"/><stop offset="1" stop-color="#75E6FF" stop-opacity="0"/></linearGradient>
+<linearGradient id="brandDepth" x1="260" y1="185" x2="370" y2="440" gradientUnits="userSpaceOnUse"><stop stop-color="#1C2CBE" stop-opacity=".12"/><stop offset="1" stop-color="#230D62" stop-opacity=".55"/></linearGradient>
+</defs>
+<path d="M88 430V82h82l86 224 86-224h82v348h-82V264l-86 190-86-190v166z" fill="url(#brandGradient)"/>
+<path d="M88 82h82l86 224-54 119L88 238z" fill="url(#brandHighlight)"/>
+<path d="M256 382l52-82 34-88v218h-82z" fill="url(#brandDepth)"/>
+<path d="M103 404V103c0-8 5-13 13-12l41 7M356 98l39-7c8-1 13 4 13 12v301" fill="none" stroke="#E2FFFF" stroke-opacity=".56" stroke-width="5" stroke-linecap="round"/>
+</svg>
