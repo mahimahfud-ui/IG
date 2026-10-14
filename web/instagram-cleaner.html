@@ -70,6 +70,25 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 @keyframes iosPanelIn{from{opacity:0;transform:translateX(16px) scale(.985);filter:blur(5px)}65%{opacity:1;transform:translateX(-1px) scale(1);filter:blur(0)}to{opacity:1;transform:none;filter:blur(0)}}
 @media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root),::view-transition-old(winforge-library),::view-transition-new(winforge-library),::view-transition-old(cleaner-panel),::view-transition-new(cleaner-panel){animation:none!important}}
 </style>
+<style id="mahicloud-subsite-motion-v1">
+/* MahiCloud scoped motion polish — Instagram Cleaner. Existing application logic is untouched. */
+@keyframes mcCleanerEntry{from{opacity:0;transform:translateY(12px) scale(.995);filter:blur(3px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+.header{animation:mcCleanerEntry .58s cubic-bezier(.22,1,.36,1) both}
+.hero{animation:mcCleanerEntry .66s cubic-bezier(.22,1,.36,1) .06s both}
+.nav{animation:mcCleanerEntry .58s cubic-bezier(.22,1,.36,1) .12s both}
+.stats>.stat{animation:mcCleanerEntry .5s cubic-bezier(.22,1,.36,1) both}
+.stats>.stat:nth-child(1){animation-delay:.08s}.stats>.stat:nth-child(2){animation-delay:.13s}.stats>.stat:nth-child(3){animation-delay:.18s}.stats>.stat:nth-child(4){animation-delay:.23s}.stats>.stat:nth-child(5){animation-delay:.28s}
+.card{transition:transform .32s cubic-bezier(.22,1,.36,1),border-color .32s,box-shadow .32s,background-color .32s}
+@media(hover:hover){.card:hover{transform:translateY(-3px);border-color:rgba(154,99,255,.28);box-shadow:0 28px 84px rgba(0,0,0,.40)}.stat:hover{transform:translateY(-2px);border-color:rgba(154,99,255,.35)}}
+.stat{transition:transform .28s cubic-bezier(.22,1,.36,1),border-color .28s,box-shadow .28s}
+.btn{transition:transform .25s cubic-bezier(.22,1,.36,1),border-color .25s,background .25s,box-shadow .25s,filter .25s}
+.btn:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.22);filter:brightness(1.06)}
+.btn:not(:disabled):active{transform:translateY(0) scale(.985)}
+.nav button:focus-visible,.btn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.header,.hero,.nav,.stats>.stat{animation:none!important}.card,.stat,.btn{transition:none!important}.btn:not(:disabled):hover,.stat:hover,.card:hover{transform:none!important}}
+body.reduce-motion .header,body.reduce-motion .hero,body.reduce-motion .nav,body.reduce-motion .stats>.stat{animation:none!important}
+body.reduce-motion .card,body.reduce-motion .stat,body.reduce-motion .btn{transition:none!important}
+</style>
 </head>
 <body>
 <div class="app">
