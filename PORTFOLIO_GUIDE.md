@@ -8,6 +8,9 @@ All public website pages are served from the single Flask app in this repository
 - `/mahiflix/` — movie and web-series website collection only.
 - `/apps/` — separate animated app collection with movie apps and music apps.
 - `/linkora/` — Linkora / WinForge Windows scripts library.
+- `/lumr/` — LUMR photo and video gallery.
+- `/@<username>` — LUMR public creator profiles, matching the source repo's URL pattern.
+- `/unfollowers/` — local Instagram export comparison, without requesting account credentials.
 - `/instagram-cleaner.html` — preserved original Mahi Social Cleaner dashboard.
 - `/privacy` and `/health` — existing routes.
 
@@ -21,3 +24,7 @@ MahiFlix and Linkora live under `web/mahiflix/` and `web/linkora/`; Apps lives u
 4. Commit and push to `main`. The unified Render service auto-deploys changes from this branch.
 
 One domain and one service can host every static project under a subpath. Projects requiring server-side code must be integrated into the shared Flask app or a compatible shared route.
+
+## LUMR account and upload setup
+
+The LUMR gallery is integrated under `web/lumr/`. To enable real accounts, public creator profiles and media uploads, run `supabase/schema.sql` in the intended Supabase project's SQL editor, then set `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` on the MahiCloud Render service. `YOUTUBE_URL` is optional. `.env.example` contains placeholders only; never commit live keys or a service-role/secret key.
