@@ -12,6 +12,23 @@
 @media(max-width:650px){.wrap{width:calc(100% - 26px)}.nav{height:64px}.hero{padding:48px 0 28px}.upload-grid{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.metric:last-child{grid-column:1/-1}.result-head{align-items:flex-start;flex-direction:column}.search{width:100%;max-width:none}.results{grid-template-columns:1fr}.panel{border-radius:18px}.nav a:last-child{font-size:10px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
+<style id="mahicloud-subsite-motion-v1">
+/* MahiCloud scoped motion polish — Unfollowers Checker. No file-processing logic changes. */
+@keyframes mcUnfollowersEntry{from{opacity:0;transform:translateY(14px) scale(.995);filter:blur(3px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+.nav{animation:mcUnfollowersEntry .52s cubic-bezier(.22,1,.36,1) both}
+.hero{animation:mcUnfollowersEntry .68s cubic-bezier(.22,1,.36,1) .07s both}
+.trust .pill{animation:mcUnfollowersEntry .48s cubic-bezier(.22,1,.36,1) both}
+.trust .pill:nth-child(1){animation-delay:.15s}.trust .pill:nth-child(2){animation-delay:.21s}.trust .pill:nth-child(3){animation-delay:.27s}.trust .pill:nth-child(4){animation-delay:.33s}
+.panel{animation:mcUnfollowersEntry .62s cubic-bezier(.22,1,.36,1) .13s both}
+.metric{transition:transform .3s cubic-bezier(.22,1,.36,1),border-color .3s,background .3s,box-shadow .3s}
+@media(hover:hover){.metric:hover{transform:translateY(-3px);border-color:rgba(215,255,121,.42);background:#d7ff7909;box-shadow:0 15px 32px rgba(0,0,0,.18)}.upload:hover{border-color:#d7ff7966;background:#d7ff7908}.person:hover{transform:translateX(2px);border-color:#d7ff7955;background:#d7ff7908}}
+.upload,.person{transition:transform .25s cubic-bezier(.22,1,.36,1),border-color .25s,background .25s}
+.btn{transition:transform .26s cubic-bezier(.22,1,.36,1),border-color .26s,box-shadow .26s,filter .26s}
+.btn:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(0,0,0,.2);filter:brightness(1.05)}
+.btn:not(:disabled):active{transform:translateY(0) scale(.985)}
+.report.visible{animation:mcUnfollowersEntry .48s cubic-bezier(.22,1,.36,1) both}
+@media(prefers-reduced-motion:reduce){.nav,.hero,.trust .pill,.panel,.report.visible{animation:none!important}.metric,.upload,.person,.btn{transition:none!important}.metric:hover,.upload:hover,.person:hover,.btn:not(:disabled):hover{transform:none!important}}
+</style>
 </head>
 <body>
 <div class="wrap">
