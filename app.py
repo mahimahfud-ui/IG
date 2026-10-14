@@ -321,6 +321,12 @@ def lumr_index():
     return send_from_directory(os.path.join(app.root_path, "web", "lumr"), "index.html")
 
 
+@app.get("/@<username>")
+def lumr_public_profile(username):
+    """Serve LUMR for the original public profile route /@username."""
+    return send_from_directory(os.path.join(app.root_path, "web", "lumr"), "index.html")
+
+
 @app.get("/lumr/api/config")
 def lumr_config():
     return jsonify({
