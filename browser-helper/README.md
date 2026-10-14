@@ -1,4 +1,4 @@
-# Browser Tools v2.1.0
+# Browser Tools
 
 Standalone Instagram browser-session utility for Chrome/Brave. It works from an Instagram tab where you are already signed in and does not ask the extension for your Instagram password.
 
@@ -32,11 +32,11 @@ The helper does not bypass CAPTCHAs, security checks, rate limits, or other acco
 
 ## Updating the source
 
-The canonical source is the repository `main` branch:
+The canonical source is the `browser-helper` folder on the MahiCloud repository's `main` branch:
 
-https://github.com/mahimahfud-ui/IG
+https://github.com/mahimahfud-ui/mahicloud/tree/main/browser-helper
 
-Future code changes can be committed directly to the same repository. A manually loaded extension still needs **Reload** in the browser after source changes. Automatic browser updates require installation through a supported extension store; the repository already contains a Chrome Web Store publishing workflow for that setup.
+Future code changes can be committed directly to the MahiCloud repository. A manually loaded extension still needs **Reload** in the browser after source changes. Automatic browser updates require installation through a supported extension store; the repository already contains a Chrome Web Store publishing workflow for that setup.
 
 ## Third-party
 

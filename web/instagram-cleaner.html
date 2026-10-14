@@ -298,7 +298,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
   $('settingsBtn').onclick=()=>openPage('home');
   $('openInstagram').onclick=()=>window.open('https://www.instagram.com/','_blank','noopener');
   $('connectBtn').onclick=async()=>{window.open('https://www.instagram.com/','_blank','noopener');setTimeout(()=>syncSession(),900)};
-  $('installGuide').onclick=()=>window.open('https://github.com/mahimahfud-ui/IG/blob/main/browser-helper/README.md','_blank','noopener');
+  $('installGuide').onclick=()=>window.open('https://github.com/mahimahfud-ui/mahicloud/blob/main/browser-helper/README.md','_blank','noopener');
 
   function updateHome(d){
     if(d?.followingCount!=null)$('sFollowing').textContent=fmt(d.followingCount);
@@ -329,7 +329,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
   async function scanNF(){
     $('nfStatus').textContent='Scanning following and followers…';$('scanNF').disabled=true;
     try{
-      const d=await bridge('SCAN_NON_FOLLOWERS',{},18000);state.nf=d.nonFollowers||[];
+      const d=await bridge('SCAN_NON_FOLLOWERS',{},120000);state.nf=d.nonFollowers||[];
       $('nfFollowCount').textContent=fmt(d.followingCount);$('nfFollowerCount').textContent=fmt(d.followersCount);$('nfCount').textContent=fmt(state.nf.length);
       $('sFollowing').textContent=fmt(d.followingCount);$('sFollowers').textContent=fmt(d.followersCount);$('sNon').textContent=fmt(state.nf.length);
       state.nfSel.clear();renderNF();$('nfStatus').className='status good';$('nfStatus').textContent='Scan complete · review before taking action';log('Non-followers scan',state.nf.length+' accounts found');toast('Non-followers scan complete');
@@ -343,7 +343,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
     const ids=[...state.nfSel];if(!ids.length)return;
     if(!confirm('Unfollow '+ids.length+' selected account(s)?'))return;
     $('nfUnfollow').disabled=true;$('nfStatus').textContent='Applying selected changes…';
-    try{const r=await bridge('UNFOLLOW_SELECTED',{ids},30000);const ok=(r||[]).filter(x=>x.ok).length;log('Unfollow batch',ok+' succeeded · '+((r||[]).length-ok)+' failed');toast(ok+' accounts updated');state.nfSel.clear();await scanNF()}
+    try{const r=await bridge('UNFOLLOW_SELECTED',{ids},120000);const ok=(r||[]).filter(x=>x.ok).length;log('Unfollow batch',ok+' succeeded · '+((r||[]).length-ok)+' failed');toast(ok+' accounts updated');state.nfSel.clear();await scanNF()}
     catch(e){$('nfStatus').className='status bad';$('nfStatus').textContent=e.message}
     finally{$('nfUnfollow').disabled=false}
   };
@@ -362,7 +362,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
   }
   async function scanLikes(){
     $('likeStatus').textContent='Scanning liked activity…';$('scanLikes').disabled=true;
-    try{state.likes=await bridge('SCAN_LIKES',{},18000)||[];$('sLikes').textContent=fmt(state.likes.length);state.likeSel.clear();renderLikes();$('likeStatus').className='status good';$('likeStatus').textContent='Scan complete · review before action';log('Likes scan',state.likes.length+' liked posts found');toast('Likes scan complete')}
+    try{state.likes=await bridge('SCAN_LIKES',{},120000)||[];$('sLikes').textContent=fmt(state.likes.length);state.likeSel.clear();renderLikes();$('likeStatus').className='status good';$('likeStatus').textContent='Scan complete · review before action';log('Likes scan',state.likes.length+' liked posts found');toast('Likes scan complete')}
     catch(e){$('likeStatus').className='status bad';$('likeStatus').textContent=e.message;toast('Scan failed')}
     finally{$('scanLikes').disabled=false}
   }
@@ -372,7 +372,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
     const ids=[...state.likeSel];if(!ids.length)return;
     if(!confirm('Unlike '+ids.length+' selected post(s)?'))return;
     $('likeUnlike').disabled=true;$('likeStatus').textContent='Applying selected changes…';
-    try{const r=await bridge('UNLIKE_SELECTED',{ids},30000);const ok=(r||[]).filter(x=>x.ok).length;log('Unlike batch',ok+' succeeded · '+((r||[]).length-ok)+' failed');toast(ok+' posts updated');state.likeSel.clear();await scanLikes()}
+    try{const r=await bridge('UNLIKE_SELECTED',{ids},120000);const ok=(r||[]).filter(x=>x.ok).length;log('Unlike batch',ok+' succeeded · '+((r||[]).length-ok)+' failed');toast(ok+' posts updated');state.likeSel.clear();await scanLikes()}
     catch(e){$('likeStatus').className='status bad';$('likeStatus').textContent=e.message}
     finally{$('likeUnlike').disabled=false}
   };
