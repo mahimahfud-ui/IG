@@ -1,4 +1,4 @@
-# Mahi Instagram Helper v2.1.0
+# Browser Tools v2.1.0
 
 Standalone Instagram browser-session utility for Chrome/Brave. It works from an Instagram tab where you are already signed in and does not ask the extension for your Instagram password.
 
@@ -28,7 +28,7 @@ The helper does not bypass CAPTCHAs, security checks, rate limits, or other acco
 4. Click **Load unpacked**.
 5. Select this `browser-helper` folder (or the extracted folder containing `manifest.json`).
 6. Open Instagram and sign in normally.
-7. Pin and open **Mahi Instagram Helper**.
+7. Pin and open **Browser Tools**.
 
 ## Updating the source
 

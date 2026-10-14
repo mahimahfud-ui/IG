@@ -3,18 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#08090d">
-<meta name="description" content="Mahi Social Cleaner — professional Instagram account workspace powered by your existing browser session.">
-<title>Mahi Social Cleaner</title>
+<meta name="theme-color" content="#141414">
+<meta name="description" content="Social Media Tools — professional Instagram account workspace powered by your existing browser session.">
+<title>Social Media Tools</title>
 <style>
 :root{
-  --bg:#08090d;--panel:#11131a;--panel2:#0d0f15;--line:rgba(255,255,255,.08);
+  --bg:#141414;--panel:#181818;--panel2:#242424;--line:rgba(255,255,255,.08);
   --text:#f7f7fb;--muted:#8b8e9a;--pink:#ff3b76;--purple:#9a63ff;--blue:#5aa8ff;
   --green:#55e39e;--danger:#ff5c6f;--radius:22px;--shadow:0 24px 80px rgba(0,0,0,.35)
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;min-height:100vh;background:radial-gradient(circle at 20% 10%,rgba(255,59,118,.09),transparent 28%),radial-gradient(circle at 85% 18%,rgba(154,99,255,.10),transparent 30%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at 20% 10%,rgba(229,9,20,.18),transparent 28%),radial-gradient(circle at 85% 18%,rgba(229,9,20,.09),transparent 30%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
 .app{max-width:1380px;margin:0 auto;padding:16px 20px 110px}
 .header{display:flex;align-items:center;justify-content:space-between;gap:14px;height:54px}
@@ -38,7 +38,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 .nav button.active{border-color:rgba(255,92,132,.3);background:linear-gradient(145deg,rgba(255,59,118,.15),rgba(115,77,176,.16));color:#ff9db5;box-shadow:inset 0 0 18px rgba(255,92,132,.05),0 5px 18px rgba(0,0,0,.12);transform:scale(.985)}.nav button:active{transform:scale(.965)}
 .page{display:none;margin-top:16px}.page.active{display:block;view-transition-name:cleaner-panel;animation:iosPanelIn .48s cubic-bezier(.22,1,.36,1) both;transform-origin:50% 10%}
 @keyframes pageIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
-.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:15px}.card{background:linear-gradient(145deg,rgba(19,21,29,.88),rgba(12,14,20,.86));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:15px}.card{background:linear-gradient(145deg,rgba(36,36,36,.88),rgba(24,24,24,.86));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
 .card-pad{padding:22px}.title{font:700 24px/1.05 ui-sans-serif,system-ui;letter-spacing:-.04em}.sub{color:var(--muted);font-size:10px;line-height:1.7;margin-top:8px}
 .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:15px}.stat{padding:15px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.025)}.stat b{font-size:23px;letter-spacing:-.05em}.stat span{display:block;color:#70737e;font-size:7px;letter-spacing:.12em;margin-top:6px}
 .quick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}.quick{padding:16px;text-align:left;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025);color:#fff}.quick strong{font-size:10px}.quick small{display:block;color:#777985;font-size:8px;line-height:1.5;margin-top:5px}
@@ -400,7 +400,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
     else if(action==='unfollow_nonfollowers')body='session.unfollow_users(amount='+amount+', nonFollowers=True, style="RANDOM", sleep_delay='+sleep+')';
     else if(action==='unfollow_custom')body='session.unfollow_users(amount='+amount+', custom_list_enabled=True, custom_list='+JSON.stringify(list.length?list:['example'])+', custom_list_param="all", style="FIFO", sleep_delay='+sleep+')';
     else if(action==='interact_by_url')body='session.interact_by_URL(urls='+JSON.stringify(list.length?list:['https://www.instagram.com/p/POST_ID/'])+', randomize=True, interact=False)';
-    return '# Mahi Social Cleaner · original InstaPy wrapper\n# Keep your Instagram password in the INSTA_PW environment variable.\n\nimport os\nfrom instapy import InstaPy\n\nUSERNAME=os.environ.get("INSTA_USER") or '+JSON.stringify(u)+'\nPASSWORD=os.environ.get("INSTA_PW")\n\nsession=InstaPy(username=USERNAME,password=PASSWORD,headless_browser=True)\nsession.login()\n\n'+body+'\n\nsession.end()\n';
+    return '# Social Media Tools · original InstaPy wrapper\n# Keep your Instagram password in the INSTA_PW environment variable.\n\nimport os\nfrom instapy import InstaPy\n\nUSERNAME=os.environ.get("INSTA_USER") or '+JSON.stringify(u)+'\nPASSWORD=os.environ.get("INSTA_PW")\n\nsession=InstaPy(username=USERNAME,password=PASSWORD,headless_browser=True)\nsession.login()\n\n'+body+'\n\nsession.end()\n';
   };
   function buildIpy(){const s=py();$('ipyPreview').textContent=s;return s}
   $('buildIpy').onclick=()=>{buildIpy();toast('Script ready')};$('copyIpy').onclick=()=>navigator.clipboard.writeText(buildIpy()).then(()=>toast('Script copied')).catch(()=>toast('Copy failed'));

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#07080b">
+<meta name="theme-color" content="#141414">
 <meta name="description" content="MahiCloud — the personal digital ecosystem of Mahi. Websites, apps, tools and experiments, each with its own identity, all in one place.">
 <meta property="og:title" content="MahiCloud — Personal Digital Ecosystem">
 <meta property="og:description" content="Every website, app and tool I build, in one home.">
@@ -17,7 +17,7 @@
 <style>
 @view-transition{navigation:auto}
 :root{
-  --bg:#07080b; --fg:#f3f4f6; --soft:rgba(243,244,246,.66); --faint:rgba(243,244,246,.42);
+  --bg:#141414; --fg:#f3f4f6; --soft:rgba(243,244,246,.66); --faint:rgba(243,244,246,.42);
   --rule:rgba(255,255,255,.09); --card:rgba(255,255,255,.035);
   --ease:cubic-bezier(.22,.61,.36,1); --spring:cubic-bezier(.32,.72,0,1);
   --pill-bg:#f3f4f6; --pill-fg:#0a0b0e;
@@ -40,19 +40,19 @@ a{color:inherit}
 /* ---------- fixed stage ---------- */
 .stage{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--bg)}
 .aura{position:absolute;border-radius:50%;pointer-events:none;will-change:transform}
-.a1{width:70vmax;height:70vmax;left:-22vmax;top:-26vmax;background:radial-gradient(circle,rgba(53,104,255,.30),transparent 62%);animation:drift 24s ease-in-out infinite alternate}
-.a2{width:64vmax;height:64vmax;right:-20vmax;bottom:-24vmax;background:radial-gradient(circle,rgba(134,81,255,.26),rgba(240,108,240,.10) 45%,transparent 64%);animation:drift 28s ease-in-out infinite alternate-reverse}
+.a1{width:70vmax;height:70vmax;left:-22vmax;top:-26vmax;background:radial-gradient(circle,rgba(229,9,20,.30),transparent 62%);animation:drift 24s ease-in-out infinite alternate}
+.a2{width:64vmax;height:64vmax;right:-20vmax;bottom:-24vmax;background:radial-gradient(circle,rgba(229,9,20,.24),rgba(229,9,20,.08) 45%,transparent 64%);animation:drift 28s ease-in-out infinite alternate-reverse}
 @keyframes drift{from{transform:translate3d(0,0,0)}to{transform:translate3d(4vmax,3vmax,0)}}
 #scene{position:absolute;inset:0;width:100%;height:100%}
 .veil{position:absolute;inset:0;pointer-events:none;background:
-  radial-gradient(60% 46% at 50% 50%,rgba(7,8,11,.62),rgba(7,8,11,0) 100%),
-  linear-gradient(to bottom,rgba(7,8,11,.55) 0%,rgba(7,8,11,0) 22%,rgba(7,8,11,0) 78%,rgba(7,8,11,.5) 100%)}
+  radial-gradient(60% 46% at 50% 50%,rgba(20,20,20,.62),rgba(20,20,20,0) 100%),
+  linear-gradient(to bottom,rgba(20,20,20,.55) 0%,rgba(20,20,20,0) 22%,rgba(20,20,20,0) 78%,rgba(20,20,20,.5) 100%)}
 .grain{position:absolute;inset:-50%;opacity:.07;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='.5'/></svg>")}
 .meter{position:fixed;top:0;left:0;z-index:50;height:2px;width:100%;transform:scaleX(0);transform-origin:0 50%;background:var(--grad);opacity:.8}
 
 /* ---------- chrome ---------- */
-.chrome{position:fixed;left:0;right:0;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:max(14px,calc(env(safe-area-inset-top,0px) + 12px)) clamp(16px,3.4vw,44px) 14px;background:linear-gradient(to bottom,rgba(7,8,11,.9) 0%,rgba(7,8,11,.6) 72%,rgba(7,8,11,0) 100%);transition:background .4s var(--ease)}
-.chrome.solid{background:rgba(7,8,11,.72);-webkit-backdrop-filter:saturate(1.4) blur(16px);backdrop-filter:saturate(1.4) blur(16px);box-shadow:0 1px 0 var(--rule)}
+.chrome{position:fixed;left:0;right:0;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:max(14px,calc(env(safe-area-inset-top,0px) + 12px)) clamp(16px,3.4vw,44px) 14px;background:linear-gradient(to bottom,rgba(20,20,20,.9) 0%,rgba(20,20,20,.6) 72%,rgba(20,20,20,0) 100%);transition:background .4s var(--ease)}
+.chrome.solid{background:rgba(20,20,20,.72);-webkit-backdrop-filter:saturate(1.4) blur(16px);backdrop-filter:saturate(1.4) blur(16px);box-shadow:0 1px 0 var(--rule)}
 .mark{display:flex;align-items:center;gap:10px;font-size:15px;letter-spacing:-.012em;text-decoration:none;min-width:0}
 .mark img{width:30px;height:30px}
 .nav{display:flex;align-items:center;gap:clamp(14px,2.4vw,32px);flex-shrink:0}
@@ -63,7 +63,7 @@ a{color:inherit}
 .pill:hover,.pill:focus-visible{transform:translateY(-2px);background:#fff;box-shadow:0 10px 30px rgba(120,140,255,.25)}
 .pill:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid #8af7ff;outline-offset:2px}
 .pill:active{transform:scale(.97)}
-.skip{position:fixed;left:50%;bottom:max(18px,calc(env(safe-area-inset-bottom,0px) + 10px));z-index:41;transform:translateX(-50%);font-size:12px;letter-spacing:.06em;color:var(--faint);text-decoration:none;padding:8px 14px;border-radius:999px;border:1px solid var(--rule);background:rgba(7,8,11,.5);transition:color .3s,opacity .3s}
+.skip{position:fixed;left:50%;bottom:max(18px,calc(env(safe-area-inset-bottom,0px) + 10px));z-index:41;transform:translateX(-50%);font-size:12px;letter-spacing:.06em;color:var(--faint);text-decoration:none;padding:8px 14px;border-radius:999px;border:1px solid var(--rule);background:rgba(20,20,20,.5);transition:color .3s,opacity .3s}
 .skip:hover{color:var(--fg)}
 
 /* ---------- panels ---------- */
@@ -84,8 +84,8 @@ h1{font-weight:400;font-size:clamp(34px,7.1vw,104px);line-height:.98;letter-spac
 .wrap{width:min(1320px,calc(100% - clamp(32px,6vw,80px)));margin:0 auto}
 .profile{display:flex;flex-direction:column;align-items:center;text-align:center;gap:clamp(14px,2vw,20px);padding-bottom:clamp(28px,4vw,44px);border-bottom:1px solid var(--rule)}
 .avatar{width:88px;height:88px;border-radius:50%;padding:2px;background:var(--grad);flex-shrink:0}
-.avatar span{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:#0b0d12}
-.avatar img{width:54px;height:54px}
+.avatar span{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:#181818}
+.avatar img{width:54px;height:54px;border-radius:50%;object-fit:cover}
 .who{max-width:60ch}
 .who h2{font-weight:500;font-size:clamp(24px,3vw,34px);letter-spacing:-.03em;line-height:1.1}
 .handle{font-size:13.5px;color:var(--faint);margin-top:4px}
@@ -158,7 +158,7 @@ footer{border-top:1px solid var(--rule);padding:28px 0 max(28px,calc(env(safe-ar
 .foot-brand{display:flex;align-items:center;gap:10px}.foot-brand img{width:24px;height:24px}
 .foot-links{display:flex;gap:18px;flex-wrap:wrap}.foot-links a{text-decoration:none;transition:color .3s}.foot-links a:hover{color:var(--fg)}
 
-@media(max-width:900px){.veil{background:radial-gradient(70% 50% at 50% 50%,rgba(7,8,11,.7),rgba(7,8,11,0) 100%),linear-gradient(to bottom,rgba(7,8,11,.62) 0%,rgba(7,8,11,0) 24%,rgba(7,8,11,0) 76%,rgba(7,8,11,.55) 100%)}}
+@media(max-width:900px){.veil{background:radial-gradient(70% 50% at 50% 50%,rgba(20,20,20,.7),rgba(20,20,20,0) 100%),linear-gradient(to bottom,rgba(20,20,20,.62) 0%,rgba(20,20,20,0) 24%,rgba(20,20,20,0) 76%,rgba(20,20,20,.55) 100%)}}
 @media(max-width:720px){
   .nav a:not(.pill){display:none}
   .mark{font-size:14px}
@@ -202,7 +202,7 @@ footer{border-top:1px solid var(--rule);padding:28px 0 max(28px,calc(env(safe-ar
 <header class="chrome" id="chrome">
   <a class="mark" href="#top" aria-label="MahiCloud home"><img src="/brand-m.svg" alt="" width="30" height="30"><span>MahiCloud</span></a>
   <nav class="nav" aria-label="Main navigation">
-    <a href="#top">Home</a><a href="#projects">Projects</a><a href="/apps/">Apps</a><a href="/linkora/">Tools</a>
+    <a href="#top">Home</a><a href="#projects">Projects</a><a href="/apps/">Apps</a><a href="/linkora/">Windows Tools</a>
     <a class="pill" href="#projects">Explore</a>
   </nav>
 </header>
@@ -211,19 +211,19 @@ footer{border-top:1px solid var(--rule);padding:28px 0 max(28px,calc(env(safe-ar
   <div class="panel" data-panel>
     <img class="p-logo" src="/brand-m.svg" alt="" width="64" height="64">
     <p class="eyebrow">Personal ecosystem <span>&middot;</span> MahiCloud</p>
-    <h1>Everything I build.<br><span class="grad">One home.</span></h1>
+    <h1>A world built by<br><span class="grad">curiosity.</span></h1>
     <p class="sub">Websites, apps, tools and experiments — each with its own identity, gathered in one place.</p>
     <div class="cta"><a class="pill" href="#projects">Explore the store</a></div>
   </div>
   <div class="panel" data-panel>
     <p class="eyebrow">Every project has a face</p>
-    <h1>Its own logo.<br><span class="grad">Its own world.</span></h1>
+    <h1>Every creation<br><span class="grad">has a character.</span></h1>
     <p class="sub">From cinematic directories to Windows automation — a dedicated brand, colour and feel for every build.</p>
     <div class="cta"><a class="pill" href="/apps/">Open the Apps library</a></div>
   </div>
   <div class="panel" data-panel>
     <p class="eyebrow">Always growing</p>
-    <h1>The next one lands <span class="grad">right here.</span></h1>
+    <h1>Something new is <span class="grad">taking shape.</span></h1>
     <p class="sub">New websites and tools join the dock the moment they ship.</p>
     <div class="cta"><a class="pill" href="#projects">Browse all projects</a></div>
   </div>
@@ -235,7 +235,7 @@ footer{border-top:1px solid var(--rule);padding:28px 0 max(28px,calc(env(safe-ar
 <main class="store" id="store">
   <div class="wrap">
     <section class="profile" aria-label="About MahiCloud">
-      <div class="avatar"><span><img src="/brand-m.svg" alt="MahiCloud logo" width="54" height="54"></span></div>
+      <div class="avatar"><span><img src="/mahi-profile.jpg" alt="Mahi profile picture" width="54" height="54"></span></div>
       <div class="who">
         <h2>MahiCloud</h2>
         <p class="handle">@mahimahfud</p>
@@ -269,7 +269,7 @@ footer{border-top:1px solid var(--rule);padding:28px 0 max(28px,calc(env(safe-ar
   </div>
   <footer><div class="wrap foot-row">
     <div class="foot-brand"><img src="/brand-m.svg" alt="" width="24" height="24"><span>MahiCloud &middot; Made with curiosity by <b>Mahi</b> &middot; <span id="year"></span></span></div>
-    <nav class="foot-links" aria-label="Footer"><a href="#top">Home</a><a href="#projects">Projects</a><a href="/apps/">Apps</a><a href="/linkora/">Tools</a><a href="/privacy">Privacy</a><a href="https://github.com/mahimahfud-ui" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://www.instagram.com/mahimahfud/" target="_blank" rel="noopener noreferrer">Instagram</a></nav>
+    <nav class="foot-links" aria-label="Footer"><a href="#top">Home</a><a href="#projects">Projects</a><a href="/apps/">Apps</a><a href="/linkora/">Windows Tools</a><a href="/privacy">Privacy</a><a href="https://github.com/mahimahfud-ui" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://www.instagram.com/mahimahfud/" target="_blank" rel="noopener noreferrer">Instagram</a></nav>
   </div></footer>
 </main>
 
@@ -278,17 +278,17 @@ footer{border-top:1px solid var(--rule);padding:28px 0 max(28px,calc(env(safe-ar
 
 /* ===== Project data: one entry per site. Add a new object here to add a new project. ===== */
 var projects = [
-  {id:"mahiflix", title:"MahiFlix", cat:"ent", catLabel:"Entertainment", status:"Live", url:"/mahiflix/", local:true, repo:"https://github.com/mahimahfud-ui/mahiflix",
+  {id:"mahiflix", title:"Movie Websites", cat:"ent", catLabel:"Entertainment", status:"Live", url:"/mahiflix/", local:true, repo:"https://github.com/mahimahfud-ui/mahiflix",
    desc:"A cinematic discovery space for movies and web series—made for finding what to watch next.", tags:["Movies","Web series","Discovery"], c1:"#ff5a6a", c2:"#a3061b", glyph:"play"},
   {id:"apps", title:"Apps", cat:"ent", catLabel:"Entertainment", status:"Live", url:"/apps/", local:true, repo:"https://github.com/mahimahfud-ui/mahicloud",
    desc:"A separate, animated app directory for movie apps and music players—all in one place.", tags:["Movie apps","Music apps","Android"], c1:"#6f8bff", c2:"#8f4dff", glyph:"apps"},
-  {id:"linkora", title:"Linkora", cat:"util", catLabel:"Windows & utilities", status:"Live", url:"/linkora/", local:true, repo:"https://github.com/mahimahfud-ui/linkora",
+  {id:"linkora", title:"Windows Tools", cat:"util", catLabel:"Windows & utilities", status:"Live", url:"/linkora/", local:true, repo:"https://github.com/mahimahfud-ui/linkora",
    desc:"A growing library of practical Windows scripts, workflow helpers and ready-to-run utilities.", tags:["Windows","Automation","Scripts"], c1:"#d7ff79", c2:"#5fcf4a", glyph:"terminal", ink:"#10150a"},
-  {id:"social-cleaner", title:"Mahi Social Cleaner", cat:"util", catLabel:"Instagram tools", status:"In this repo", url:"/instagram-cleaner.html", local:true, repo:"https://github.com/mahimahfud-ui/mahicloud",
+  {id:"social-cleaner", title:"Social Media Tools", cat:"util", catLabel:"Instagram tools", status:"In this repo", url:"/instagram-cleaner.html", local:true, repo:"https://github.com/mahimahfud-ui/mahicloud",
    desc:"An Instagram workspace for account cleanup and local data insights. The original dashboard stays available alongside this portfolio.", tags:["Instagram","Dashboard","Flask"], c1:"#b57bff", c2:"#ff5fb2", glyph:"spark"},
-  {id:"browser-helper", title:"Browser Helper", cat:"dev", catLabel:"Browser extension", status:"Source", url:"https://github.com/mahimahfud-ui/mahicloud/tree/main/browser-helper", local:false, repo:"https://github.com/mahimahfud-ui/mahicloud",
+  {id:"browser-helper", title:"Browser Tools", cat:"dev", catLabel:"Browser extension", status:"Source", url:"https://github.com/mahimahfud-ui/mahicloud/tree/main/browser-helper", local:false, repo:"https://github.com/mahimahfud-ui/mahicloud",
    desc:"A companion browser extension maintained in the same project, with its code and setup notes available on GitHub.", tags:["Browser","Extension","Open source"], c1:"#4cc9ff", c2:"#3568ff", glyph:"browser"},
-  {id:"lumr", title:"LUMR", cat:"ent", catLabel:"Creator gallery", status:"Setup needed", url:"/lumr/", local:true, repo:"https://github.com/mahimahfud-ui/LUMR",
+  {id:"lumr", title:"Photo & Video Gallery", cat:"ent", catLabel:"Creator gallery", status:"Setup needed", url:"/lumr/", local:true, repo:"https://github.com/mahimahfud-ui/LUMR",
    desc:"A cinematic, media-first gallery for photography, video and creator profiles. The visual experience is hosted here; live accounts and uploads need Supabase configuration.", tags:["Creator gallery","Photo & video","Supabase"], c1:"#ffb36b", c2:"#ff4f8b", glyph:"lens"},
   {id:"instagram-login-demo", title:"Instagram Login Demo", cat:"dev", catLabel:"Legacy demo", status:"Source only", url:"https://github.com/mahimahfud-ui/Instagram-Login", local:false, repo:"https://github.com/mahimahfud-ui/Instagram-Login",
    desc:"An old learning/demo form that logs entered credentials. It is not hosted as a live login page; never enter a real Instagram password into it.", tags:["Demo only","Not hosted","Credentials unsafe"], c1:"#6b7280", c2:"#2f3541", glyph:"warn"},
@@ -378,7 +378,7 @@ function draw(t,time){
   /* soft core glow + faint M mark */
   var pulse=reduced ? 0.5 : 0.5 + 0.5*Math.sin(time*.0008);
   var g=ctx.createRadialGradient(cx,cy,0,cx,cy,m*.5);
-  g.addColorStop(0,"rgba(86,120,255,"+(.20+.06*pulse)*(1-m2*.6)+")"); g.addColorStop(1,"rgba(86,120,255,0)");
+  g.addColorStop(0,"rgba(229,9,20,"+(.20+.06*pulse)*(1-m2*.6)+")"); g.addColorStop(1,"rgba(229,9,20,0)");
   ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
   if(logo.complete && logo.naturalWidth){
     var L=m*.56*(1-.15*t); ctx.globalAlpha=(.13+.04*pulse)*(1-m2*.7); ctx.drawImage(logo,cx-L/2,cy-L/2,L,L); ctx.globalAlpha=1;
