@@ -33,10 +33,10 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 .primary{background:linear-gradient(100deg,var(--pink),var(--purple) 60%,var(--blue));border:0;color:#fff;box-shadow:0 12px 28px rgba(255,59,118,.15)}
 .full{width:100%}
 .nav{display:flex;flex-wrap:nowrap;gap:8px;position:sticky;top:6px;z-index:10;padding:7px;background:rgba(8,9,13,.65);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.04);border-radius:20px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}.nav button{flex:0 0 clamp(125px,14vw,160px)}
-.nav button{min-height:72px;text-align:left;padding:12px;border-radius:16px;border:1px solid transparent;background:rgba(255,255,255,.02);color:#9b9da8}
+.nav button{min-height:72px;text-align:left;padding:12px;border-radius:16px;border:1px solid transparent;background:rgba(255,255,255,.02);color:#9b9da8;transition:transform .44s cubic-bezier(.22,1,.36,1),border-color .35s,background .35s,color .35s,box-shadow .35s;will-change:transform}
 .nav button b{display:block;color:#e9ebf0;font-size:11px;margin-top:7px}.nav button span{font-size:7px;color:#6e717c}
-.nav button.active{border-color:rgba(255,92,132,.3);background:linear-gradient(145deg,rgba(255,59,118,.11),rgba(115,77,176,.12));color:#ff9db5}
-.page{display:none;margin-top:16px}.page.active{display:block;animation:pageIn .28s ease}
+.nav button.active{border-color:rgba(255,92,132,.3);background:linear-gradient(145deg,rgba(255,59,118,.15),rgba(115,77,176,.16));color:#ff9db5;box-shadow:inset 0 0 18px rgba(255,92,132,.05),0 5px 18px rgba(0,0,0,.12);transform:scale(.985)}.nav button:active{transform:scale(.965)}
+.page{display:none;margin-top:16px}.page.active{display:block;view-transition-name:cleaner-panel;animation:iosPanelIn .48s cubic-bezier(.22,1,.36,1) both;transform-origin:50% 10%}
 @keyframes pageIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
 .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:15px}.card{background:linear-gradient(145deg,rgba(19,21,29,.88),rgba(12,14,20,.86));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
 .card-pad{padding:22px}.title{font:700 24px/1.05 ui-sans-serif,system-ui;letter-spacing:-.04em}.sub{color:var(--muted);font-size:10px;line-height:1.7;margin-top:8px}
@@ -59,6 +59,16 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 @media(max-width:640px){.app{padding:11px 12px 96px}.header{height:46px}.hero{padding:34px 1px 18px}.hero h1{font-size:48px}.hero p{font-size:10px}.nav{display:flex;gap:6px}.nav button{flex-basis:132px;min-height:66px}.stats{grid-template-columns:repeat(5,110px)}.quick-grid{grid-template-columns:1fr}.card-pad{padding:17px}.toolbar .grow{margin-left:0;width:100%}.toolbar .grow.input{height:40px}.row{grid-template-columns:20px 1fr}.row .mini-btn{display:none}}
 .reduce-motion *{animation:none!important;transition:none!important}
 .dense .card-pad{padding:16px}.dense .row{padding:7px}.dense .list{max-height:360px}
+::view-transition-old(cleaner-panel){animation:iosPanelOut .2s cubic-bezier(.4,0,1,1) both}::view-transition-new(cleaner-panel){animation:iosPanelIn .48s cubic-bezier(.22,1,.36,1) both}
+
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:iosRouteOut .2s cubic-bezier(.4,0,1,1) both}
+::view-transition-new(root){animation:iosRouteIn .44s cubic-bezier(.22,1,.36,1) both}
+@keyframes iosRouteOut{to{opacity:0;transform:translateY(-5px) scale(.996);filter:blur(2px)}}
+@keyframes iosRouteIn{from{opacity:0;transform:translateY(12px) scale(.99);filter:blur(4px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes iosPanelOut{to{opacity:0;transform:translateX(-16px) scale(.99);filter:blur(3px)}}
+@keyframes iosPanelIn{from{opacity:0;transform:translateX(16px) scale(.985);filter:blur(5px)}65%{opacity:1;transform:translateX(-1px) scale(1);filter:blur(0)}to{opacity:1;transform:none;filter:blur(0)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root),::view-transition-old(winforge-library),::view-transition-new(winforge-library),::view-transition-old(cleaner-panel),::view-transition-new(cleaner-panel){animation:none!important}}
 </style>
 </head>
 <body>
@@ -275,9 +285,13 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 
   const pages=['home','nf','likes','comments','instapy','data'];
   function openPage(name){
-    pages.forEach(p=>document.getElementById('page-'+p).classList.toggle('active',p===name));
-    document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));
-    window.scrollTo({top:0,behavior:'smooth'});
+    if(!pages.includes(name))return;
+    const update=()=>{
+      pages.forEach(p=>document.getElementById('page-'+p).classList.toggle('active',p===name));
+      document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));
+    };
+    if(document.startViewTransition&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.startViewTransition(update)}else{update()}
+    window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
   }
   document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>openPage(b.dataset.page));
   document.querySelectorAll('[data-jump]').forEach(b=>b.onclick=()=>openPage(b.dataset.jump));
