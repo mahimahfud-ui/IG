@@ -1,0 +1,185 @@
+name: MahiCloud AI site maintenance
+
+on:
+  schedule:
+    - cron: "17 */2 * * *"
+  push:
+    branches: [main]
+    paths:
+      - "web/**"
+      - "app.py"
+      - "tools/**"
+      - "tests/**"
+      - "requirements.txt"
+      - ".github/workflows/site-maintenance.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: mahi-cloud-ai-site-maintenance
+  cancel-in-progress: false
+
+jobs:
+  maintenance:
+    name: Audit site and safely prepare repairs
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://mahicloud.onrender.com' }}
+      OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.5' }}
+      AI_REPAIR_ENABLED: ${{ secrets.OPENAI_API_KEY != '' }}
+      MAINTENANCE_REPORT: ${{ runner.temp }}/mahi-site-maintenance-report.json
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js for inline script checks
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install the app's existing dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --upgrade pip
+          python -m pip install --disable-pip-version-check -r requirements.txt
+
+      - name: Run code, asset, test and live-route diagnostics
+        id: diagnostics
+        continue-on-error: true
+        run: python tools/site_maintenance.py check --report "$MAINTENANCE_REPORT" --run-tests
+
+      - name: Save diagnostics as a workflow artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mahi-site-maintenance-report
+          path: ${{ runner.temp }}/mahi-site-maintenance-report.json
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Ask AI for a minimal code repair (when configured)
+        id: repair
+        if: steps.diagnostics.outcome == 'failure' && env.AI_REPAIR_ENABLED == 'true'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ env.OPENAI_MODEL }}
+          MAINTENANCE_REPORT: ${{ env.MAINTENANCE_REPORT }}
+        run: python tools/site_maintenance.py repair --report "$MAINTENANCE_REPORT" --github-output "$GITHUB_OUTPUT"
+
+      - name: Validate AI patch with all local checks and route tests
+        id: validation
+        if: steps.repair.outputs.changed == 'true'
+        continue-on-error: true
+        run: python tools/site_maintenance.py check --repo-only --report "${{ runner.temp }}/mahi-ai-validation-report.json" --run-tests
+
+      - name: Open a pull request for a validated AI repair
+        id: create_pr
+        if: steps.repair.outputs.changed == 'true' && steps.validation.outcome == 'success'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: automation/ai-site-maintenance
+          delete-branch: true
+          commit-message: "fix: validated AI-assisted site maintenance"
+          title: "fix: AI-assisted site maintenance"
+          body: |
+            ## Automated maintenance repair
+
+            The scheduled MahiCloud diagnostics identified a code-level issue. An AI-generated minimal patch was applied only to approved existing source files and passed local static checks and Python route tests before this pull request was opened.
+
+            AI summary: ${{ steps.repair.outputs.summary }}
+
+            Files: ${{ steps.repair.outputs.files }}
+
+            This pull request does not merge or deploy itself. Review the diff and CI results before merging.
+
+      - name: Create or refresh the maintenance issue
+        if: always() && steps.diagnostics.outcome == 'failure'
+        uses: actions/github-script@v7
+        env:
+          MAINTENANCE_REPORT: ${{ env.MAINTENANCE_REPORT }}
+          PR_URL: ${{ steps.create_pr.outputs.pull-request-url }}
+          AI_REPAIR_ENABLED: ${{ env.AI_REPAIR_ENABLED }}
+        with:
+          script: |
+            const fs = require('fs');
+            let report = {};
+            try {
+              report = JSON.parse(fs.readFileSync(process.env.MAINTENANCE_REPORT, 'utf8'));
+            } catch (error) {
+              report = { ok: false, repo_errors: [{ kind: 'report_read_error', message: String(error) }], live_errors: [] };
+            }
+            const title = 'Automated site maintenance detected an issue';
+            const { owner, repo } = context.repo;
+            const { data: issues } = await github.rest.issues.listForRepo({ owner, repo, state: 'open', per_page: 100 });
+            const existing = issues.find(item => !item.pull_request && item.title === title);
+            const repoErrors = report.repo_errors || [];
+            const liveErrors = report.live_errors || [];
+            const issueText = list => list.length
+              ? list.map(item => '- ' + item.kind + (item.file ? ' (' + item.file + ')': '') + ': ' + item.message).join('\n')
+              : '- None';
+            const repairStatus = process.env.PR_URL
+              ? 'A validated AI repair pull request was opened: ' + process.env.PR_URL
+              : (process.env.AI_REPAIR_ENABLED === 'true'
+                ? 'No validated AI pull request was opened for this run. See workflow logs and artifact.'
+                : 'AI repair is not configured. Add an OPENAI_API_KEY Actions secret to enable guarded repair pull requests.');
+            const body = [
+              '## MahiCloud background maintenance report',
+              '',
+              'The scheduled site-maintenance workflow found one or more issues. This report is automatically refreshed on later runs.',
+              '',
+              'Checked: ' + (report.checked_at || new Date().toISOString()),
+              'Main revision: ' + context.sha,
+              'Repository checks: ' + repoErrors.length,
+              'Live route checks: ' + liveErrors.length,
+              '',
+              '### Code and repository checks',
+              issueText(repoErrors),
+              '',
+              '### Live website routes',
+              issueText(liveErrors),
+              '',
+              '### Suggested repair',
+              repairStatus,
+              '',
+              '### Workflow details',
+              'Run: ' + context.serverUrl + '/' + owner + '/' + repo + '/actions/runs/' + context.runId,
+              '',
+              'AI patches are not pushed directly to main. Code fixes must pass validation and be reviewed in a pull request.'
+            ].join('\n');
+            if (existing) {
+              await github.rest.issues.update({ owner, repo, issue_number: existing.number, body });
+              core.info('Refreshed existing maintenance issue #' + existing.number);
+            } else {
+              const created = await github.rest.issues.create({ owner, repo, title, body });
+              core.info('Created maintenance issue #' + created.data.number);
+            }
+
+      - name: Close the maintenance issue when checks recover
+        if: always() && steps.diagnostics.outcome == 'success'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = 'Automated site maintenance detected an issue';
+            const { owner, repo } = context.repo;
+            const { data: issues } = await github.rest.issues.listForRepo({ owner, repo, state: 'open', per_page: 100 });
+            const existing = issues.find(item => !item.pull_request && item.title === title);
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number: existing.number,
+                body: 'The latest scheduled maintenance run passed all code, asset, test and live-route checks. Closing this report automatically.'
+              });
+              await github.rest.issues.update({ owner, repo, issue_number: existing.number, state: 'closed', state_reason: 'completed' });
+              core.info('Closed recovered maintenance issue #' + existing.number);
+            }
