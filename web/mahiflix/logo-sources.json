@@ -1,0 +1,236 @@
+{
+  "sites": [
+    {
+      "id": "bcine",
+      "name": "bCine",
+      "domain": "cineyz.com",
+      "sources": [
+        "https://cineyz.com/favicon.ico",
+        "https://cineyz.com/favicon.png",
+        "https://cineyz.com/icon-192.png"
+      ]
+    },
+    {
+      "id": "seven-reel",
+      "name": "7reel",
+      "domain": "7reels.cc",
+      "sources": [
+        "https://7reels.cc/favicon-96x96.png",
+        "https://7reels.cc/favicon.ico",
+        "https://7reels.cc/favicon.png"
+      ]
+    },
+    {
+      "id": "plex",
+      "name": "Plex",
+      "domain": "plex.tv",
+      "sources": [
+        "https://watch.plex.tv/favicon.ico",
+        "https://plex.tv/favicon.ico",
+        "https://www.plex.tv/favicon.ico",
+        "https://www.plex.tv/wp-content/themes/plex/assets/img/favicons/apple-touch-icon-152x152.png"
+      ]
+    },
+    {
+      "id": "m4uhd",
+      "name": "M4UHD",
+      "domain": "m4uhd.gold",
+      "sources": [
+        "https://m4uhd.gold/logo.png",
+        "https://m4uhd.gold/favicon.png",
+        "https://m4uhd.gold/favicon.ico"
+      ]
+    },
+    {
+      "id": "cinehd-site",
+      "name": "CineHD",
+      "domain": "cinehd.vc",
+      "sources": [
+        "https://cinehd.vc/icon-192x192.png",
+        "https://cinehd.vc/favicon.ico",
+        "https://cinehd.dev/images/favicon.ico"
+      ]
+    },
+    {
+      "id": "nightflix-vg",
+      "name": "NightFlix",
+      "domain": "nightflix.vg",
+      "sources": [
+        "https://nightflix.vg/favicon.ico",
+        "https://nightflix.vg/favicon.png",
+        "https://nightflix.vg/favicon-192x192.png"
+      ]
+    },
+    {
+      "id": "pvrplay-site",
+      "name": "Pvrplay",
+      "domain": "pvrplay.online",
+      "sources": [
+        "https://pvrplay.online/favicon.ico",
+        "https://pvrplay.online/favicon.png"
+      ]
+    },
+    {
+      "id": "nightflix-to",
+      "name": "Nightflix",
+      "domain": "nightflix.to",
+      "sources": [
+        "https://nightflix.to/favicon.ico",
+        "https://nightflix.to/favicon.png",
+        "https://nightflix.to/favicon-192x192.png"
+      ]
+    },
+    {
+      "id": "bingr",
+      "name": "Bingr",
+      "domain": "bingr.one",
+      "sources": [
+        "https://bingr.one/icons/favicon-96x96.png",
+        "https://bingr.one/favicon.ico",
+        "https://bingr.one/favicon.svg"
+      ]
+    },
+    {
+      "id": "cinejoy",
+      "name": "Cinejoy",
+      "domain": "cinejoy.to",
+      "sources": [
+        "https://cinejoy.to/favicon.png",
+        "https://cinejoy.to/brand/logomark-white.svg",
+        "https://cinejoy.to/favicon.ico"
+      ]
+    },
+    {
+      "id": "cinegram",
+      "name": "Cinegram",
+      "domain": "cinegram.tv",
+      "sources": [
+        "https://cinegram.tv/sizes/fav-192.png",
+        "https://cinegram.tv/favicon.ico",
+        "https://cinegram.tv/favicon.png"
+      ]
+    },
+    {
+      "id": "watchott",
+      "name": "Watchott",
+      "domain": "watchott.org",
+      "sources": [
+        "https://watchott.org/favicon.ico",
+        "https://watchott.org/favicon.png",
+        "https://watchott.org/favicon.svg"
+      ]
+    },
+    {
+      "id": "1tube",
+      "name": "1tube",
+      "domain": "1tube.org",
+      "sources": [
+        "https://www.1tube.org/logo.png",
+        "https://www.1tube.org/favicon.ico",
+        "https://www.1tube.org/favicon.png"
+      ]
+    }
+  ],
+  "apps": [
+    {
+      "id": "filmtv",
+      "name": "FilmTV",
+      "domain": "filmtvapp.com",
+      "sources": [
+        "https://www.filmtvapp.com/favicon.ico",
+        "https://www.filmtvapp.com/favicon.png",
+        "https://www.filmtvapp.com/icon-192.png"
+      ]
+    },
+    {
+      "id": "nuvix",
+      "name": "Nuvix",
+      "domain": "nuvixapp.in",
+      "sources": [
+        "https://www.nuvixapp.in/favicon.ico",
+        "https://www.nuvixapp.in/favicon.png",
+        "https://www.nuvixapp.in/icon-192.png"
+      ]
+    },
+    {
+      "id": "vega",
+      "name": "Vega",
+      "domain": "vega.zendax.me",
+      "sources": [
+        "https://raw.githubusercontent.com/vega-org/vega-app/main/assets/adaptive_icon.png",
+        "https://vega.zendax.me/favicon.ico"
+      ]
+    },
+    {
+      "id": "netmirror",
+      "name": "NetMirror",
+      "domain": "netmirror.gg",
+      "sources": [
+        "https://netmirror.gg/favicon.ico",
+        "https://netmirror.gg/favicon.png",
+        "https://netmiirror.app/wp-content/uploads/2026/10/cropped-NetMirror-1-192x192.webp"
+      ]
+    },
+    {
+      "id": "cinehd-app",
+      "name": "CineHD",
+      "domain": "cinehd.dev",
+      "sources": [
+        "https://cinehd.vc/icon-192x192.png",
+        "https://cinehd.dev/images/favicon.ico"
+      ]
+    },
+    {
+      "id": "moviboxapk",
+      "name": "Moviboxapk",
+      "domain": "moviboxapk.com",
+      "sources": [
+        "https://moviboxapk.com/wp-content/uploads/2026/06/cropped-cropped-moviebox-icon-192x192.webp",
+        "https://moviboxapk.com/wp-content/uploads/2026/06/cropped-cropped-moviebox-icon-180x180.webp",
+        "https://moviboxapk.com/favicon.ico",
+        "https://moviboxapk.com/favicon.png"
+      ]
+    },
+    {
+      "id": "pvrplay-app",
+      "name": "PvrPlay",
+      "domain": "pvrplay.online",
+      "sources": [
+        "https://pvrplay.online/favicon.ico",
+        "https://pvrplay.online/favicon.png"
+      ]
+    },
+    {
+      "id": "hdghartv",
+      "name": "Hdghartv",
+      "domain": "hdghartv.com.pk",
+      "sources": [
+        "https://hdghartv.com.pk/wp-content/uploads/2026/08/hdghartv-logo.png",
+        "https://hdghartv.com.pk/logo.png",
+        "https://hdghartv.com.pk/favicon.png",
+        "https://hdghartv.com.pk/favicon.ico"
+      ]
+    },
+    {
+      "id": "anivortex",
+      "name": "Anivortex",
+      "domain": "anivortex.in",
+      "sources": [
+        "https://anivortex.in/images/anivortex_logo.webp",
+        "https://anivortex.in/images/anivortex_logo_transparent.webp",
+        "https://anivortex.in/favicon.ico",
+        "https://anivortex.in/favicon.png"
+      ]
+    },
+    {
+      "id": "nxsha",
+      "name": "Nxsha",
+      "domain": "nxsha.app",
+      "sources": [
+        "https://nxsha.app/favicon.ico",
+        "https://nxsha.app/favicon.png",
+        "https://nxsha.app/icon-192.png"
+      ]
+    }
+  ]
+}
