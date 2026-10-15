@@ -1,0 +1,63 @@
+/* MahiCloud shared subsite theme.
+   Standardizes the dark charcoal + soft red ambient background while leaving each
+   subsite's content layout and purpose-specific animation systems intact. */
+:root {
+  color-scheme: dark;
+  --bg: #141414 !important;
+  --panel: #1b1b1b;
+  --panel2: #242424;
+  --card: #202020;
+  --surface: #1b1b1b;
+  --line: rgba(255,255,255,.10);
+  --border: rgba(255,255,255,.10);
+  --mc-bg: #141414;
+  --mc-red: #e50914;
+  --mc-red-soft: rgba(229,9,20,.13);
+}
+html {
+  background-color: #141414 !important;
+  color-scheme: dark;
+}
+body {
+  background-color: #141414 !important;
+  background-image:
+    radial-gradient(ellipse at 50% -17%, rgba(229,9,20,.15), transparent 47%),
+    radial-gradient(ellipse at 100% 75%, rgba(229,9,20,.055), transparent 38%) !important;
+  background-attachment: fixed !important;
+}
+/* Shared ambient canvases use the same MahiCloud colour family. Their own
+   pseudo-elements and JS animations remain active for different page identities. */
+#backdrop, .ambient {
+  background:
+    radial-gradient(ellipse at 50% -18%, rgba(229,9,20,.13), transparent 54%),
+    radial-gradient(ellipse at 95% 80%, rgba(229,9,20,.055), transparent 40%),
+    #141414 !important;
+}
+header:not(.hero), .chrome {
+  background-color: rgba(20,20,20,.82);
+  border-color: rgba(255,255,255,.09);
+  -webkit-backdrop-filter: saturate(1.2) blur(18px);
+  backdrop-filter: saturate(1.2) blur(18px);
+}
+.site-brand-logo {
+  display: block;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  object-fit: contain;
+  border-radius: 8px;
+}
+.brand:has(.site-brand-logo) {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand .mark img, .brand .logo img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
