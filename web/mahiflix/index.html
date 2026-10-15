@@ -253,7 +253,7 @@ body.mf-ready #mf-page-loader{opacity:0;visibility:hidden;pointer-events:none}
   <div class="hero-in">
     <div class="hero-kicker"><span class="hero-kicker-dot"></span> MAHICLOUD ENTERTAINMENT GUIDE</div>
     <h1 class="hero-title">Mahi<span>Flix</span></h1>
-    <p id="heroDesc">Explore movie and series websites, discover their apps, and open each service’s own homepage directly.</p>
+    <p id="heroDesc">Explore movie and series websites and open each service’s homepage directly.</p>
     <div class="hero-actions">
       <a class="hero-browse" href="#browse">Explore collection <span aria-hidden="true">↓</span></a>
       <a class="ig-link" href="https://www.instagram.com/mahimahfud/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
@@ -264,15 +264,13 @@ body.mf-ready #mf-page-loader{opacity:0;visibility:hidden;pointer-events:none}
 </header>
 
 <div class="mode-wrap" id="browse">
-  <div class="mode-switch" role="tablist" aria-label="MahiFlix categories">
+  <div class="mode-switch" role="tablist" aria-label="Movie website collection">
     <button class="mode active" data-mode="sites" role="tab" aria-selected="true">WEBSITES</button>
-    <button class="mode" data-mode="apps" role="tab" aria-selected="false">APPS</button>
   </div>
 </div>
 
 <main>
   <div id="sitesView" class="view active"></div>
-  <div id="appsView" class="view"></div>
   <p id="empty" class="empty">Nothing matched your search.</p>
 </main>
 
@@ -485,18 +483,18 @@ document.querySelectorAll(".mode").forEach(function(btn){
   btn.addEventListener("click",function(){
     document.querySelectorAll(".mode").forEach(function(x){x.classList.remove("active");x.setAttribute("aria-selected","false")});
     btn.classList.add("active");btn.setAttribute("aria-selected","true");
-    var mode=btn.dataset.mode;
-    document.getElementById("sitesView").classList.toggle("active",mode==="sites");
-    document.getElementById("appsView").classList.toggle("active",mode==="apps");
-    playCardEntrance(document.getElementById(mode==="sites"?"sitesView":"appsView"));
-    document.getElementById("q").value="";
+    var siteView=document.getElementById("sitesView");
+    siteView.classList.add("active");
+    playCardEntrance(siteView);
+    var q=document.getElementById("q");
+    if(q)q.value="";
     document.querySelectorAll(".card").forEach(function(card){card.style.display=""});
     document.querySelectorAll(".row-section").forEach(function(row){row.style.display=""});
     document.getElementById("empty").style.display="none";
-      });
+  });
 });
 
-// MahiFlix uses a responsive CSS grid, so there are no horizontal rail arrow controls to initialize.
+// // MahiFlix uses a responsive CSS grid, so there are no horizontal rail arrow controls to initialize.
 document.addEventListener("click",function(e){
   var f=e.target.closest(".fav");
   if(f){
@@ -558,7 +556,7 @@ document.getElementById("yr").textContent=new Date().getFullYear();
   const overlay=document.createElement("div");
   overlay.id="mf-add-overlay";
   overlay.setAttribute("role","presentation");
-  overlay.innerHTML="<section id='mf-add-dialog' role='dialog' aria-modal='true' aria-labelledby='mf-add-title'><div class='mf-kicker'>MahiFlix · Add to collection</div><h2 id='mf-add-title'>Enter passcode</h2><p id='mf-add-copy'>Confirm the passcode to add a website or app.</p><form id='mf-add-form' novalidate><label id='mf-add-label' for='mf-add-input'>Passcode</label><input id='mf-add-input' autocomplete='off' required><div id='mf-add-error' class='mf-error' role='status' aria-live='polite'></div><div class='mf-actions'><button type='button' class='mf-btn' id='mf-add-cancel'>Cancel</button><button type='submit' class='mf-btn primary' id='mf-add-next'>Continue</button></div></form></section>";
+  overlay.innerHTML="<section id='mf-add-dialog' role='dialog' aria-modal='true' aria-labelledby='mf-add-title'><div class='mf-kicker'>MahiFlix · Add to collection</div><h2 id='mf-add-title'>Enter passcode</h2><p id='mf-add-copy'>Confirm the passcode to add a website.</p><form id='mf-add-form' novalidate><label id='mf-add-label' for='mf-add-input'>Passcode</label><input id='mf-add-input' autocomplete='off' required><div id='mf-add-error' class='mf-error' role='status' aria-live='polite'></div><div class='mf-actions'><button type='button' class='mf-btn' id='mf-add-cancel'>Cancel</button><button type='submit' class='mf-btn primary' id='mf-add-next'>Continue</button></div></form></section>";
   document.body.appendChild(overlay);
   const title=overlay.querySelector("#mf-add-title"),copy=overlay.querySelector("#mf-add-copy"),label=overlay.querySelector("#mf-add-label"),input=overlay.querySelector("#mf-add-input"),error=overlay.querySelector("#mf-add-error"),form=overlay.querySelector("#mf-add-form"),next=overlay.querySelector("#mf-add-next");
   function open(type){addType=type;stage="pin";pendingUrl="";input.value="";error.textContent="";input.type="password";input.inputMode="numeric";input.autocomplete="current-password";input.placeholder="••••";title.textContent="Enter passcode";copy.textContent="Unlock the add form for "+(type==="apps"?"Apps":"Websites")+".";
@@ -566,7 +564,7 @@ document.getElementById("yr").textContent=new Date().getFullYear();
   window.mahiFlixOpenAdd=open;
   function close(){overlay.classList.remove("open");form.reset();error.textContent=""}
   function showUrl(){stage="url";input.value="";input.type="url";input.inputMode="url";input.autocomplete="url";input.placeholder="https://example.com";title.textContent="Website URL";copy.textContent="Paste the official homepage URL. Its favicon will be fetched automatically.";label.textContent="Website URL";input.setAttribute("aria-label","Website URL");next.textContent="Next";error.textContent="";setTimeout(function(){input.focus()},20)}
-  function showName(){stage="name";input.value="";input.type="text";input.inputMode="text";input.autocomplete="off";input.placeholder="Website or app name";title.textContent="Website name";copy.textContent="Enter the name that should appear on the "+(addType==="apps"?"Apps":"Websites")+" grid.";label.textContent="Website name";input.setAttribute("aria-label","Website name");next.textContent="Add to "+(addType==="apps"?"Apps":"Websites");error.textContent="";setTimeout(function(){input.focus()},20)}
+  function showName(){stage="name";input.value="";input.type="text";input.inputMode="text";input.autocomplete="off";input.placeholder="Website name";title.textContent="Website name";copy.textContent="Enter the name that should appear on the Websites grid.";label.textContent="Website name";input.setAttribute("aria-label","Website name");next.textContent="Add to "+(addType==="apps"?"Apps":"Websites");error.textContent="";setTimeout(function(){input.focus()},20)}
   function normaliseUrl(value){
     let raw=value.trim();if(!raw)return "";
     if(!/^https?:\/\//i.test(raw))raw="https://"+raw;
@@ -595,7 +593,6 @@ document.getElementById("yr").textContent=new Date().getFullYear();
 
 
 renderView("sites");
-renderView("apps");
 
 </script>
 </body>
