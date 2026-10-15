@@ -183,6 +183,13 @@ html{scroll-padding-top:65px}.hero{min-height:345px;padding:100px 5% 50px}.hero 
 }
 @media(prefers-reduced-motion:reduce){#mf-add-overlay.open,#mf-add-dialog{animation:none!important}.add-item-btn{transition:none!important}}
 </style>
+
+<style id="mahiflix-ig-plus">
+#sitesView .add-item-btn,#appsView .add-item-btn{width:40px;height:40px;min-height:40px;padding:0;border-radius:50%;gap:0;background:rgba(255,255,255,.08);box-shadow:0 5px 18px rgba(0,0,0,.2)}
+#sitesView .add-item-btn span,#appsView .add-item-btn span{display:none}
+#sitesView .add-item-btn svg,#appsView .add-item-btn svg{width:20px;height:20px}
+@media(max-width:760px){#sitesView .add-item-btn,#appsView .add-item-btn{width:37px;height:37px;min-height:37px}}
+</style>
 </head>
 <body>
 <div class="intro" id="intro" aria-hidden="true"><div class="intro-logo" aria-label="MahiFlix"></div></div>
@@ -259,7 +266,7 @@ const A=[
 const adLabel=["No / minimal ads","Some ads","More / heavier ads"];
 const adClass=["a0","a1","a2"];
 
-const clean=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const clean=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const initials=n=>n.replace(/[^a-z0-9 ]/gi,"").split(/\s+/).map(x=>x[0]||"").join("").slice(0,2).toUpperCase();
 const hue=n=>{let h=0;for(let i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))%360;return h};
 
@@ -474,7 +481,7 @@ document.getElementById("yr").textContent=new Date().getFullYear();
       const key=addType==="apps"?"apps":"sites";
       if((key==="apps"?A:S).some(function(x){return x.url.toLowerCase()===item.url.toLowerCase()})||readCustomItems(key).some(function(x){return x.url.toLowerCase()===item.url.toLowerCase()})){error.textContent="This URL is already in that list.";return}
       if(!saveCustomItem(key,item)){error.textContent="Could not save the item. Check your browser storage settings.";return}
-      close();renderView(key);applySearch();return;
+      close();renderView(key);q.dispatchEvent(new Event("input"));return;
     }
   });
   overlay.querySelector("#mf-add-cancel").addEventListener("click",close);
