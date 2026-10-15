@@ -12,9 +12,11 @@ import requests
 
 from flask import Flask, jsonify, redirect, request, send_from_directory
 from werkzeug.exceptions import RequestEntityTooLarge
+from mahi_ai import mahi_ai_bp
 
 app = Flask(__name__, static_folder="web", static_url_path="")
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10 MiB upload limit.
+app.register_blueprint(mahi_ai_bp)
 
 jobs = {}
 jobs_lock = threading.Lock()

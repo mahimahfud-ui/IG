@@ -101,6 +101,7 @@ class MahiCloudRouteTests(unittest.TestCase):
             "/apps/",
             "/unfollowers/",
             "/instagram-cleaner.html",
+            "/mahi-ai/",
         ]
         for route in pages:
             with self.subTest(route=route):
@@ -121,6 +122,44 @@ class MahiCloudRouteTests(unittest.TestCase):
         self.assertEqual(railway["deploy"]["healthcheckPath"], "/")
         self.assertIn("app:app", railway["deploy"]["startCommand"])
         self.assertTrue((root / "Procfile").is_file())
+
+
+    def test_mahi_ai_control_page_and_launcher_are_served(self):
+        page = self.client.get("/mahi-ai/")
+        self.assertEqual(page.status_code, 200)
+        self.assertIn(b"Add Website", page.data)
+        self.assertIn(b"Change Code / Route", page.data)
+        launcher = self.client.get("/mahi-ai-launcher.js")
+        self.assertEqual(launcher.status_code, 200)
+        self.assertIn(b"/mahi-ai/", launcher.data)
+
+    def test_mahi_ai_api_requires_access_token(self):
+        import os
+        from unittest.mock import patch
+
+        with patch.dict(os.environ, {"MAHI_AI_ACCESS_TOKEN": "test-control-key", "OPENAI_API_KEY": ""}):
+            denied = self.client.post("/api/mahi-ai/chat", json={"message": "hello", "action": "chat"})
+            self.assertEqual(denied.status_code, 401)
+            accepted_but_unconfigured = self.client.post(
+                "/api/mahi-ai/chat", json={"message": "hello", "action": "chat", "history": []},
+                headers={"Authorization": "Bearer test-control-key"},
+            )
+            self.assertEqual(accepted_but_unconfigured.status_code, 503)
+            self.assertIn("OPENAI_API_KEY", accepted_but_unconfigured.get_json().get("reply", ""))
+
+    def test_mahi_ai_status_never_returns_secret_values(self):
+        import os
+        from unittest.mock import patch
+
+        with patch.dict(os.environ, {"MAHI_AI_ACCESS_TOKEN": "test-control-key", "OPENAI_API_KEY": "test-openai-key", "MAHI_AI_GITHUB_TOKEN": "test-github-key"}):
+            response = self.client.get("/api/mahi-ai/status")
+            self.assertEqual(response.status_code, 200)
+            payload = response.get_json()
+            self.assertTrue(payload["access_configured"])
+            self.assertTrue(payload["ai_configured"])
+            self.assertTrue(payload["github_configured"])
+            self.assertNotIn("test-openai-key", response.get_data(as_text=True))
+            self.assertNotIn("test-github-key", response.get_data(as_text=True))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,10 @@
+(function(){
+"use strict";
+if(location.pathname.startsWith("/mahi-ai"))return;
+if(document.getElementById("mahi-ai-launcher"))return;
+const style=document.createElement("style");
+style.textContent="@keyframes mahiAiLauncherGlow{0%,100%{box-shadow:0 8px 24px #0005,0 0 0 1px #a89aff55}50%{box-shadow:0 8px 28px #0006,0 0 0 5px #a89aff12}}#mahi-ai-launcher{position:fixed;right:max(17px,env(safe-area-inset-right));bottom:max(17px,env(safe-area-inset-bottom));z-index:9998;display:flex;align-items:center;gap:9px;padding:11px 15px;border:1px solid #b9adff75;border-radius:999px;background:linear-gradient(120deg,#252331f5,#17191df5);color:#f7f5ff;font:800 11px/1.2 Inter,system-ui,sans-serif;letter-spacing:.01em;box-shadow:0 8px 24px #0005;cursor:pointer;animation:mahiAiLauncherGlow 3.8s ease-in-out infinite;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform .22s,border-color .22s}#mahi-ai-launcher:hover{transform:translateY(-3px);border-color:#d0c7ff}#mahi-ai-launcher svg{width:17px;height:17px;color:#c9c0ff;flex:none}#mahi-ai-launcher span{display:block}#mahi-ai-launcher small{display:block;font:600 8px/1.4 Inter,system-ui,sans-serif;color:#b9b2d6;margin-top:2px;letter-spacing:.045em}@media(max-width:480px){#mahi-ai-launcher{right:12px;bottom:12px;padding:10px 12px;gap:7px}#mahi-ai-launcher small{display:none}}@media(prefers-reduced-motion:reduce){#mahi-ai-launcher{animation:none!important;transition:none!important}}";
+document.head.appendChild(style);
+const button=document.createElement("button");button.id="mahi-ai-launcher";button.type="button";button.setAttribute("aria-label","Open private Mahi AI control chat");button.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 14.6 9.4 21 12l-6.4 2.6L12 21l-2.6-6.4L3 12l6.4-2.6z"/><path d="M19 3v4M17 5h4"/></svg><span>Mahi AI<small>CHAT & CONTROL</small></span>';
+button.addEventListener("click",()=>{location.href="/mahi-ai/"});document.body.appendChild(button);
+})();
