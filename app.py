@@ -329,12 +329,13 @@ def social_tools_redirect():
 
 @app.get("/social-tools/")
 def social_tools_index():
-    return send_from_directory(os.path.join(app.root_path, "web"), "instagram-cleaner.html")
+    # Redirect to the existing root URL so relative assets and browser paths behave exactly as before.
+    return redirect("/instagram-cleaner.html", code=308)
 
 
 @app.get("/social-tools/instagram-cleaner")
 def social_tools_cleaner_redirect():
-    return redirect("/social-tools/", code=308)
+    return redirect("/instagram-cleaner.html", code=308)
 
 
 @app.get("/unfollowers")
