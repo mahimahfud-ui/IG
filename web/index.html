@@ -187,6 +187,14 @@ footer{border-top:1px solid var(--rule);padding:28px 0 max(28px,calc(env(safe-ar
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
 }
+
+/* Privacy & Network collection: distinct animated brand treatments. */
+.card.project-quick-link .icon,.card.project-nextdns .icon{transition:transform .65s cubic-bezier(.2,.8,.2,1),filter .65s ease;}
+.card.project-quick-link:hover .icon{transform:rotate(-8deg) scale(1.09);filter:drop-shadow(0 0 18px rgba(182,243,107,.42));}
+.card.project-nextdns:hover .icon{transform:rotate(8deg) scale(1.09);filter:drop-shadow(0 0 18px rgba(112,214,255,.5));}
+.card.project-quick-link:before,.card.project-nextdns:before{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .45s ease;background:radial-gradient(circle at 90% 0%,color-mix(in srgb,var(--c1) 22%,transparent),transparent 52%);}
+.card.project-quick-link:hover:before,.card.project-nextdns:hover:before{opacity:1;}
+@media(prefers-reduced-motion:reduce){.card.project-quick-link .icon,.card.project-nextdns .icon{transition:none;}}
 </style>
 </head>
 <body id="top">
@@ -257,6 +265,7 @@ footer{border-top:1px solid var(--rule);padding:28px 0 max(28px,calc(env(safe-ar
           <button type="button" data-cat="ent" aria-pressed="false">Entertainment</button>
           <button type="button" data-cat="util" aria-pressed="false">Utilities</button>
           <button type="button" data-cat="dev" aria-pressed="false">Developer</button>
+          <button type="button" data-cat="privacy" aria-pressed="false">Privacy &amp; Network</button>
         </div>
         <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
           <input id="q" type="search" placeholder="Search projects" aria-label="Search projects" autocomplete="off"></label>
@@ -293,7 +302,11 @@ var projects = [
   {id:"instagram-login-demo", title:"Instagram Login Demo", cat:"dev", catLabel:"Legacy demo", status:"Source only", url:"https://github.com/mahimahfud-ui/Instagram-Login", local:false, repo:"https://github.com/mahimahfud-ui/Instagram-Login",
    desc:"An old learning/demo form that logs entered credentials. It is not hosted as a live login page; never enter a real Instagram password into it.", tags:["Demo only","Not hosted","Credentials unsafe"], c1:"#6b7280", c2:"#2f3541", glyph:"warn"},
   {id:"unfollowers", title:"Unfollowers Checker", cat:"util", catLabel:"Instagram utilities", status:"Live", url:"/unfollowers/", local:true, repo:"https://github.com/mahimahfud-ui/mahicloud",
-   desc:"Compare Instagram followers and following exports privately in your browser. No password, login, or file upload to a server.", tags:["Privacy-first","JSON export","Local-only"], c1:"#38e0c8", c2:"#2a7de1", glyph:"unfollow"}
+   desc:"Compare Instagram followers and following exports privately in your browser. No password, login, or file upload to a server.", tags:["Privacy-first","JSON export","Local-only"], c1:"#38e0c8", c2:"#2a7de1", glyph:"unfollow"},
+  {id:"quick-link", title:"Quick Link", cat:"privacy", catLabel:"Privacy & Network", status:"External link", url:"https://tinyurl.com/ypy5x9wv", local:false, repo:"https://tinyurl.com/ypy5x9wv",
+   desc:"A saved short link, kept in its own privacy and network collection. The destination is opened externally.", tags:["Short link","External","One tap"], c1:"#b6f36b", c2:"#1a9c8c", glyph:"shield"},
+  {id:"nextdns", title:"NextDNS Endpoint", cat:"privacy", catLabel:"Privacy & Network", status:"Endpoint", url:"https://f1388b.dns.nextdns.io", local:false, repo:"https://nextdns.io/",
+   desc:"Your provided NextDNS hostname, available as a quick-access card for network and DNS configuration.", tags:["NextDNS","DNS","Network"], c1:"#70d6ff", c2:"#5b4bdb", glyph:"dns"}
 ];
 var N = projects.length;
 
@@ -307,7 +320,9 @@ var GLYPHS={
   unfollow:'<circle cx="50" cy="46" r="13"/><path d="M26 88 C26 72 36 64 50 64 C64 64 74 72 74 88"/><path d="M80 46 H98"/>',
   spark:'<path d="M58 28 L66 52 L90 60 L66 68 L58 92 L50 68 L26 60 L50 52 Z" fill="currentColor" stroke-width="3"/><path d="M94 26 V42 M86 34 H102"/>',
   browser:'<rect x="28" y="34" width="64" height="52" rx="10"/><path d="M28 50 H92"/><circle cx="40" cy="42" r="1.5" fill="currentColor"/>',
-  warn:'<path d="M60 32 L92 88 H28 Z"/><path d="M60 54 V68"/><circle cx="60" cy="78" r="1.5" fill="currentColor"/>'
+  warn:'<path d="M60 32 L92 88 H28 Z"/><path d="M60 54 V68"/><circle cx="60" cy="78" r="1.5" fill="currentColor"/>',
+  shield:'<path d="M60 24 L91 36 V57 C91 76 78 90 60 99 C42 90 29 76 29 57 V36 Z"/><path d="M45 60 L55 70 L76 48"/>',
+  dns:'<circle cx="60" cy="60" r="31"/><path d="M29 60 H91 M60 29 C44 43 44 77 60 91 M60 29 C76 43 76 77 60 91 M35 43 H85 M35 77 H85"/>'
 };
 function iconURI(p){
   var ink=p.ink||"#fff";
@@ -437,7 +452,7 @@ function frame(time){
 /* ===== Store: segmented control, search, grid ===== */
 var grid=document.getElementById("grid"), emptyEl=document.getElementById("empty"), seg=document.getElementById("seg"), glider=document.getElementById("glider"), q=document.getElementById("q");
 var segBtns=[].slice.call(seg.querySelectorAll("button"));
-var catOrder=["all","ent","util","dev"], curCat="all", curIdx=0, dir=1, timer=0, gridVisible=false;
+var catOrder=["all","ent","util","dev","privacy"], curCat="all", curIdx=0, dir=1, timer=0, gridVisible=false;
 
 document.getElementById("nAll").textContent=N;
 document.getElementById("nLive").textContent=projects.filter(function(p){return p.status==="Live";}).length;
@@ -448,7 +463,7 @@ var GH='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d=
 function card(p,i){
   var ext=!p.local, live=p.status==="Live", warn=/setup|source only/i.test(p.status);
   var sc=live?"s-live":(warn?"s-warn":"");
-  return '<article class="card" style="--c1:'+p.c1+';--c2:'+p.c2+';--i:'+Math.min(i,10)+'">'+
+  return '<article class="card project-'+esc(p.id)+'" style="--c1:'+p.c1+';--c2:'+p.c2+';--i:'+Math.min(i,10)+'">'+
     '<div class="card-top"><img class="icon" src="'+p.icon+'" alt="" width="60" height="60" decoding="async"><span class="status '+sc+'"><i></i>'+esc(p.status)+'</span></div>'+
     '<h3><a href="'+esc(p.url)+'"'+(ext?' target="_blank" rel="noopener noreferrer"':'')+'>'+esc(p.title)+'</a></h3>'+
     '<p class="cat">'+esc(p.catLabel)+'</p><p class="desc">'+esc(p.desc)+'</p>'+
