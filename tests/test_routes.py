@@ -88,5 +88,16 @@ class MahiCloudRouteTests(unittest.TestCase):
                 self.assertIn(b'viewport-fit=cover', response.data)
 
 
+    def test_railway_deployment_configuration(self):
+        import json
+        from pathlib import Path
+
+        root = Path(__file__).resolve().parents[1]
+        railway = json.loads((root / "railway.json").read_text(encoding="utf-8"))
+        self.assertEqual(railway["deploy"]["healthcheckPath"], "/")
+        self.assertIn("app:app", railway["deploy"]["startCommand"])
+        self.assertTrue((root / "Procfile").is_file())
+
+
 if __name__ == "__main__":
     unittest.main()
