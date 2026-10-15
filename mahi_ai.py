@@ -406,11 +406,37 @@ def _looks_like_html(content_type: str, body: bytes) -> bool:
 def _metadata_for_url(url: str) -> dict:
     final_url, content_type, body = _fetch_public(url, max_bytes=2_000_000, allow_truncate=True)
     if not _looks_like_html(content_type, body):
-        raise MahiAIError(
-            "This link serves a direct file or non-HTML response, not a readable website page. "
-            "Use the official homepage or app-store listing, not an APK, ZIP, API, or direct-download URL.",
-            415,
-        )
+        parts = urlsplit(final_url)
+        path = parts.path or "/"
+        file_like = bool(re.search(
+            r"(?i)\\.(?:apk|aab|zip|rar|7z|exe|msi|dmg|iso|pdf|mp4|mkv|webm|mp3|wav|png|jpe?g|gif|webp|svg|ico|bat|js|css|json|xml|txt|woff2?)(?:$)",
+            path,
+        ))
+        endpoint_like = bool(re.match(r"(?i)^/(?:api|graphql|download|downloads|files|assets|cdn-cgi)(?:/|$)", path))
+        # When a user pastes a content/detail route that responds with JSON or another
+        # MIME type, try the site's HTTPS root page. Never replace an explicit file/API URL.
+        if path != "/" and not file_like and not endpoint_like:
+            root_url = urlunsplit((parts.scheme, parts.netloc, "/", "", ""))
+            try:
+                root_url, root_type, root_body = _fetch_public(
+                    root_url, max_bytes=2_000_000, allow_truncate=True
+                )
+                if _looks_like_html(root_type, root_body):
+                    final_url, content_type, body = root_url, root_type, root_body
+                else:
+                    raise MahiAIError("Site root did not return HTML.", 415)
+            except MahiAIError:
+                raise MahiAIError(
+                    f"This link did not return a readable HTML page (Content-Type: {content_type or 'unknown'}). "
+                    "Try the site's official homepage or app-store listing. Direct downloads and API URLs are not supported.",
+                    415,
+                )
+        else:
+            raise MahiAIError(
+                f"This link did not return a readable HTML page (Content-Type: {content_type or 'unknown'}). "
+                "Try the site's official homepage or app-store listing. Direct downloads and API URLs are not supported.",
+                415,
+            )
     source = body.decode("utf-8", errors="replace")
     parser = _MetadataParser()
     try:
