@@ -27,8 +27,10 @@ class FakeSession:
         self.response = response
         self.trust_env = True
         self.closed = False
+        self.last_kwargs = None
 
     def get(self, *args, **kwargs):
+        self.last_kwargs = kwargs
         return self.response
 
     def close(self):
@@ -54,6 +56,8 @@ class FetchPublicLimitTests(unittest.TestCase):
         self.assertEqual(url, "https://example.com/")
         self.assertEqual(content_type, "text/html")
         self.assertEqual(body, b"1234567")
+        self.assertIn("text/html", session.last_kwargs["headers"]["Accept"])
+        self.assertNotIn("application/octet-stream", session.last_kwargs["headers"]["Accept"])
         self.assertEqual(response.yielded, 2)
         self.assertTrue(response.closed)
         self.assertTrue(session.closed)
