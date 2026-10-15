@@ -48,6 +48,37 @@ footer{margin-top:15px}
 /* Explorer-style library controls */
 .viewbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-1px 0 14px;padding:10px 12px;border:1px solid #252d25;border-radius:11px;background:linear-gradient(110deg,#121612,#0e110e)}.viewlabel{font-size:10px;letter-spacing:1.1px;color:#7f897c}.viewlabel span{color:#4b5746;margin:0 4px}.viewlabel b{font-weight:650;letter-spacing:0;color:#dce8d2}.viewactions{display:flex;align-items:center;gap:8px}.viewtoggle{display:flex;gap:3px;padding:3px;border:1px solid #ffffff12;border-radius:8px;background:#090c09}.viewbtn{display:grid;place-items:center;width:30px;height:28px;border:1px solid transparent;border-radius:5px;background:transparent;color:#818b7d;cursor:pointer;transition:all .2s}.viewbtn svg{width:16px;height:16px}.viewbtn:hover{color:var(--text)}.viewbtn.active{background:#c9f77a12;border-color:#c9f77a30;color:var(--lime)}.sortlabel{font-size:10px;color:var(--muted);margin-left:4px}.viewactions select{max-width:145px;background:#0c0f0c;color:var(--text);border:1px solid #303830;border-radius:7px;padding:7px 25px 7px 9px;font-size:11px;outline:none}.viewactions select:focus{border-color:#c9f77a65}.grid.list-view{grid-template-columns:1fr;gap:8px}.list-view .script-card{display:grid;grid-template-columns:minmax(175px, .85fr) minmax(170px,1.4fr) minmax(115px,.7fr) minmax(130px,.6fr);align-items:center;gap:14px;padding:13px 15px;border-radius:12px}.list-view .cardtop{min-width:0}.list-view .desc{font-size:11px}.list-view .chips{max-height:55px;overflow:hidden}.list-view .fileline{min-width:0}.list-view .download{width:auto;white-space:nowrap;padding:9px 11px}.list-view .download svg{width:13px;height:13px}@media(max-width:760px){.list-view .script-card{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:11px}.list-view .cardtop{grid-column:1}.list-view .desc{grid-column:2;grid-row:1}.list-view .chips{grid-column:1}.list-view .fileline{grid-column:1}.list-view .download{grid-column:2;grid-row:2/4;align-self:center}}@media(max-width:560px){.viewbar{align-items:flex-start;flex-direction:column}.viewactions{width:100%;flex-wrap:wrap}.viewactions select{flex:1;max-width:none}.list-view .script-card{display:flex;align-items:stretch;gap:11px}.list-view .desc{order:2}.list-view .chips{order:3;max-height:none}.list-view .fileline{order:4}.list-view .download{order:5;width:100%}}
 </style>
+
+<style id="mahi-device-polish">
+/* Shared device polish: fluid sizing, iOS-safe insets, touch-friendly controls and motion preferences. */
+:root{color-scheme:dark;scroll-padding-top:calc(72px + env(safe-area-inset-top,0px));}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth;}
+body{min-width:320px;overflow-x:clip;-webkit-tap-highlight-color:transparent;}
+img,video,canvas,svg{max-width:100%;}
+button,input,select,textarea{max-width:100%;font:inherit;}
+button,a,[role="button"],input[type="button"],input[type="submit"]{-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+:where(button,a,[role="button"],input,select,textarea):focus-visible{outline:2px solid #8af7ff;outline-offset:3px;}
+@supports(height:100dvh){.stage,#scene{height:100dvh;}}
+@media(max-width:760px){
+  html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px));}
+  body{overflow-wrap:break-word;}
+  input,select,textarea{font-size:16px;}
+  :where(button,a,[role="button"]){scroll-margin-block:12px;}
+  :where(table){display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  :where(pre){max-width:100%;overflow-x:auto;}
+}
+@media(max-width:380px){
+  :root{scroll-padding-top:calc(54px + env(safe-area-inset-top,0px));}
+  :where(.wrap,.container,.shell,.page-wrap){max-width:100%;}
+}
+@media(hover:none){
+  :where(button,a,[role="button"]){-webkit-user-select:none;user-select:none;}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto!important;}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important;transition-delay:0ms!important;}
+}
+</style>
 </head>
 <body>
 <div id="backdrop" aria-hidden="true"></div><div id="glow" aria-hidden="true"></div>
