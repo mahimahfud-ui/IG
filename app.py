@@ -582,6 +582,13 @@ def start():
     if active_jobs >= MAX_ACTIVE_JOBS:
         return jsonify({"error": "The service is busy. Wait for an active run to finish before starting another."}), 429
 
+    # The current Social Media Tools frontend uses the local browser helper.
+    # Disable the legacy server-side password endpoint to avoid collecting
+    # third-party account credentials through direct API requests.
+    return jsonify({
+        "error": "This legacy password-based endpoint is disabled. Use the local browser helper instead."
+    }), 410
+
     username = request.form.get("username", "").strip()
     password = request.form.get("password", "")
     upload = request.files.get("liked_posts")
