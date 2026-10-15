@@ -304,7 +304,13 @@ def _assert_public_host(url: str) -> None:
         raise MahiAIError("Private, loopback, link-local, and non-public IP destinations are blocked.")
 
 
-def _fetch_public(url: str, max_bytes: int = 2_000_000) -> tuple[str, str, bytes]:
+def _fetch_public(url: str, max_bytes: int = 2_000_000, *, allow_truncate: bool = False) -> tuple[str, str, bytes]:
+    """Fetch a public HTTPS resource with a hard memory bound.
+
+    Strictly reject oversize resources by default. Metadata-only callers may opt
+    into a bounded prefix, which is enough for most HTML <head> metadata and
+    avoids downloading the rest of very large pages.
+    """
     current, session = _normalise_public_url(url), requests.Session()
     session.trust_env = False
     try:
@@ -333,17 +339,24 @@ def _fetch_public(url: str, max_bytes: int = 2_000_000) -> tuple[str, str, bytes
                 for chunk in response.iter_content(chunk_size=8192):
                     if not chunk:
                         continue
-                    size += len(chunk)
-                    if size > max_bytes:
-                        raise MahiAIError(f"The fetched file exceeds the {max_bytes // 1024} KiB safety limit.", 413)
+                    remaining = max_bytes - size
+                    if len(chunk) > remaining:
+                        if not allow_truncate:
+                            raise MahiAIError(f"The fetched file exceeds the {max_bytes // 1024} KiB safety limit.", 413)
+                        if remaining > 0:
+                            chunks.append(chunk[:remaining])
+                            size += remaining
+                        break
                     chunks.append(chunk)
+                    size += len(chunk)
+                    if size >= max_bytes and allow_truncate:
+                        break
             finally:
                 response.close()
             return current, content_type, b"".join(chunks)
         raise MahiAIError("The link redirected too many times.", 400)
     finally:
         session.close()
-
 
 class _MetadataParser(HTMLParser):
     def __init__(self) -> None:
@@ -377,7 +390,7 @@ class _MetadataParser(HTMLParser):
 
 
 def _metadata_for_url(url: str) -> dict:
-    final_url, content_type, body = _fetch_public(url, max_bytes=2_000_000)
+    final_url, content_type, body = _fetch_public(url, max_bytes=2_000_000, allow_truncate=True)
     if content_type not in ("text/html", "application/xhtml+xml", ""):
         raise MahiAIError("The link is not an HTML website. For a Windows script, use Add BAT file with a direct .bat URL.", 415)
     source = body.decode("utf-8", errors="replace")
