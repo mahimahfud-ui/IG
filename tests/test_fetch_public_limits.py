@@ -93,6 +93,9 @@ class FetchPublicLimitTests(unittest.TestCase):
         body = b"\xef\xbb\xbf  <!DOCTYPE html><html><head><title>Page</title></head></html>"
         self.assertTrue(mahi_ai._looks_like_html("application/octet-stream", body))
         self.assertTrue(mahi_ai._looks_like_html("text/plain", b"<html><title>Page</title>"))
+        self.assertTrue(mahi_ai._looks_like_html("application/octet-stream", b"<script>window.app={};</script>"))
+        self.assertTrue(mahi_ai._looks_like_html("application/octet-stream", b"<div id='root'></div>"))
+        self.assertTrue(mahi_ai._looks_like_html("text/plain", b"<!-- shell --><main>App</main>"))
 
     def test_binary_download_is_not_mistaken_for_a_website(self):
         self.assertFalse(mahi_ai._looks_like_html("application/zip", b"PK\x03\x04binary data"))
@@ -112,6 +115,21 @@ class FetchPublicLimitTests(unittest.TestCase):
         self.assertEqual(fetch.call_count, 2)
         self.assertEqual(metadata["url"], "https://example.com/")
         self.assertEqual(metadata["title"], "Example Movies")
+
+    def test_non_html_homepage_mime_is_reported_clearly(self):
+        with patch.object(
+            mahi_ai,
+            "_fetch_public",
+            side_effect=[
+                ("https://example.com/watch/123", "application/json", b'{"id":123}'),
+                ("https://example.com/", "application/octet-stream", b"binary"),
+            ],
+        ):
+            with self.assertRaises(mahi_ai.MahiAIError) as error:
+                mahi_ai._metadata_for_url("https://example.com/watch/123")
+        self.assertEqual(error.exception.status, 415)
+        self.assertIn("homepage also returned Content-Type: application/octet-stream", error.exception.message)
+        self.assertIn("file-host links", error.exception.message)
 
     def test_direct_apk_url_is_rejected_without_homepage_fallback(self):
         with patch.object(

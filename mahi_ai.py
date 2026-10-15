@@ -397,8 +397,11 @@ def _looks_like_html(content_type: str, body: bytes) -> bool:
     # Some hosts/CDNs label HTML as text/plain or application/octet-stream.
     # Inspect only a small bounded prefix; do not treat arbitrary binary files as pages.
     prefix = body[:8192].lstrip(b"\xef\xbb\xbf\x00\t\r\n ")
+    # Many SPA shells start with script/style/container tags rather than html/head.
+    # Check a bounded prefix for common HTML document elements while rejecting binary data.
     return bool(re.match(
-        rb"(?is)^(?:<!--.*?-->\s*)*(?:<!doctype\s+html\b|<html\b|<head\b|<body\b|<meta\b|<title\b)",
+        rb"(?is)^(?:<!--.*?-->\s*)*(?:<!doctype\s+html\b|<html\b|<head\b|<body\b|"
+        rb"<meta\b|<title\b|<script\b|<style\b|<main\b|<div\b|<noscript\b|<link\b)",
         prefix,
     ))
 
@@ -417,6 +420,7 @@ def _metadata_for_url(url: str) -> dict:
         # MIME type, try the site's HTTPS root page. Never replace an explicit file/API URL.
         if path != "/" and not file_like and not endpoint_like:
             root_url = urlunsplit((parts.scheme, parts.netloc, "/", "", ""))
+            root_type = ""
             try:
                 root_url, root_type, root_body = _fetch_public(
                     root_url, max_bytes=2_000_000, allow_truncate=True
@@ -425,12 +429,17 @@ def _metadata_for_url(url: str) -> dict:
                     final_url, content_type, body = root_url, root_type, root_body
                 else:
                     raise MahiAIError("Site root did not return HTML.", 415)
-            except MahiAIError:
-                raise MahiAIError(
-                    f"This link did not return a readable HTML page (Content-Type: {content_type or 'unknown'}). "
-                    "Try the site's official homepage or app-store listing. Direct downloads and API URLs are not supported.",
-                    415,
+            except MahiAIError as exc:
+                root_detail = (
+                    f" The homepage also returned Content-Type: {root_type or 'unknown'}."
+                    if root_type else ""
                 )
+                raise MahiAIError(
+                    f"This link did not return a readable HTML page (Content-Type: {content_type or 'unknown'})."
+                    f"{root_detail} Paste the official homepage or app-store listing URL instead. "
+                    "Direct downloads, API endpoints, and file-host links cannot be read as website pages.",
+                    415,
+                ) from exc
         else:
             raise MahiAIError(
                 f"This link did not return a readable HTML page (Content-Type: {content_type or 'unknown'}). "
