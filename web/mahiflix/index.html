@@ -124,6 +124,65 @@ html{scroll-padding-top:65px}.hero{min-height:345px;padding:100px 5% 50px}.hero 
 @media(max-width:380px){.hero-kicker{letter-spacing:.11em}.hero-actions{gap:9px}.hero-browse{padding:0 14px;gap:12px}.mode{padding:10px 13px}.card{flex-basis:73vw}}
 @media(prefers-reduced-motion:reduce){.view.active{animation:none!important}.card.live{animation:none!important}.hero-browse,.round,.arrow{transition:none!important}}
 </style>
+
+<style id="mahiflix-grid-and-add">
+/* Match the responsive card grid used on the MahiCloud main page. */
+#sitesView .rail,#appsView .rail{position:relative;overflow:visible}
+#sitesView .track,#appsView .track{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;overflow:visible;padding:12px 4% 30px;margin:0;scroll-snap-type:none}
+#sitesView .arrow,#appsView .arrow{display:none!important}
+#sitesView .card,#appsView .card{position:relative;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;flex:initial;width:100%;min-width:0;min-height:210px;aspect-ratio:auto;padding:15px;border:1px solid rgba(255,255,255,.09);border-radius:17px;background:linear-gradient(150deg,rgba(255,255,255,.045),rgba(255,255,255,.015));overflow:hidden;scroll-snap-align:none;transition:transform .3s cubic-bezier(.22,.61,.36,1),border-color .25s ease,background .25s ease,box-shadow .3s ease}
+#sitesView .card:before,#appsView .card:before{background:radial-gradient(120% 70% at 20% 0%,color-mix(in srgb,var(--c1) 19%,transparent),transparent 65%);opacity:.7}
+#sitesView .card.logo-card img,#appsView .card.logo-card img{position:relative;left:auto;top:auto;z-index:2;display:block;width:58px;height:58px;max-width:58px;max-height:58px;flex:0 0 58px;object-fit:contain;opacity:0;padding:0;margin:0 0 12px;border:0;border-radius:13px;background:rgba(255,255,255,.035);box-shadow:0 8px 20px rgba(0,0,0,.2);filter:none;transition:opacity .18s ease,transform .3s ease}
+#sitesView .card.logo-card img.logo-ready,#appsView .card.logo-card img.logo-ready{opacity:1}
+#sitesView .initials,#appsView .initials{width:58px;height:58px;min-height:58px;flex:0 0 58px;margin:0 0 12px;border-radius:13px;font-size:25px;background:color-mix(in srgb,var(--c1) 28%,#171719);box-shadow:0 8px 20px rgba(0,0,0,.18)}
+#sitesView .card .num,#appsView .card .num{position:absolute;top:12px;right:12px;left:auto;font-size:11px;color:#aaa}
+#sitesView .card .badge,#appsView .card .badge{position:absolute;top:12px;right:12px;left:auto}
+#sitesView .card .ad,#appsView .card .ad{position:absolute;top:40px;right:12px}
+#sitesView .card .cap,#appsView .card .cap{position:relative;inset:auto;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:7px;margin:0;padding:0;background:none;font-size:15px;font-weight:700;letter-spacing:-.02em}
+#sitesView .cap-open,#appsView .cap-open{font-size:9px;color:#b9b9c0;white-space:nowrap}
+#sitesView .card .more,#appsView .card .more{position:relative;inset:auto;z-index:3;display:flex;flex-direction:column;flex:1;transform:none;opacity:1;visibility:visible;min-width:0;margin:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;backdrop-filter:none}
+#sitesView .more b,#appsView .more b{display:none}
+#sitesView .more p,#appsView .more p{font-size:12px;line-height:1.5;color:#aaa;margin-top:8px}
+#sitesView .more .lang,#appsView .more .lang{display:none}
+#sitesView .more .card-domain,#appsView .more .card-domain{font-size:10px!important;color:#777;margin-top:auto!important;padding-top:12px;overflow-wrap:anywhere}
+#sitesView .actions,#appsView .actions{display:flex;align-items:center;gap:7px;margin:13px 0 0;order:2}
+#sitesView .round,#appsView .round{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;flex:0 0 34px}
+#sitesView .mobile-actions,#appsView .mobile-actions{display:none!important}
+#sitesView .row-head,#appsView .row-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:8px 4% 0}
+#sitesView .row-head h2,#appsView .row-head h2{font-size:clamp(19px,2.4vw,24px)}
+#sitesView .row-note,#appsView .row-note{display:none}
+.add-item-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:0 15px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.07);color:#fff;font-size:12px;font-weight:750;letter-spacing:.01em;box-shadow:0 6px 20px rgba(0,0,0,.16);transition:transform .22s ease,background .22s ease,border-color .22s ease}
+.add-item-btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.27)}
+.add-item-btn svg{width:18px;height:18px}
+#mf-add-overlay{position:fixed;inset:0;z-index:999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.7);backdrop-filter:blur(14px)}
+#mf-add-overlay.open{display:flex;animation:mfFadeIn .18s ease both}
+#mf-add-dialog{width:min(100%,410px);padding:25px;border:1px solid rgba(255,255,255,.14);border-radius:22px;background:linear-gradient(150deg,#202022,#111112);box-shadow:0 30px 100px rgba(0,0,0,.55);animation:mfDialogIn .24s cubic-bezier(.22,.61,.36,1) both}
+#mf-add-dialog .mf-kicker{font-size:10px;font-weight:800;letter-spacing:.17em;color:#ff626b;text-transform:uppercase}
+#mf-add-dialog h2{font-size:24px;letter-spacing:-.035em;margin:9px 0 8px}
+#mf-add-dialog p{font-size:13px;line-height:1.5;color:#aaa;margin-bottom:17px}
+#mf-add-dialog label{display:block;font-size:12px;color:#c9c9ce;margin-bottom:7px}
+#mf-add-dialog input{width:100%;height:46px;padding:0 13px;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(255,255,255,.055);color:#fff;outline:none}
+#mf-add-dialog input:focus{border-color:rgba(255,80,90,.75);box-shadow:0 0 0 3px rgba(229,9,20,.12)}
+#mf-add-dialog .mf-error{min-height:18px;margin:8px 0 0;color:#ff747c;font-size:12px}
+#mf-add-dialog .mf-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:17px}
+#mf-add-dialog .mf-btn{min-height:40px;padding:0 15px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.07);color:#fff;font-size:12px;font-weight:750}
+#mf-add-dialog .mf-btn.primary{border-color:#ed2330;background:linear-gradient(135deg,#fa3541,#c90814)}
+@keyframes mfFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes mfDialogIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+@media(min-width:640px){#sitesView .track,#appsView .track{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}}
+@media(min-width:980px){#sitesView .track,#appsView .track{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}}
+@media(min-width:1360px){#sitesView .track,#appsView .track{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-width:760px){
+#sitesView .track,#appsView .track{gap:10px;padding:12px 4% 24px}
+#sitesView .card,#appsView .card{min-height:195px;padding:12px;border-radius:14px}
+#sitesView .card .cap,#appsView .card .cap{font-size:13px;align-items:flex-start}
+#sitesView .cap-open,#appsView .cap-open{font-size:8px}
+#sitesView .more p,#appsView .more p{font-size:11px}
+.add-item-btn{min-height:38px;padding:0 12px}
+#mf-add-dialog{padding:21px}
+}
+@media(prefers-reduced-motion:reduce){#mf-add-overlay.open,#mf-add-dialog{animation:none!important}.add-item-btn{transition:none!important}}
+</style>
 </head>
 <body>
 <div class="intro" id="intro" aria-hidden="true"><div class="intro-logo" aria-label="MahiFlix"></div></div>
@@ -205,16 +264,13 @@ const initials=n=>n.replace(/[^a-z0-9 ]/gi,"").split(/\s+/).map(x=>x[0]||"").joi
 const hue=n=>{let h=0;for(let i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))%360;return h};
 
 function logoHTML(it){
-  const sources=[
-    ...(it.logoSources||[]),
-    "https://"+it.domain+"/favicon.ico",
-    "https://"+it.domain+"/favicon.png",
-    "https://"+it.domain+"/favicon.svg",
-    "https://www.google.com/s2/favicons?sz=256&domain="+encodeURIComponent(it.domain),
-    "https://icons.duckduckgo.com/ip3/"+encodeURIComponent(it.domain)+".ico"
+  const sources=it.logoSources&&it.logoSources.length?it.logoSources.slice():[
+    "https://www.google.com/s2/favicons?sz=128&domain="+encodeURIComponent(it.domain),
+    "https://icons.duckduckgo.com/ip3/"+encodeURIComponent(it.domain)+".ico",
+    "https://"+it.domain+"/favicon.ico"
   ];
   const json=JSON.stringify(sources);
-  return "<img loading='lazy' fetchpriority='low' decoding='async' alt='"+clean(it.name)+" logo' src='"+sources[0]+"' data-logo-sources='"+clean(json)+"' data-logo-index='0' onerror='nextLogo(this)'>";
+  return "<img loading='lazy' decoding='async' fetchpriority='low' width='58' height='58' alt='"+clean(it.name)+" logo' src='"+clean(sources[0])+"' data-logo-sources='"+clean(json)+"' data-logo-index='0' onload='this.classList.add(\"logo-ready\")' onerror='nextLogo(this)'>";
 }
 function nextLogo(img){
   try{
@@ -262,7 +318,7 @@ function card(it,i,isTop){
   const ad=it.ads<2?"<span class='ad "+adClass[it.ads]+"'>"+(it.ads===0?"NO AD":"LESS AD")+"</span>":"";
   const url=linkOf(it), desktopFav=favButton(it,""), mobileFav=favButton(it,"mobile-fav");
   const download=downloadLink(it,""), mobileDownload=downloadLink(it,"mobile-download");
-  return "<article class='card logo-card live' tabindex='0' aria-label='"+clean(it.name)+" card. Press Enter to visit website.' style='--c1:"+c1+";--c2:#0d0d0d' data-name='"+clean(it.name.toLowerCase())+"' data-search='"+clean((it.name+" "+it.domain).toLowerCase())+"'>"+
+  return "<article class='card logo-card live' tabindex='0' aria-label='"+clean(it.name)+" card. Press Enter to visit website.' style='--c1:"+c1+";--c2:#0d0d0d' data-name='"+clean(it.name.toLowerCase())+"' data-search='"+clean((it.name+" "+it.domain+" "+(it.desc||"")).toLowerCase())+"'>"+
     num+logoHTML(it)+nw+ad+
     "<div class='mobile-actions'>"+mobileFav+mobileDownload+"</div>"+
     "<a class='cap' href='"+clean(url)+"' target='_blank' rel='noopener noreferrer'><span>"+clean(it.name)+"</span><span class='cap-open'>VISIT HOME ↗</span></a>"+
@@ -272,14 +328,30 @@ function card(it,i,isTop){
 
 
 
+const CUSTOM_KEY="mahiflix-custom-items-v1";
+function readCustomItems(type){
+  try{
+    const all=JSON.parse(localStorage.getItem(CUSTOM_KEY)||"{}");
+    return Array.isArray(all[type])?all[type].filter(function(x){return x&&typeof x.name==="string"&&typeof x.url==="string"&&typeof x.domain==="string"}):[];
+  }catch(e){return []}
+}
+function saveCustomItem(type,item){
+  const all=(()=>{try{return JSON.parse(localStorage.getItem(CUSTOM_KEY)||"{}")}catch(e){return {}}})();
+  if(!Array.isArray(all[type]))all[type]=[];
+  if(all[type].some(function(x){return x.url.toLowerCase()===item.url.toLowerCase()}))return false;
+  all[type].push(item);
+  try{localStorage.setItem(CUSTOM_KEY,JSON.stringify(all));return true}catch(e){return false}
+}
 function renderView(type){
   const el=document.getElementById(type==="sites"?"sitesView":"appsView");
-  const data=type==="sites"?S:A;
+  const base=type==="sites"?S:A;
+  const data=base.concat(readCustomItems(type));
   const label=type==="sites"?"Websites":"Apps";
-  const sorted=data.slice().sort((a,b)=>qualityScore(b)-qualityScore(a));
+  const sorted=data.slice().sort(function(a,b){return qualityScore(b)-qualityScore(a)});
   el.innerHTML=rowHTML(label,sorted,{kind:type==="sites"?"site":"app",note:"Your curated MahiFlix collection"});
+  const track=el.querySelector(".track");
+  if(track)track.querySelectorAll(".card").forEach(function(card,i){card.style.animationDelay=(Math.min(i,8)*35)+"ms"});
 }
-
 renderView("sites");
 renderView("apps");
 document.querySelectorAll('.track').forEach(function(t){t.querySelectorAll('.card').forEach(function(card,i){card.style.animationDelay=(Math.min(i,8)*55)+'ms'})});
@@ -287,11 +359,10 @@ function svgPlay(){return "<svg viewBox='0 0 24 24' fill='currentColor'><path d=
 function svgPlus(){return "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round'><path d='M12 5v14M5 12h14'/></svg>"}
 function rowHTML(title,items,opts){
   if(!items.length)return "";
-  var top=opts&&opts.top;
-  var note=opts&&opts.note?opts.note:"";
-  return "<section class='row "+(top?"top10 ":"")+"row-section' data-row='"+clean(title.toLowerCase())+"'><div class='row-head'><h2>"+clean(title)+"</h2><span class='row-note'>"+clean(note)+"</span></div><div class='rail'><button class='arrow l' aria-label='Scroll left'>&#8249;</button><div class='track'>"+items.map(function(it,i){return card(it,i,top)}).join("")+"</div><button class='arrow r' aria-label='Scroll right'>&#8250;</button></div></section>";
+  const kind=opts&&opts.kind==="app"?"apps":"sites";
+  const note=opts&&opts.note?opts.note:"";
+  return "<section class='row row-section' data-row='"+clean(title.toLowerCase())+"'><div class='row-head'><h2>"+clean(title)+"</h2><button class='add-item-btn' type='button' data-add-type='"+kind+"' aria-label='Add "+(kind==="apps"?"app":"website")+"'><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' aria-hidden='true'><path d='M12 5v14M5 12h14'/></svg><span>Add "+(kind==="apps"?"App":"Website")+"</span></button></div><div class='rail'><div class='track'>"+items.map(function(it,i){return card(it,i,false)}).join("")+"</div></div></section>";
 }
-
 function setHero(type){}
 
 document.querySelectorAll(".mode").forEach(function(btn){
@@ -371,6 +442,47 @@ document.getElementById("yr").textContent=new Date().getFullYear();
   function end(){if(done)return;done=true;try{sessionStorage.setItem("nf-intro","1")}catch(e){}d.classList.add("intro-leave");setTimeout(function(){d.classList.remove("intro-on","intro-leave")},650)}
   document.getElementById("intro").addEventListener("click",end);setTimeout(end,2750)
 })();
+
+(function(){
+  const ADD_PIN="6993";
+  let stage="pin",addType="sites",pendingUrl="",dialogInput=null,errorNode=null;
+  const overlay=document.createElement("div");
+  overlay.id="mf-add-overlay";
+  overlay.setAttribute("role","presentation");
+  overlay.innerHTML="<section id='mf-add-dialog' role='dialog' aria-modal='true' aria-labelledby='mf-add-title'><div class='mf-kicker'>MahiFlix · Add to collection</div><h2 id='mf-add-title'>Enter passcode</h2><p id='mf-add-copy'>Confirm the passcode to add a website or app.</p><form id='mf-add-form' novalidate><label id='mf-add-label' for='mf-add-input'>Passcode</label><input id='mf-add-input' autocomplete='off' required><div id='mf-add-error' class='mf-error' role='status' aria-live='polite'></div><div class='mf-actions'><button type='button' class='mf-btn' id='mf-add-cancel'>Cancel</button><button type='submit' class='mf-btn primary' id='mf-add-next'>Continue</button></div></form></section>";
+  document.body.appendChild(overlay);
+  const title=overlay.querySelector("#mf-add-title"),copy=overlay.querySelector("#mf-add-copy"),label=overlay.querySelector("#mf-add-label"),input=overlay.querySelector("#mf-add-input"),error=overlay.querySelector("#mf-add-error"),form=overlay.querySelector("#mf-add-form"),next=overlay.querySelector("#mf-add-next");
+  function open(type){addType=type;stage="pin";pendingUrl="";input.value="";error.textContent="";input.type="password";input.inputMode="numeric";input.autocomplete="current-password";input.placeholder="••••";title.textContent="Enter passcode";copy.textContent="Unlock the add form for "+(type==="apps"?"Apps":"Websites")+".";
+    label.textContent="Passcode";input.setAttribute("aria-label","Passcode");next.textContent="Continue";overlay.classList.add("open");setTimeout(function(){input.focus()},40)}
+  function close(){overlay.classList.remove("open");form.reset();error.textContent=""}
+  function showUrl(){stage="url";input.value="";input.type="url";input.inputMode="url";input.autocomplete="url";input.placeholder="https://example.com";title.textContent="Website URL";copy.textContent="Paste the official homepage URL. Its favicon will be fetched automatically.";label.textContent="Website URL";input.setAttribute("aria-label","Website URL");next.textContent="Next";error.textContent="";setTimeout(function(){input.focus()},20)}
+  function showName(){stage="name";input.value="";input.type="text";input.inputMode="text";input.autocomplete="off";input.placeholder="Website or app name";title.textContent="Website name";copy.textContent="Enter the name that should appear on the "+(addType==="apps"?"Apps":"Websites")+" grid.";label.textContent="Website name";input.setAttribute("aria-label","Website name");next.textContent="Add to "+(addType==="apps"?"Apps":"Websites");error.textContent="";setTimeout(function(){input.focus()},20)}
+  function normaliseUrl(value){
+    let raw=value.trim();if(!raw)return "";
+    if(!/^https?:\/\//i.test(raw))raw="https://"+raw;
+    try{const u=new URL(raw);if(u.protocol!=="https:"||!u.hostname||u.username||u.password)return "";return u.href}catch(e){return ""}
+  }
+  form.addEventListener("submit",function(e){
+    e.preventDefault();error.textContent="";
+    const value=input.value.trim();
+    if(stage==="pin"){if(value!==ADD_PIN){error.textContent="Incorrect passcode.";input.select();return}showUrl();return}
+    if(stage==="url"){pendingUrl=normaliseUrl(value);if(!pendingUrl){error.textContent="Enter a valid HTTPS website URL.";return}showName();return}
+    if(stage==="name"){
+      const name=value;if(!name||name.length>80){error.textContent="Name must be between 1 and 80 characters.";return}
+      let u;try{u=new URL(pendingUrl)}catch(e){error.textContent="The URL looks invalid. Please try again.";return}
+      const item={name:name,url:pendingUrl,domain:u.hostname.toLowerCase(),ads:1,pop:70,smooth:70,langs:70,new:true,desc:"Added to MahiFlix by you.",logoSources:["https://www.google.com/s2/favicons?sz=128&domain="+encodeURIComponent(u.hostname),"https://icons.duckduckgo.com/ip3/"+encodeURIComponent(u.hostname)+".ico","https://"+u.hostname+"/favicon.ico"],custom:true};
+      const key=addType==="apps"?"apps":"sites";
+      if((key==="apps"?A:S).some(function(x){return x.url.toLowerCase()===item.url.toLowerCase()})||readCustomItems(key).some(function(x){return x.url.toLowerCase()===item.url.toLowerCase()})){error.textContent="This URL is already in that list.";return}
+      if(!saveCustomItem(key,item)){error.textContent="Could not save the item. Check your browser storage settings.";return}
+      close();renderView(key);applySearch();return;
+    }
+  });
+  overlay.querySelector("#mf-add-cancel").addEventListener("click",close);
+  overlay.addEventListener("click",function(e){if(e.target===overlay)close()});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&overlay.classList.contains("open"))close()});
+  document.addEventListener("click",function(e){const btn=e.target.closest("[data-add-type]");if(btn){e.preventDefault();open(btn.dataset.addType==="apps"?"apps":"sites")}});
+})();
+
 </script>
 </body>
 </html>
