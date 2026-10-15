@@ -124,42 +124,40 @@ class MahiCloudRouteTests(unittest.TestCase):
         self.assertTrue((root / "Procfile").is_file())
 
 
-    def test_mahi_ai_control_page_and_launcher_are_served(self):
-        page = self.client.get("/mahi-ai/")
-        self.assertEqual(page.status_code, 200)
-        self.assertIn(b"Add Website", page.data)
-        self.assertIn(b"Change Code / Route", page.data)
+    def test_old_ai_chat_is_hidden_and_quick_add_is_injected(self):
+        response = self.client.get("/mahi-ai/", follow_redirects=False)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.headers.get("Location"), "/")
+        for path in ("/", "/mahiflix/", "/apps/", "/linkora/"):
+            with self.subTest(path=path):
+                page = self.client.get(path)
+                self.assertEqual(page.status_code, 200)
+                self.assertIn(b"/mahi-ai-launcher.js", page.data)
         launcher = self.client.get("/mahi-ai-launcher.js")
         self.assertEqual(launcher.status_code, 200)
-        self.assertIn(b"/mahi-ai/", launcher.data)
+        self.assertIn(b"mahi-catalog-plus", launcher.data)
+        self.assertIn(b"/api/catalog-add", launcher.data)
+        self.assertNotIn(b"Mahi AI Control", self.client.get("/").data)
 
-    def test_mahi_ai_api_requires_access_token(self):
+    def test_catalog_add_needs_pin_but_not_openai_key(self):
         import os
         from unittest.mock import patch
-
-        with patch.dict(os.environ, {"MAHI_AI_ACCESS_TOKEN": "test-control-key", "OPENAI_API_KEY": ""}):
-            denied = self.client.post("/api/mahi-ai/chat", json={"message": "hello", "action": "chat"})
+        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "6993", "MAHI_AI_GITHUB_TOKEN": "", "OPENAI_API_KEY": ""}):
+            denied = self.client.post("/api/catalog-add", json={"password": "wrong", "input": "https://example.com"})
             self.assertEqual(denied.status_code, 401)
-            accepted_but_unconfigured = self.client.post(
-                "/api/mahi-ai/chat", json={"message": "hello", "action": "chat", "history": []},
-                headers={"Authorization": "Bearer test-control-key"},
-            )
-            self.assertEqual(accepted_but_unconfigured.status_code, 503)
-            self.assertIn("OPENAI_API_KEY", accepted_but_unconfigured.get_json().get("reply", ""))
+            self.assertIn("Incorrect password", denied.get_json().get("error", ""))
+            unconfigured = self.client.post("/api/catalog-add", json={"password": "6993", "input": "https://example.com"})
+            self.assertEqual(unconfigured.status_code, 503)
+            self.assertIn("MAHI_AI_GITHUB_TOKEN", unconfigured.get_json().get("error", ""))
+            self.assertNotIn("OPENAI_API_KEY", unconfigured.get_data(as_text=True))
 
-    def test_mahi_ai_status_never_returns_secret_values(self):
+    def test_catalog_add_rejects_blank_input(self):
         import os
         from unittest.mock import patch
-
-        with patch.dict(os.environ, {"MAHI_AI_ACCESS_TOKEN": "test-control-key", "OPENAI_API_KEY": "test-openai-key", "MAHI_AI_GITHUB_TOKEN": "test-github-key"}):
-            response = self.client.get("/api/mahi-ai/status")
-            self.assertEqual(response.status_code, 200)
-            payload = response.get_json()
-            self.assertTrue(payload["access_configured"])
-            self.assertTrue(payload["ai_configured"])
-            self.assertTrue(payload["github_configured"])
-            self.assertNotIn("test-openai-key", response.get_data(as_text=True))
-            self.assertNotIn("test-github-key", response.get_data(as_text=True))
+        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "6993", "MAHI_AI_GITHUB_TOKEN": "test-github-key"}):
+            response = self.client.post("/api/catalog-add", json={"password": "6993", "input": " "})
+            self.assertEqual(response.status_code, 400)
+            self.assertIn("Paste a link", response.get_json().get("error", ""))
 
 
 if __name__ == "__main__":

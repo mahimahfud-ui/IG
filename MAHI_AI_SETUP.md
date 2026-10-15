@@ -1,54 +1,26 @@
-# Mahi AI — secure setup
+# MahiCloud Quick Add
 
-Mahi AI is a private, server-side assistant for the MahiCloud repository. OpenAI and GitHub credentials are never embedded in the browser.
+The old Mahi AI chat page is hidden. A floating plus button is injected into HTML pages.
 
-## 1. Add server environment variables
+1. Click plus.
+2. Enter the shared code 6993.
+3. Paste an official Movie Website / Movie App / Music App URL, or describe a supported Windows BAT task.
+4. The server reads page metadata, chooses a matching supported catalog category, downloads a safe logo into web/assets/submitted-logos, edits the existing catalog list, and commits to main.
 
-Open the environment-variable settings for the same host that runs the Flask app and add:
+This flow does not call OpenAI and does not require OpenAI API billing. Name/category detection uses the page's metadata and keyword rules, not a generative model. Generic services outside the existing Movie Websites, Movie Apps, and Music Apps catalogs are rejected. For BAT requests, it only generates pre-reviewed templates for flushing DNS, listing network information, testing internet connectivity, and creating a battery report. Arbitrary BAT imports are disabled.
 
-| Variable | Purpose |
-|---|---|
-| OPENAI_API_KEY | OpenAI API key used by the chatbot. |
-| MAHI_AI_ACCESS_TOKEN | A long private password for the chatbot's access gate. |
-| MAHI_AI_GITHUB_TOKEN | Fine-grained GitHub token for mahimahfud-ui/mahicloud. |
-| MAHI_AI_REPOSITORY | Optional; defaults to mahimahfud-ui/mahicloud. |
-| MAHI_AI_MODEL | Optional; defaults to gpt-5.5. |
+## Flask hosting variables
 
-Generate a strong access token locally with PowerShell:
+- MAHI_AI_GITHUB_TOKEN: required; use a fine-grained token with Contents read/write permission for mahimahfud-ui/mahicloud. The token stays on the server.
+- MAHI_AI_REPOSITORY: optional; defaults to mahimahfud-ui/mahicloud.
+- MAHI_CATALOG_PASSWORD: optional; defaults to 6993. If changed, update the browser launcher code at the same time.
 
-    [Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+OPENAI_API_KEY and MAHI_AI_ACCESS_TOKEN are not used by quick-add.
 
-Do not put the access token, GitHub token, or OpenAI API key into HTML, JavaScript, Git commits, or chat messages.
+## Deployment
 
-## 2. GitHub token permissions
+Every successful item submission makes a commit to main. The production website shows that entry after its hosting service deploys the commit. The live service must point at this repository and main, with automatic deployments enabled.
 
-Create a fine-grained personal access token for only the mahicloud repository. Grant **Contents: Read and write** and **Pull requests: Read and write**. The chatbot reads repository source, adds catalog entries through Git database writes, and opens pull requests for ordinary code edits.
+## Safety
 
-Use minimum scope and revoke the token immediately if it is exposed.
-
-## 3. Open the assistant
-
-After the Flask app is redeployed with these server-side environment variables, open:
-
-    https://mahicloud.onrender.com/mahi-ai/
-
-The access key is kept in the current browser tab's session storage. The assistant supports English, Bengali script and Banglish/Romanized Bangla.
-
-## 4. Built-in actions
-
-- **Add Website:** reads public page metadata, asks AI to classify the service, collects original icon/logo candidates, and adds supported movie website/app entries to the correct collection.
-- **Add App:** routes supported apps to Movie Apps or Music Apps using the official page metadata.
-- **Add BAT Tool:** imports a direct public BAT file or generates a Windows script from a description. Several destructive or suspicious command patterns are blocked. Always inspect a BAT file before running it.
-- **Change Code / Route:** searches and reads supported repository files, stages exact changes and opens a GitHub pull request. It does not force-push or auto-merge code changes.
-
-Catalogue additions and BAT entries are committed to main after validation. General code edits go to a pull request so you can review the diff and CI results before merging.
-
-## 5. Hosting and cost
-
-This requires a live Flask backend, outbound HTTPS access to OpenAI and GitHub, and the three server variables above. If the public domain only serves static files, the chat API will not work until the Flask backend is deployed on that origin or behind the same origin.
-
-OpenAI API usage is billed separately from ChatGPT. Configure API usage limits in the OpenAI platform.
-
-## 6. Safety limitations
-
-The BAT checker is a conservative pattern check, not a malware scanner or Windows execution test. Never run unfamiliar scripts without reviewing them. BAT files are not executed on the web server. AI code edits are not auto-merged.
+The shared PIN is visible in public JavaScript and is a lightweight shared prompt, not private authentication. This design intentionally permits visitors who know or inspect the code to add catalog entries. Rate limits, strict categories, SSRF checks and image-format checks reduce abuse but do not eliminate it. Logo downloads support common safe image types. Review Windows BAT scripts before running them.

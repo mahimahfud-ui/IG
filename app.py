@@ -12,11 +12,11 @@ import requests
 
 from flask import Flask, jsonify, redirect, request, send_from_directory
 from werkzeug.exceptions import RequestEntityTooLarge
-from mahi_ai import mahi_ai_bp
+from mahi_catalog import mahi_catalog_bp
 
 app = Flask(__name__, static_folder="web", static_url_path="")
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10 MiB upload limit.
-app.register_blueprint(mahi_ai_bp)
+app.register_blueprint(mahi_catalog_bp)
 
 jobs = {}
 jobs_lock = threading.Lock()
@@ -335,6 +335,15 @@ def apps_redirect():
 @app.get("/apps/")
 def apps_index():
     return send_from_directory(os.path.join(app.root_path, "web", "apps"), "index.html")
+
+
+
+# The former chat interface is hidden; catalog additions use the floating plus dialog.
+@app.route("/mahi-ai", defaults={"legacy_path": ""})
+@app.route("/mahi-ai/", defaults={"legacy_path": ""})
+@app.route("/mahi-ai/<path:legacy_path>")
+def hide_legacy_mahi_ai(legacy_path=""):
+    return redirect("/", code=302)
 
 
 # Friendly MahiCloud route aliases. Canonical project routes remain unchanged.
@@ -703,6 +712,19 @@ def page_not_found(_error):
 
 @app.after_request
 def add_security_headers(response):
+    # Inject one shared quick-add launcher across HTML pages without changing page designs.
+    if response.status_code == 200 and response.mimetype == "text/html" and not request.path.startswith("/mahi-ai"):
+        try:
+            response.direct_passthrough = False
+            body = response.get_data()
+            lowered = body.lower()
+            tag = b'<script defer src="/mahi-ai-launcher.js"></script>'
+            if b"mahi-ai-launcher.js" not in lowered:
+                position = lowered.rfind(b"</body>")
+                if position >= 0:
+                    response.set_data(body[:position] + tag + b"\n" + body[position:])
+        except Exception:
+            pass
     if request.path.startswith("/api/"):
         response.headers.setdefault("Cache-Control", "no-store")
     response.headers.setdefault("X-Content-Type-Options", "nosniff")
