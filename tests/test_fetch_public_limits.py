@@ -90,13 +90,13 @@ class FetchPublicLimitTests(unittest.TestCase):
 
 
     def test_html_is_accepted_when_server_sends_wrong_content_type(self):
-        body = b"\\xef\\xbb\\xbf  <!DOCTYPE html><html><head><title>Page</title></head></html>"
+        body = b"\xef\xbb\xbf  <!DOCTYPE html><html><head><title>Page</title></head></html>"
         self.assertTrue(mahi_ai._looks_like_html("application/octet-stream", body))
         self.assertTrue(mahi_ai._looks_like_html("text/plain", b"<html><title>Page</title>"))
 
     def test_binary_download_is_not_mistaken_for_a_website(self):
-        self.assertFalse(mahi_ai._looks_like_html("application/zip", b"PK\\x03\\x04binary data"))
-        self.assertFalse(mahi_ai._looks_like_html("application/octet-stream", b"\\x00\\x01\\x02\\x03binary"))
+        self.assertFalse(mahi_ai._looks_like_html("application/zip", b"PK\x03\x04binary data"))
+        self.assertFalse(mahi_ai._looks_like_html("application/octet-stream", b"\x00\x01\x02\x03binary"))
 
 
 if __name__ == "__main__":
