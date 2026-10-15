@@ -396,9 +396,9 @@ def _looks_like_html(content_type: str, body: bytes) -> bool:
         return True
     # Some hosts/CDNs label HTML as text/plain or application/octet-stream.
     # Inspect only a small bounded prefix; do not treat arbitrary binary files as pages.
-    prefix = body[:8192].lstrip(b"\\xef\\xbb\\xbf\\x00\\t\\r\\n ")
+    prefix = body[:8192].lstrip(b"\xef\xbb\xbf\x00\t\r\n ")
     return bool(re.match(
-        rb"(?is)^(?:<!--.*?-->\\s*)*(?:<!doctype\\s+html\\b|<html\\b|<head\\b|<body\\b|<meta\\b|<title\\b)",
+        rb"(?is)^(?:<!--.*?-->\s*)*(?:<!doctype\s+html\b|<html\b|<head\b|<body\b|<meta\b|<title\b)",
         prefix,
     ))
 
