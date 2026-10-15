@@ -319,7 +319,7 @@ def _fetch_public(url: str, max_bytes: int = 2_000_000, *, allow_truncate: bool 
             try:
                 response = session.get(current, allow_redirects=False, stream=True, timeout=(8, 18),
                                        headers={"User-Agent": "MahiCloud-AI-Control/1.0",
-                                                "Accept": "text/html,application/octet-stream,*/*;q=0.7"})
+                                                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"})
             except requests.RequestException as exc:
                 raise MahiAIError("That public link could not be fetched. Check that it is accessible and try again.", 502) from exc
             if response.status_code in (301, 302, 303, 307, 308):
