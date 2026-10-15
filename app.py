@@ -43,6 +43,40 @@ TERMINAL_STATUSES = {"complete", "error", "cancelled"}
 JOB_TTL_SECONDS = 6 * 60 * 60
 MAX_LIKED_POSTS = 50_000
 
+# Lightweight per-process abuse controls. For multi-instance deployments, use a
+# shared store (for example Redis) so limits apply across every worker/instance.
+_RATE_LIMITS = {
+    "start": (5, 15 * 60),       # at most 5 job starts per client per 15 minutes
+    "download": (60, 60),        # at most 60 resolver requests per client per minute
+}
+_rate_events = {}
+_rate_lock = threading.Lock()
+MAX_ACTIVE_JOBS = 3
+
+
+def _client_key():
+    # Do not trust arbitrary X-Forwarded-For values from clients.
+    return request.remote_addr or "unknown"
+
+
+def _rate_limited(bucket):
+    limit, window = _RATE_LIMITS[bucket]
+    now = time.monotonic()
+    key = (bucket, _client_key())
+    with _rate_lock:
+        events = _rate_events.setdefault(key, [])
+        events[:] = [stamp for stamp in events if now - stamp < window]
+        if len(events) >= limit:
+            return True, max(1, int(window - (now - events[0])))
+        events.append(now)
+        # Periodically discard old keys to prevent unbounded memory growth.
+        if len(_rate_events) > 5000:
+            stale = [k for k, stamps in _rate_events.items()
+                     if not stamps or now - stamps[-1] >= 3600]
+            for old_key in stale:
+                _rate_events.pop(old_key, None)
+        return False, 0
+
 
 def utc_now_iso():
     return datetime.now(timezone.utc).isoformat()
@@ -510,6 +544,12 @@ def resolve_app_download(slug):
 @app.get("/download/app/<slug>")
 def download_app_redirect(slug):
     app_id = str(slug or "").strip().lower()
+    limited, retry_after = _rate_limited("download")
+    if limited:
+        response = jsonify({"error": "Too many download lookups. Please try again later."})
+        response.status_code = 429
+        response.headers["Retry-After"] = str(retry_after)
+        return response
     if app_id not in APP_DOWNLOADS:
         return ("App not found.", 404, {"Content-Type":"text/plain; charset=utf-8","Cache-Control":"no-store"})
     target = resolve_app_download(app_id)
@@ -527,6 +567,20 @@ def config():
 @app.post("/api/start")
 def start():
     cleanup_old_jobs()
+    limited, retry_after = _rate_limited("start")
+    if limited:
+        response = jsonify({"error": "Too many runs started from this connection. Please wait before trying again."})
+        response.status_code = 429
+        response.headers["Retry-After"] = str(retry_after)
+        return response
+
+    with jobs_lock:
+        active_jobs = sum(
+            1 for job in jobs.values()
+            if job.get("status") not in TERMINAL_STATUSES
+        )
+    if active_jobs >= MAX_ACTIVE_JOBS:
+        return jsonify({"error": "The service is busy. Wait for an active run to finish before starting another."}), 429
 
     username = request.form.get("username", "").strip()
     password = request.form.get("password", "")
@@ -640,6 +694,8 @@ def page_not_found(_error):
 
 @app.after_request
 def add_security_headers(response):
+    if request.path.startswith("/api/"):
+        response.headers.setdefault("Cache-Control", "no-store")
     response.headers.setdefault("X-Content-Type-Options", "nosniff")
     response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
     response.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
