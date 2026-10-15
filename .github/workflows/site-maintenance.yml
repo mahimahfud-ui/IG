@@ -63,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: mahi-site-maintenance-report
-          path: ${{ runner.temp }}/mahi-site-maintenance-report.json
+          path: /tmp/mahi-site-maintenance-report.json
           if-no-files-found: ignore
           retention-days: 14
 
