@@ -101,6 +101,16 @@ class FetchPublicLimitTests(unittest.TestCase):
         self.assertFalse(mahi_ai._looks_like_html("application/zip", b"PK\x03\x04binary data"))
         self.assertFalse(mahi_ai._looks_like_html("application/octet-stream", b"\x00\x01\x02\x03binary"))
 
+    def test_html_with_short_preamble_and_wrong_content_type_is_accepted(self):
+        body = b")]}'\n/* proxy preamble */\n<!DOCTYPE html><html><head><title>Page</title></head></html>"
+        self.assertTrue(mahi_ai._looks_like_html("application/octet-stream", body))
+        body = b"cached-page-metadata\n<html><head><title>Page</title></head><body>OK</body></html>"
+        self.assertTrue(mahi_ai._looks_like_html("application/octet-stream", body))
+
+    def test_json_with_embedded_html_string_is_not_mistaken_for_a_page(self):
+        body = b'{"message":"<html><body>This is API data, not a page</body></html>"}'
+        self.assertFalse(mahi_ai._looks_like_html("application/octet-stream", body))
+
 
     def test_non_html_detail_page_falls_back_to_site_homepage(self):
         with patch.object(
@@ -115,6 +125,18 @@ class FetchPublicLimitTests(unittest.TestCase):
         self.assertEqual(fetch.call_count, 2)
         self.assertEqual(metadata["url"], "https://example.com/")
         self.assertEqual(metadata["title"], "Example Movies")
+
+    def test_non_html_root_page_has_specific_diagnostic(self):
+        with patch.object(
+            mahi_ai,
+            "_fetch_public",
+            return_value=("https://example.com/", "application/octet-stream", b"binary"),
+        ):
+            with self.assertRaises(mahi_ai.MahiAIError) as error:
+                mahi_ai._metadata_for_url("https://example.com/")
+        self.assertEqual(error.exception.status, 415)
+        self.assertIn("homepage did not return a readable HTML page", error.exception.message)
+        self.assertIn("Content-Type: application/octet-stream", error.exception.message)
 
     def test_non_html_homepage_mime_is_reported_clearly(self):
         with patch.object(
