@@ -48,7 +48,7 @@ img,video,canvas,svg{max-width:100%;}
 button,input,select,textarea{max-width:100%;font:inherit;}
 button,a,[role="button"],input[type="button"],input[type="submit"]{-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
 :where(button,a,[role="button"],input,select,textarea):focus-visible{outline:2px solid #8af7ff;outline-offset:3px;}
-@supports(height:100dvh){.stage,#scene{height:100dvh;}}
+@supports(height:100dvh){body{min-height:100dvh;}}
 @media(max-width:760px){
   html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px));}
   body{overflow-wrap:break-word;}
