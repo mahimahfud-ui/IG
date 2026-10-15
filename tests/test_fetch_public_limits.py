@@ -99,5 +99,32 @@ class FetchPublicLimitTests(unittest.TestCase):
         self.assertFalse(mahi_ai._looks_like_html("application/octet-stream", b"\x00\x01\x02\x03binary"))
 
 
+    def test_non_html_detail_page_falls_back_to_site_homepage(self):
+        with patch.object(
+            mahi_ai,
+            "_fetch_public",
+            side_effect=[
+                ("https://example.com/watch/123", "application/json", b'{"id":123}'),
+                ("https://example.com/", "text/html", b"<html><head><title>Example Movies</title></head></html>"),
+            ],
+        ) as fetch:
+            metadata = mahi_ai._metadata_for_url("https://example.com/watch/123")
+        self.assertEqual(fetch.call_count, 2)
+        self.assertEqual(metadata["url"], "https://example.com/")
+        self.assertEqual(metadata["title"], "Example Movies")
+
+    def test_direct_apk_url_is_rejected_without_homepage_fallback(self):
+        with patch.object(
+            mahi_ai,
+            "_fetch_public",
+            return_value=("https://example.com/app.apk", "application/vnd.android.package-archive", b"PK\\x03\\x04"),
+        ) as fetch:
+            with self.assertRaises(mahi_ai.MahiAIError) as error:
+                mahi_ai._metadata_for_url("https://example.com/app.apk")
+        self.assertEqual(error.exception.status, 415)
+        self.assertIn("official homepage", error.exception.message)
+        fetch.assert_called_once()
+
+
 if __name__ == "__main__":
     unittest.main()
