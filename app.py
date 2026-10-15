@@ -324,7 +324,7 @@ def gallery_index():
 
 @app.get("/social-tools")
 def social_tools_redirect():
-    return redirect("/social-tools/", code=308)
+    return redirect("/instagram-cleaner.html", code=308)
 
 
 @app.get("/social-tools/")
@@ -364,6 +364,7 @@ def lumr_public_profile(username):
     return send_from_directory(os.path.join(app.root_path, "web", "lumr"), "index.html")
 
 
+@app.get("/api/config")
 @app.get("/lumr/api/config")
 def lumr_config():
     return jsonify({
