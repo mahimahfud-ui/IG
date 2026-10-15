@@ -68,6 +68,25 @@ class MahiCloudRouteTests(unittest.TestCase):
                 self.assertIn("publishableKey", payload)
                 self.assertIn("youtubeUrl", payload)
 
+    def test_all_integrated_pages_have_responsive_device_polish(self):
+        pages = [
+            "/",
+            "/mahiflix/",
+            "/lumr/",
+            "/linkora/",
+            "/apps/",
+            "/unfollowers/",
+            "/instagram-cleaner.html",
+        ]
+        for route in pages:
+            with self.subTest(route=route):
+                response = self.client.get(route)
+                self.assertEqual(response.status_code, 200)
+                self.assertIn(b'name="viewport"', response.data)
+                self.assertIn(b'id="mahi-device-polish"', response.data)
+                self.assertIn(b'prefers-reduced-motion:reduce', response.data)
+                self.assertIn(b'viewport-fit=cover', response.data)
+
 
 if __name__ == "__main__":
     unittest.main()
