@@ -69,6 +69,61 @@ button,a,[role="button"],input[type="button"],input[type="submit"]{-webkit-tap-h
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important;transition-delay:0ms!important;}
 }
 </style>
+<style id="mahiflix-premium-refresh">
+:root{--red:#ed2330;--border:rgba(255,255,255,.12)}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{background:radial-gradient(ellipse at 50% -18%,rgba(229,9,20,.14),transparent 46%),#101011}
+nav{padding:14px 4%;background:linear-gradient(180deg,rgba(8,8,9,.94),rgba(8,8,9,.28));backdrop-filter:blur(12px)}
+nav.solid{background:rgba(14,14,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06)}
+.hero{min-height:clamp(360px,43vw,500px);padding:112px 4% 70px;align-items:center;background:radial-gradient(ellipse at 50% 8%,rgba(229,9,20,.28),transparent 48%),linear-gradient(180deg,rgba(12,12,13,.16),#101011 100%),#171011}
+.hero-in{max-width:900px;padding:0;text-align:center}
+.hero-kicker{display:inline-flex;align-items:center;gap:9px;margin-bottom:15px;color:#c3c3c7;font-size:10px;font-weight:800;letter-spacing:.22em}
+.hero-kicker-dot{width:7px;height:7px;border-radius:50%;background:#ff3c48;box-shadow:0 0 16px rgba(255,60,72,.85)}
+.hero h1.hero-title{font:400 clamp(68px,10vw,122px)/.86 "Bebas Neue",Impact,sans-serif;letter-spacing:.015em;margin:0 0 20px;background:linear-gradient(180deg,#fff 8%,#d9d9dd 100%);color:transparent;background-clip:text;-webkit-background-clip:text;text-shadow:none}
+.hero h1.hero-title span{color:var(--red);background:linear-gradient(180deg,#ff5360,#df0612);background-clip:text;-webkit-background-clip:text}
+.hero p{max-width:640px;margin:0 auto 24px;color:#c3c3c8;font-size:clamp(14px,1.55vw,17px);line-height:1.7}
+.hero-actions{display:flex;align-items:center;justify-content:center;gap:12px}
+.hero-browse{display:inline-flex;align-items:center;gap:22px;min-height:44px;padding:0 18px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(255,255,255,.94);color:#101011;font-weight:800;font-size:13px;box-shadow:0 8px 28px rgba(0,0,0,.2);transition:transform .3s ease,box-shadow .3s ease}
+.hero-browse:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(0,0,0,.3)}
+.hero .ig-link{width:44px;height:44px;margin:0;border:1px solid rgba(255,255,255,.12);border-radius:50%;background:rgba(255,255,255,.06);transition:transform .3s ease,background .3s ease}
+.hero .ig-link svg{width:23px;height:23px}
+.mode-wrap{margin:-27px 4% 14px}
+.mode-switch{gap:4px;padding:5px;border-color:rgba(255,255,255,.12);background:rgba(27,27,29,.86);backdrop-filter:blur(20px);border-radius:15px;box-shadow:0 20px 54px rgba(0,0,0,.34)}
+.mode{padding:12px 22px;border-radius:10px}
+.mode.active{background:linear-gradient(135deg,#fa2634,#c90612);box-shadow:0 7px 24px rgba(229,9,20,.23)}
+.row{margin-bottom:18px}.row-head{align-items:center;margin:0 4% 4px}.row h2{font-size:clamp(18px,2vw,22px);letter-spacing:-.025em}.row-note{color:#888;font-size:11px}
+.track{display:flex;gap:17px;padding:26px 4% 48px;margin:0;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-padding-inline:4%;scrollbar-width:none;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
+.track::-webkit-scrollbar{display:none}
+.arrow{position:absolute;top:44%;z-index:25;display:grid;place-items:center;width:42px;height:42px;padding:0;border:1px solid rgba(255,255,255,.16);border-radius:50%;background:rgba(15,15,16,.85);color:#fff;font-size:27px;line-height:1;box-shadow:0 8px 24px rgba(0,0,0,.32);backdrop-filter:blur(14px);transition:transform .25s ease,opacity .25s ease,background .25s ease}
+.arrow:hover{transform:scale(1.08);background:#e50914}.arrow.l{left:12px}.arrow.r{right:12px}.arrow:disabled{opacity:0;pointer-events:none}
+.card{flex:0 0 clamp(190px,22vw,284px);aspect-ratio:1/1;border:1px solid rgba(255,255,255,.09);border-radius:17px;background:radial-gradient(ellipse at 50% 35%,color-mix(in srgb,var(--c1) 60%,#171719),#111112 76%);overflow:hidden;scroll-snap-align:start;transition:transform .55s cubic-bezier(.2,.8,.2,1),border-color .35s ease,box-shadow .45s ease}
+.card:before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(145deg,rgba(255,255,255,.075),transparent 34%,rgba(0,0,0,.12));opacity:.75}
+.card.logo-card img{z-index:2;width:70%;height:70%;max-height:70%;object-fit:contain;padding:0;background:transparent;border-radius:0;box-shadow:none;filter:drop-shadow(0 12px 20px rgba(0,0,0,.25));transition:transform .5s cubic-bezier(.2,.8,.2,1),filter .5s ease}
+.card.live:hover,.card.live:focus-within{transform:translate3d(0,-7px,0) scale(1.025);z-index:20;border-color:rgba(255,255,255,.2);box-shadow:0 25px 60px rgba(0,0,0,.42),0 0 35px rgba(229,9,20,.09)}
+.card.live:hover img,.card.live:focus-within img{transform:scale(1.07);filter:drop-shadow(0 15px 26px rgba(0,0,0,.35)) brightness(1.06)}
+.cap{z-index:4;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:42px 13px 13px;background:linear-gradient(0deg,rgba(0,0,0,.92),rgba(0,0,0,.52) 62%,transparent);font-size:13px;letter-spacing:.005em}
+.cap-open{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:800;letter-spacing:.08em;color:#d1d1d5;opacity:.84;white-space:nowrap}
+.more{top:auto;bottom:9px;left:9px;right:9px;z-index:6;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(12,12,13,.91);backdrop-filter:blur(18px);box-shadow:0 12px 32px rgba(0,0,0,.35);transform:translateY(9px) scale(.985)}
+.more b{font-size:13px}.more p{font-size:11px;line-height:1.45}.more .lang{margin-top:7px}.card-domain{color:#777;font-size:10px!important;margin-top:4px!important}
+.actions{align-items:center;gap:7px;margin-bottom:10px}.round{width:34px;height:34px;border-color:rgba(255,255,255,.17);background:rgba(255,255,255,.08);transition:transform .22s ease,background .22s ease,border-color .22s ease}
+.round:hover{transform:translateY(-1px);background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.32)}
+.round.go{background:#f6f6f7;color:#101011;border-color:#f6f6f7}.round.download{color:#fff;background:rgba(229,9,20,.18);border-color:rgba(229,9,20,.4)}.round svg{width:15px;height:15px}.mobile-actions{display:none}
+.badge,.ad{top:10px;font-size:9px;letter-spacing:.04em;padding:5px 7px;border:1px solid rgba(255,255,255,.12);border-radius:6px;backdrop-filter:blur(10px)}.badge{left:10px}.ad{right:10px}
+.initials{position:relative;z-index:2;display:grid;place-items:center;width:70%;height:70%;border:1px solid rgba(255,255,255,.12);border-radius:24px;background:rgba(0,0,0,.2);font:400 clamp(34px,5vw,58px)/1 "Bebas Neue",sans-serif}
+.empty{min-height:180px;padding:60px 4%;font-size:14px}footer{border-top:1px solid rgba(255,255,255,.06);background:rgba(8,8,9,.35);padding:28px 4% 34px}
+@keyframes premiumViewIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.view.active{animation:premiumViewIn .42s cubic-bezier(.2,.75,.25,1) both}
+@media(max-width:760px){
+html{scroll-padding-top:65px}.hero{min-height:345px;padding:100px 5% 50px}.hero h1.hero-title{font-size:clamp(66px,17vw,92px)}.hero-kicker{font-size:9px;letter-spacing:.16em}.hero p{max-width:460px;font-size:14px;margin-bottom:20px}
+.mode-wrap{margin:-20px 4% 12px}.mode{padding:11px 17px;font-size:12px}.row h2{font-size:18px}.track{gap:13px;padding:22px 4% 40px}.card{flex-basis:clamp(168px,67vw,238px);border-radius:15px}.card.live:hover,.card.live:focus-within{transform:translateY(-3px) scale(1.012)}
+.card .more{display:none}.card .cap{display:flex!important;font-size:12px;padding:36px 10px 11px}.cap-open{font-size:8px}.arrow{width:32px;height:32px;top:42%;font-size:22px}.arrow.l{left:7px}.arrow.r{right:7px}
+.mobile-actions{position:absolute;z-index:10;top:9px;left:9px;right:9px;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+.mobile-actions .round{pointer-events:auto;width:31px;height:31px;background:rgba(10,10,11,.75);backdrop-filter:blur(12px);box-shadow:0 4px 14px rgba(0,0,0,.22)}
+.mobile-actions .mobile-download{margin-left:auto;margin-right:0}.mobile-actions .mobile-fav{margin-right:auto}.mode-switch{max-width:100%}.row-note{display:none}
+}
+@media(max-width:380px){.hero-kicker{letter-spacing:.11em}.hero-actions{gap:9px}.hero-browse{padding:0 14px;gap:12px}.mode{padding:10px 13px}.card{flex-basis:73vw}}
+@media(prefers-reduced-motion:reduce){.view.active{animation:none!important}.card.live{animation:none!important}.hero-browse,.round,.arrow{transition:none!important}}
+</style>
 </head>
 <body>
 <div class="intro" id="intro" aria-hidden="true"><div class="intro-logo" aria-label="MahiFlix"></div></div>
@@ -85,8 +140,15 @@ button,a,[role="button"],input[type="button"],input[type="submit"]{-webkit-tap-h
 
 <header class="hero" id="top">
   <div class="hero-in">
-    <p id="heroDesc">A curated collection of the best movie &amp; web-series websites and apps.</p>
-    <a class="ig-link" href="https://www.instagram.com/mahimahfud/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="igBgHero" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="2" y="2" width="20" height="20" rx="6" fill="url(#igBgHero)"/><rect x="6.3" y="6.3" width="11.4" height="11.4" rx="3.5" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="12" cy="12" r="2.7" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="16.35" cy="7.65" r="1.05" fill="#fff"/></svg></a>
+    <div class="hero-kicker"><span class="hero-kicker-dot"></span> MAHICLOUD ENTERTAINMENT GUIDE</div>
+    <h1 class="hero-title">Mahi<span>Flix</span></h1>
+    <p id="heroDesc">Explore movie and series websites, discover their apps, and open each service’s own homepage directly.</p>
+    <div class="hero-actions">
+      <a class="hero-browse" href="#browse">Explore collection <span aria-hidden="true">↓</span></a>
+      <a class="ig-link" href="https://www.instagram.com/mahimahfud/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="igBgHero" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="2" y="2" width="20" height="20" rx="6" fill="url(#igBgHero)"/><rect x="6.3" y="6.3" width="11.4" height="11.4" rx="3.5" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="12" cy="12" r="2.7" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="16.35" cy="7.65" r="1.05" fill="#fff"/></svg>
+      </a>
+    </div>
   </div>
 </header>
 
@@ -108,8 +170,8 @@ button,a,[role="button"],input[type="button"],input[type="submit"]{-webkit-tap-h
 <script>
 const S=[
 {name:"bCine",url:"https://cineyz.com/",domain:"cineyz.com",ads:1,pop:82,smooth:84,langs:86,new:true,desc:"Movie and TV streaming website.",logoSources:["https://cineyz.com/favicon.ico","https://cineyz.com/favicon.png","https://cineyz.com/icon-192.png"]},
-{name:"7reel",url:"https://7reels.cc",domain:"7reels.cc",ads:2,pop:74,smooth:62,langs:72,new:true,desc:"Free movie and series streaming directory.",logoSources:["https://7reels.cc/favicon-96x96.png","https://7reels.cc/favicon.ico","https://7reels.cc/favicon.png"]},
-{name:"Plex",url:"https://watch.plex.tv/en-GB",domain:"plex.tv",ads:1,pop:96,smooth:94,langs:88,new:false,desc:"Free ad-supported movies, shows and live TV with premium options.",logoSources:["https://watch.plex.tv/favicon.ico","https://plex.tv/favicon.ico","https://www.plex.tv/favicon.ico"]},
+{name:"7reel",url:"https://7reels.cc/",domain:"7reels.cc",ads:2,pop:74,smooth:62,langs:72,new:true,desc:"Free movie and series streaming directory.",logoSources:["https://7reels.cc/favicon-96x96.png","https://7reels.cc/favicon.ico","https://7reels.cc/favicon.png"]},
+{name:"Plex",url:"https://watch.plex.tv/",domain:"plex.tv",ads:1,pop:96,smooth:94,langs:88,new:false,desc:"Free ad-supported movies, shows and live TV with premium options.",logoSources:["https://watch.plex.tv/favicon.ico","https://plex.tv/favicon.ico","https://www.plex.tv/favicon.ico"]},
 {name:"M4UHD",url:"https://m4uhd.gold/",domain:"m4uhd.gold",ads:2,pop:94,smooth:60,langs:76,new:false,desc:"Large movie and TV streaming catalogue.",logoSources:["https://m4uhd.gold/logo.png","https://m4uhd.gold/favicon.png","https://m4uhd.gold/favicon.ico"]},
 {name:"CineHD",url:"https://cinehd.vc/",domain:"cinehd.vc",ads:2,pop:92,smooth:61,langs:78,new:false,desc:"Movies and series with a large free-streaming catalogue.",logoSources:["https://cinehd.vc/icon-192x192.png","https://cinehd.vc/favicon.ico","https://cinehd.dev/images/favicon.ico"]},
 {name:"NightFlix",url:"https://nightflix.vg/",domain:"nightflix.vg",ads:2,pop:86,smooth:62,langs:78,new:false,desc:"Free movies and TV streaming site.",logoSources:["https://nightflix.vg/favicon.ico","https://nightflix.vg/favicon.png","https://nightflix.vg/favicon-192x192.png"]},
@@ -117,22 +179,22 @@ const S=[
 {name:"Nightflix",url:"https://nightflix.to/",domain:"nightflix.to",ads:2,pop:79,smooth:63,langs:78,new:false,desc:"Free movies and TV streaming platform.",logoSources:["https://nightflix.to/favicon.ico","https://nightflix.to/favicon.png","https://nightflix.to/favicon-192x192.png"]},
 {name:"Bingr",url:"https://bingr.one/",domain:"bingr.one",ads:2,pop:73,smooth:56,langs:70,new:false,desc:"Movie and TV discovery/streaming platform.",logoSources:["https://bingr.one/favicon.svg","https://bingr.one/icons/favicon-96x96.png","https://bingr.one/favicon.ico"]},
 {name:"Cinejoy",url:"https://cinejoy.to/",domain:"cinejoy.to",ads:2,pop:68,smooth:52,langs:66,new:false,desc:"Movies, TV and short-drama streaming platform.",logoSources:["https://cinejoy.to/favicon.svg","https://cinejoy.to/brand/logomark-white.svg","https://cinejoy.to/favicon.png","https://cinejoy.to/favicon.ico"]},
-{name:"Cinegram",url:"https://cinegram.tv/home",domain:"cinegram.tv",ads:1,pop:77,smooth:75,langs:76,new:false,desc:"Movies and series streaming platform.",logoSources:["https://cinegram.tv/sizes/fav-192.png","https://cinegram.tv/favicon.ico","https://cinegram.tv/favicon.png"]},
+{name:"Cinegram",url:"https://cinegram.tv/",domain:"cinegram.tv",ads:1,pop:77,smooth:75,langs:76,new:false,desc:"Movies and series streaming platform.",logoSources:["https://cinegram.tv/sizes/fav-192.png","https://cinegram.tv/favicon.ico","https://cinegram.tv/favicon.png"]},
 {name:"Watchott",url:"https://watchott.org/",domain:"watchott.org",ads:1,pop:58,smooth:58,langs:65,new:false,desc:"Movie and TV streaming website.",logoSources:["https://watchott.org/favicon.svg","https://watchott.org/favicon.ico","https://watchott.org/favicon.png"]},
 {name:"1tube",url:"https://www.1tube.org/",domain:"1tube.org",ads:2,pop:84,smooth:66,langs:82,new:false,desc:"Movies, TV and other streaming content.",logoSources:["https://www.1tube.org/logo.png","https://www.1tube.org/favicon.ico","https://www.1tube.org/favicon.png"]}
 ];
 
 const A=[
-{name:"FilmTV",url:"/download/app/filmtv",domain:"filmtvapp.com",ads:0,pop:84,smooth:88,langs:86,new:true,desc:"FilmTV Android app with direct APK download.",logoSources:["https://www.filmtvapp.com/favicon.ico","https://www.filmtvapp.com/favicon.png","https://www.filmtvapp.com/icon-192.png"]},
-{name:"Nuvix",url:"/download/app/nuvix",domain:"nuvixapp.in",ads:0,pop:82,smooth:88,langs:86,new:true,desc:"Nuvix Android app with direct APK download.",logoSources:["https://www.nuvixapp.in/favicon.ico","https://www.nuvixapp.in/favicon.png","https://www.nuvixapp.in/icon-192.png"]},
-{name:"Vega",url:"/download/app/vega",domain:"github.com",ads:0,pop:88,smooth:91,langs:92,new:true,desc:"Open-source Android media streaming app with ad-free streaming and downloads.",logoSources:["https://raw.githubusercontent.com/vega-org/vega-app/main/assets/adaptive_icon.png"]},
-{name:"NetMirror",url:"/download/app/netmirror",domain:"netmirror.gg",ads:2,pop:90,smooth:66,langs:84,new:true,desc:"Android streaming app with movie and series sources.",logoSources:["https://netmirror.gg/favicon.ico","https://netmirror.gg/favicon.png","https://netmiirror.app/wp-content/uploads/2026/10/cropped-NetMirror-1-192x192.webp","https://netmiirror.app/wp-content/uploads/2026/10/cropped-NetMirror-1-180x180.webp"]},
-{name:"CineHD",url:"/download/app/cinehd",domain:"cinehd.dev",ads:2,pop:86,smooth:60,langs:78,new:false,desc:"Android movie and series streaming app.",logoSources:["https://cinehd.vc/icon-192x192.png","https://cinehd.dev/images/favicon.ico"]},
-{name:"Moviboxapk",url:"/download/app/moviboxapk",domain:"moviboxapk.com",ads:2,pop:77,smooth:63,langs:76,new:false,desc:"Android movie and series streaming app.",logoSources:["https://moviboxapk.com/wp-content/uploads/2026/06/cropped-cropped-moviebox-icon-192x192.webp","https://moviboxapk.com/wp-content/uploads/2026/06/cropped-cropped-moviebox-icon-180x180.webp","https://moviboxapk.com/favicon.ico","https://moviboxapk.com/favicon.png"]},
-{name:"PvrPlay",url:"/download/app/pvrplay",domain:"pvrplay.online",ads:2,pop:75,smooth:64,langs:74,new:false,desc:"Android app for movies and web series.",logoSources:["https://pvrplay.online/favicon.ico","https://pvrplay.online/favicon.png"]},
-{name:"Hdghartv",url:"/download/app/hdghartv",domain:"hdghartv.com.pk",ads:0,pop:72,smooth:86,langs:70,new:false,desc:"Free Android movies and TV app; its site advertises an ad-free experience.",logoSources:["https://hdghartv.com.pk/wp-content/uploads/2026/08/hdghartv-logo.png","https://hdghartv.com.pk/logo.png","https://hdghartv.com.pk/favicon.png","https://hdghartv.com.pk/favicon.ico"]},
-{name:"Anivortex",url:"/download/app/anivortex",domain:"anivortex.in",ads:1,pop:70,smooth:72,langs:80,new:false,desc:"Anime-focused streaming app.",logoSources:["https://anivortex.in/images/anivortex_logo.webp","https://anivortex.in/images/anivortex_logo_transparent.webp","https://anivortex.in/favicon.ico","https://anivortex.in/favicon.png"]},
-{name:"Nxsha",url:"/download/app/nxsha",domain:"nxsha.app",ads:1,pop:74,smooth:84,langs:90,new:false,desc:"Movies, TV, anime and K-drama discovery app.",logoSources:["https://nxsha.app/favicon.ico","https://nxsha.app/favicon.png","https://nxsha.app/icon-192.png"]}
+{name:"FilmTV",url:"https://www.filmtvapp.com/",downloadUrl:"/download/app/filmtv",domain:"filmtvapp.com",ads:0,pop:84,smooth:88,langs:86,new:true,desc:"FilmTV Android app with direct APK download.",logoSources:["https://www.filmtvapp.com/favicon.ico","https://www.filmtvapp.com/favicon.png","https://www.filmtvapp.com/icon-192.png"]},
+{name:"Nuvix",url:"https://www.nuvixapp.in/",downloadUrl:"/download/app/nuvix",domain:"nuvixapp.in",ads:0,pop:82,smooth:88,langs:86,new:true,desc:"Nuvix Android app with direct APK download.",logoSources:["https://www.nuvixapp.in/favicon.ico","https://www.nuvixapp.in/favicon.png","https://www.nuvixapp.in/icon-192.png"]},
+{name:"Vega",url:"https://vega.zendax.me/",downloadUrl:"/download/app/vega",domain:"github.com",ads:0,pop:88,smooth:91,langs:92,new:true,desc:"Open-source Android media streaming app with ad-free streaming and downloads.",logoSources:["https://raw.githubusercontent.com/vega-org/vega-app/main/assets/adaptive_icon.png"]},
+{name:"NetMirror",url:"https://netmirror.gg/",downloadUrl:"/download/app/netmirror",domain:"netmirror.gg",ads:2,pop:90,smooth:66,langs:84,new:true,desc:"Android streaming app with movie and series sources.",logoSources:["https://netmirror.gg/favicon.ico","https://netmirror.gg/favicon.png","https://netmiirror.app/wp-content/uploads/2026/10/cropped-NetMirror-1-192x192.webp","https://netmiirror.app/wp-content/uploads/2026/10/cropped-NetMirror-1-180x180.webp"]},
+{name:"CineHD",url:"https://cinehd.dev/",downloadUrl:"/download/app/cinehd",domain:"cinehd.dev",ads:2,pop:86,smooth:60,langs:78,new:false,desc:"Android movie and series streaming app.",logoSources:["https://cinehd.vc/icon-192x192.png","https://cinehd.dev/images/favicon.ico"]},
+{name:"Moviboxapk",url:"https://moviboxapk.com/",downloadUrl:"/download/app/moviboxapk",domain:"moviboxapk.com",ads:2,pop:77,smooth:63,langs:76,new:false,desc:"Android movie and series streaming app.",logoSources:["https://moviboxapk.com/wp-content/uploads/2026/06/cropped-cropped-moviebox-icon-192x192.webp","https://moviboxapk.com/wp-content/uploads/2026/06/cropped-cropped-moviebox-icon-180x180.webp","https://moviboxapk.com/favicon.ico","https://moviboxapk.com/favicon.png"]},
+{name:"PvrPlay",url:"https://pvrplay.online/",downloadUrl:"/download/app/pvrplay",domain:"pvrplay.online",ads:2,pop:75,smooth:64,langs:74,new:false,desc:"Android app for movies and web series.",logoSources:["https://pvrplay.online/favicon.ico","https://pvrplay.online/favicon.png"]},
+{name:"Hdghartv",url:"https://hdghartv.com.pk/",downloadUrl:"/download/app/hdghartv",domain:"hdghartv.com.pk",ads:0,pop:72,smooth:86,langs:70,new:false,desc:"Free Android movies and TV app; its site advertises an ad-free experience.",logoSources:["https://hdghartv.com.pk/wp-content/uploads/2026/08/hdghartv-logo.png","https://hdghartv.com.pk/logo.png","https://hdghartv.com.pk/favicon.png","https://hdghartv.com.pk/favicon.ico"]},
+{name:"Anivortex",url:"https://anivortex.in/",downloadUrl:"/download/app/anivortex",domain:"anivortex.in",ads:1,pop:70,smooth:72,langs:80,new:false,desc:"Anime-focused streaming app.",logoSources:["https://anivortex.in/images/anivortex_logo.png","https://anivortex.in/images/anivortex_logo.webp","https://anivortex.in/images/anivortex_logo_transparent.webp","https://anivortex.in/favicon.ico","https://anivortex.in/favicon.png"]},
+{name:"Nxsha",url:"https://nxsha.app/",downloadUrl:"/download/app/nxsha",domain:"nxsha.app",ads:1,pop:74,smooth:84,langs:90,new:false,desc:"Movies, TV, anime and K-drama discovery app.",logoSources:["https://nxsha.app/favicon.ico","https://nxsha.app/favicon.png","https://nxsha.app/icon-192.png"]}
 ];
 
 const adLabel=["No / minimal ads","Some ads","More / heavier ads"];
@@ -152,7 +214,7 @@ function logoHTML(it){
     "https://icons.duckduckgo.com/ip3/"+encodeURIComponent(it.domain)+".ico"
   ];
   const json=JSON.stringify(sources);
-  return "<img loading='eager' fetchpriority='high' decoding='async' alt='"+clean(it.name)+" logo' src='"+sources[0]+"' data-logo-sources='"+clean(json)+"' data-logo-index='0' onerror='nextLogo(this)'>";
+  return "<img loading='lazy' fetchpriority='low' decoding='async' alt='"+clean(it.name)+" logo' src='"+sources[0]+"' data-logo-sources='"+clean(json)+"' data-logo-index='0' onerror='nextLogo(this)'>";
 }
 function nextLogo(img){
   try{
@@ -168,6 +230,20 @@ function nextLogo(img){
   img.outerHTML="<span class='initials' aria-label='"+clean(name)+" logo'>"+initials(name)+"</span>";
 }
 function linkOf(it){return it.url}
+const FAV_KEY="mahiflix-favourites-v1";
+function readFavourites(){try{return new Set(JSON.parse(localStorage.getItem(FAV_KEY)||"[]"))}catch(e){return new Set()}}
+const favourites=readFavourites();
+function saveFavourites(){try{localStorage.setItem(FAV_KEY,JSON.stringify(Array.from(favourites)))}catch(e){}}
+function favButton(it,extra){
+  const on=favourites.has(it.name);
+  return "<button class='round fav "+(extra||"")+"' type='button' data-fav-for='"+clean(it.name)+"' aria-pressed='"+(on?"true":"false")+"' aria-label='"+(on?"Remove "+clean(it.name)+" from My List":"Add "+clean(it.name)+" to My List")+"' title='"+(on?"Remove from My List":"Add to My List")+"'>"+(on?"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12l5 5 9-10'/></svg>":svgPlus())+"</button>";
+}
+function downloadLink(it,extra){
+  if(!it.downloadUrl)return "";
+  return "<a class='round download "+(extra||"")+"' href='"+clean(it.downloadUrl)+"' aria-label='Download "+clean(it.name)+" APK' title='Download APK'>"+svgDownload()+"</a>";
+}
+function svgDownload(){return "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3v12m-5-5 5 5 5-5'/><path d='M5 17v3h14v-3'/></svg>"}
+
 
 function qualityScore(it){
   return (it.pop*.42)+(it.smooth*.30)+(it.langs*.18)+((2-it.ads)*10);
@@ -181,23 +257,20 @@ function bucket(arr,n){
 
 function card(it,i,isTop){
   const c1=it.color||("hsl("+hue(it.name)+" 55% 34%)");
-  const c2="#0d0d0d";
   const num=isTop?"<span class='num'>"+(i+1)+"</span>":"";
   const nw=it.new?"<span class='badge'>NEW</span>":"";
   const ad=it.ads<2?"<span class='ad "+adClass[it.ads]+"'>"+(it.ads===0?"NO AD":"LESS AD")+"</span>":"";
-  const url=linkOf(it);
-  return "<div class='card logo-card live' tabindex='0' role='link' style='--c1:"+c1+";--c2:"+c2+"' data-name='"+clean(it.name.toLowerCase())+"'>"+
+  const url=linkOf(it), desktopFav=favButton(it,""), mobileFav=favButton(it,"mobile-fav");
+  const download=downloadLink(it,""), mobileDownload=downloadLink(it,"mobile-download");
+  return "<article class='card logo-card live' tabindex='0' aria-label='"+clean(it.name)+" card. Press Enter to visit website.' style='--c1:"+c1+";--c2:#0d0d0d' data-name='"+clean(it.name.toLowerCase())+"' data-search='"+clean((it.name+" "+it.domain).toLowerCase())+"'>"+
     num+logoHTML(it)+nw+ad+
-    "<a class='cap' href='"+url+"' target='_blank' rel='noopener noreferrer'>"+clean(it.name)+(it.kind==="app"?" · App":"")+"</a>"+
-    "<div class='more'><div class='actions'><a class='round go' href='"+url+"' target='_blank' rel='noopener noreferrer' aria-label='Open "+clean(it.name)+"'>"+svgPlay()+"</a><button class='round fav' aria-label='Add to My List'>"+svgPlus()+"</button></div>"+
-    "<b>"+clean(it.name)+"</b><p>"+clean(it.desc)+"</p><p class='lang'>"+clean(it.langs)+"</p></div></div>";
+    "<div class='mobile-actions'>"+mobileFav+mobileDownload+"</div>"+
+    "<a class='cap' href='"+clean(url)+"' target='_blank' rel='noopener noreferrer'><span>"+clean(it.name)+"</span><span class='cap-open'>VISIT HOME ↗</span></a>"+
+    "<div class='more'><div class='actions'><a class='round go' href='"+clean(url)+"' target='_blank' rel='noopener noreferrer' aria-label='Visit "+clean(it.name)+" homepage' title='Visit homepage'>"+svgPlay()+"</a>"+download+desktopFav+"</div>"+
+    "<b>"+clean(it.name)+"</b><p>"+clean(it.desc)+"</p><p class='lang'>Language coverage score · "+clean(it.langs)+"/100</p><p class='card-domain'>"+clean(it.domain)+"</p></div></article>";
 }
 
-function rowHTML(title,items,opts){
-  if(!items.length)return "";
-  const top=opts&&opts.top,note=opts&&opts.note?opts.note:"";
-  return "<section class='row "+(top?"top10 ":"")+"row-section' data-row='"+clean(title.toLowerCase())+"'><div class='row-head'><h2>"+clean(title)+"</h2><span class='row-note'>"+clean(note)+"</span></div><div class='rail'><button class='arrow l' aria-label='Scroll left'>&#8249;</button><div class='track'>"+items.map((it,i)=>card(Object.assign({},it,{kind:opts&&opts.kind||it.kind}),i,top)).join("")+"</div><button class='arrow r' aria-label='Scroll right'>&#8250;</button></div></div></section>";
-}
+
 
 function renderView(type){
   const el=document.getElementById(type==="sites"?"sitesView":"appsView");
@@ -229,6 +302,8 @@ document.querySelectorAll(".mode").forEach(function(btn){
     document.getElementById("sitesView").classList.toggle("active",mode==="sites");
     document.getElementById("appsView").classList.toggle("active",mode==="apps");
     document.getElementById("q").value="";
+    document.querySelectorAll(".card").forEach(function(card){card.style.display=""});
+    document.querySelectorAll(".row-section").forEach(function(row){row.style.display=""});
     document.getElementById("empty").style.display="none";
       });
 });
@@ -241,9 +316,17 @@ document.querySelectorAll(".rail").forEach(function(r){
 document.addEventListener("click",function(e){
   var f=e.target.closest(".fav");
   if(f){
-    var on=f.dataset.on==="1";
-    f.dataset.on=on?"":"1";
-    f.innerHTML=on?svgPlus():"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12l5 5 9-10'/></svg>";
+    var name=f.dataset.favFor||"";
+    if(favourites.has(name))favourites.delete(name);else favourites.add(name);
+    saveFavourites();
+    document.querySelectorAll(".fav").forEach(function(button){
+      if(button.dataset.favFor!==name)return;
+      var on=favourites.has(name);
+      button.setAttribute("aria-pressed",on?"true":"false");
+      button.setAttribute("aria-label",on?"Remove "+name+" from My List":"Add "+name+" to My List");
+      button.title=on?"Remove from My List":"Add to My List";
+      button.innerHTML=on?"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12l5 5 9-10'/></svg>":svgPlus();
+    });
     return;
   }
   var cardEl=e.target.closest(".card");
@@ -271,7 +354,7 @@ q.addEventListener("input",function(){
   var v=q.value.trim().toLowerCase(),active=document.querySelector(".view.active"),any=false;
   active.querySelectorAll(".row-section").forEach(function(r){
     var count=0;
-    r.querySelectorAll(".card").forEach(function(c){var m=!v||c.dataset.name.indexOf(v)>-1;c.style.display=m?"":"none";if(m)count++});
+    r.querySelectorAll(".card").forEach(function(c){var m=!v||(c.dataset.search||c.dataset.name).indexOf(v)>-1;c.style.display=m?"":"none";if(m)count++});
     r.style.display=count?"":"none";if(count)any=true;
   });
   document.getElementById("empty").style.display=any?"none":"block";
