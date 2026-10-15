@@ -116,6 +116,21 @@ class FetchPublicLimitTests(unittest.TestCase):
         self.assertEqual(metadata["url"], "https://example.com/")
         self.assertEqual(metadata["title"], "Example Movies")
 
+    def test_non_html_homepage_mime_is_reported_clearly(self):
+        with patch.object(
+            mahi_ai,
+            "_fetch_public",
+            side_effect=[
+                ("https://example.com/watch/123", "application/json", b'{"id":123}'),
+                ("https://example.com/", "application/octet-stream", b"binary"),
+            ],
+        ):
+            with self.assertRaises(mahi_ai.MahiAIError) as error:
+                mahi_ai._metadata_for_url("https://example.com/watch/123")
+        self.assertEqual(error.exception.status, 415)
+        self.assertIn("homepage also returned Content-Type: application/octet-stream", error.exception.message)
+        self.assertIn("file-host links", error.exception.message)
+
     def test_direct_apk_url_is_rejected_without_homepage_fallback(self):
         with patch.object(
             mahi_ai,
