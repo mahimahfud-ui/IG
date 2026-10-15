@@ -31,7 +31,7 @@ jobs:
     env:
       SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://mahicloud.onrender.com' }}
       OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.5' }}
-      MAINTENANCE_REPORT: ${{ runner.temp }}/mahi-site-maintenance-report.json
+      MAINTENANCE_REPORT: /tmp/mahi-site-maintenance-report.json
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
