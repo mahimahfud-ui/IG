@@ -77,7 +77,7 @@ class MahiCloudRouteTests(unittest.TestCase):
 
         for _ in range(5):
             response = self.client.post("/api/start", data={})
-            self.assertEqual(response.status_code, 400)
+            self.assertEqual(response.status_code, 410)
         response = self.client.post("/api/start", data={})
         self.assertEqual(response.status_code, 429)
         self.assertIn("Retry-After", response.headers)
