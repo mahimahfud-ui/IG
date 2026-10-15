@@ -625,6 +625,32 @@ def privacy():
     return send_from_directory(os.path.join(app.root_path, "web"), "privacy.html")
 
 
+@app.get("/terms")
+def terms():
+    return send_from_directory(os.path.join(app.root_path, "web"), "terms.html")
+
+
+@app.errorhandler(404)
+def page_not_found(_error):
+    # Preserve JSON error responses for API consumers.
+    if request.path.startswith("/api/"):
+        return jsonify({"error": "Not found."}), 404
+    return send_from_directory(os.path.join(app.root_path, "web"), "404.html"), 404
+
+
+@app.after_request
+def add_security_headers(response):
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+    response.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
+    response.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+    # Render terminates TLS at its edge; only advertise HSTS on HTTPS requests.
+    forwarded_proto = request.headers.get("X-Forwarded-Proto", "").split(",")[0].strip().lower()
+    if request.is_secure or forwarded_proto == "https":
+        response.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+    return response
+
+
 @app.get("/health")
 def health():
     cleanup_old_jobs()
