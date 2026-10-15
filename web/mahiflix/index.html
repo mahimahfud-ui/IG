@@ -201,8 +201,42 @@ html{scroll-padding-top:65px}.hero{min-height:345px;padding:100px 5% 50px}.hero 
 @media(min-width:1360px){#sitesView .track,#appsView .track{grid-template-columns:repeat(5,minmax(0,1fr))}}
 </style>
 <link rel="stylesheet" href="/mahicloud-theme.css">
+
+<style id="mahiflix-ios-motion">
+/* iOS-inspired loading, spring-like entry, staggered reveals and tactile feedback. */
+#mf-page-loader{position:fixed;inset:0;z-index:90;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;background:rgba(13,13,15,.96);-webkit-backdrop-filter:saturate(1.3) blur(26px);backdrop-filter:saturate(1.3) blur(26px);opacity:1;visibility:visible;transition:opacity .48s cubic-bezier(.22,1,.36,1),visibility 0s linear .48s}
+body.mf-ready #mf-page-loader{opacity:0;visibility:hidden;pointer-events:none}
+.mf-loader-mark{position:relative;display:grid;place-items:center;width:62px;height:62px;animation:mfLoaderFloat 1.8s ease-in-out infinite}
+.mf-loader-mark img{position:relative;z-index:1;display:block;width:47px;height:47px;object-fit:contain;filter:drop-shadow(0 0 18px rgba(229,9,20,.25))}
+.mf-loader-ring{position:absolute;inset:-5px;border:2px solid rgba(255,255,255,.10);border-top-color:#fff;border-right-color:#ed2330;border-radius:50%;animation:mfSpin .9s linear infinite}
+.mf-loader-label{margin:1px 0 0;color:#bdbdc4;font-size:9px;font-weight:800;letter-spacing:.2em}
+.mf-loader-progress{width:118px;height:3px;overflow:hidden;border-radius:99px;background:rgba(255,255,255,.10)}
+.mf-loader-progress span{display:block;width:100%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#b90814,#ff4a56,#fff);transform:scaleX(0);transform-origin:left;animation:mfProgress .72s cubic-bezier(.22,1,.36,1) .04s forwards}
+@keyframes mfSpin{to{transform:rotate(360deg)}}
+@keyframes mfLoaderFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.025)}}
+@keyframes mfProgress{to{transform:scaleX(1)}}
+@keyframes mfSoftEnter{from{opacity:0;transform:translate3d(0,12px,0);filter:blur(5px)}to{opacity:1;transform:translate3d(0,0,0);filter:blur(0)}}
+@keyframes mfIosCardIn{0%{opacity:0;transform:translate3d(0,18px,0) scale(.965);filter:blur(7px)}68%{opacity:1;transform:translate3d(0,-1px,0) scale(1.006);filter:blur(0)}100%{opacity:1;transform:translate3d(0,0,0) scale(1);filter:blur(0)}}
+.hero-in>*{animation:mfSoftEnter .72s cubic-bezier(.2,.8,.2,1) both}
+.hero-in>*:nth-child(1){animation-delay:.04s}.hero-in>*:nth-child(2){animation-delay:.09s}.hero-in>*:nth-child(3){animation-delay:.14s}.hero-in>*:nth-child(4){animation-delay:.19s}
+#sitesView .card.live,#appsView .card.live{animation:none}
+#sitesView .card.live.mf-enter,#appsView .card.live.mf-enter{animation:mfIosCardIn .72s cubic-bezier(.2,.85,.25,1) both;animation-delay:calc(var(--mf-stagger,0) * 42ms)}
+#sitesView .card.logo-card:has(img:not(.logo-ready))::after,#appsView .card.logo-card:has(img:not(.logo-ready))::after{content:"";position:absolute;z-index:4;top:12px;left:12px;width:58px;height:58px;border:1px solid rgba(255,255,255,.045);border-radius:14px;background:linear-gradient(105deg,rgba(255,255,255,.025) 15%,rgba(255,255,255,.105) 35%,rgba(255,255,255,.025) 55%);background-size:220% 100%;animation:mfShimmer 1.3s ease-in-out infinite;pointer-events:none}
+@keyframes mfShimmer{to{background-position:-220% 0}}
+#sitesView .card:active,#appsView .card:active{transform:scale(.985);transition-duration:.14s}
+#sitesView .add-item-btn:active,#appsView .add-item-btn:active,#sitesView .round:active,#appsView .round:active,.mode:active,.hero-browse:active{transform:scale(.96);transition-duration:.12s}
+#sitesView .card,#appsView .card{transform-origin:center center;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+@media(prefers-reduced-motion:reduce){
+  #mf-page-loader{display:none!important}
+  #sitesView .card.live.mf-enter,#appsView .card.live.mf-enter,.hero-in>*{animation:none!important}
+  #sitesView .card.logo-card:has(img:not(.logo-ready))::after{animation:none!important}
+  #appsView .card.logo-card:has(img:not(.logo-ready))::after{animation:none!important}
+}
+</style>
+
 </head>
 <body>
+<div id="mf-page-loader" role="status" aria-label="Loading MahiFlix"><div class="mf-loader-mark"><img src="/brand-m.webp" alt="" width="54" height="54"><span class="mf-loader-ring"></span></div><p class="mf-loader-label">PREPARING YOUR COLLECTION</p><div class="mf-loader-progress"><span></span></div></div>
 <div class="intro" id="intro" aria-hidden="true"><div class="intro-logo" aria-label="MahiCloud"><img src="/brand-m.webp" alt="MahiCloud" width="220" height="220" decoding="async"></div></div>
 
 <nav id="nav">
@@ -245,6 +279,7 @@ html{scroll-padding-top:65px}.hero{min-height:345px;padding:100px 5% 50px}.hero 
 <footer>MahiFlix © <span id="yr"></span></footer>
 
 <script>
+setTimeout(function(){document.body.classList.add("mf-ready")},650);
 const S=[
 {name:"bCine",url:"https://cineyz.com/",domain:"cineyz.com",ads:1,pop:82,smooth:84,langs:86,new:true,desc:"Movie and TV streaming website.",logoSources:["https://cineyz.com/favicon.ico","https://cineyz.com/favicon.png","https://cineyz.com/icon-192.png"]},
 {name:"7reel",url:"https://7reels.cc/",domain:"7reels.cc",ads:2,pop:74,smooth:62,langs:72,new:true,desc:"Free movie and series streaming directory.",logoSources:["https://7reels.cc/favicon-96x96.png","https://7reels.cc/favicon.ico","https://7reels.cc/favicon.png"]},
@@ -253,7 +288,6 @@ const S=[
 {name:"CineHD",url:"https://cinehd.vc/",domain:"cinehd.vc",ads:2,pop:92,smooth:61,langs:78,new:false,desc:"Movies and series with a large free-streaming catalogue.",logoSources:["https://cinehd.vc/icon-192x192.png","https://cinehd.vc/favicon.ico","https://cinehd.dev/images/favicon.ico"]},
 {name:"NightFlix",url:"https://nightflix.vg/",domain:"nightflix.vg",ads:2,pop:86,smooth:62,langs:78,new:false,desc:"Free movies and TV streaming site.",logoSources:["https://nightflix.vg/favicon.ico","https://nightflix.vg/favicon.png","https://nightflix.vg/favicon-192x192.png"]},
 {name:"Pvrplay",url:"https://pvrplay.online/",domain:"pvrplay.online",ads:2,pop:82,smooth:65,langs:74,new:false,desc:"Free movies and web-series streaming platform.",logoSources:["https://pvrplay.online/favicon.ico","https://pvrplay.online/favicon.png"]},
-{name:"Nightflix",url:"https://nightflix.to/",domain:"nightflix.to",ads:2,pop:79,smooth:63,langs:78,new:false,desc:"Free movies and TV streaming platform.",logoSources:["https://nightflix.to/favicon.ico","https://nightflix.to/favicon.png","https://nightflix.to/favicon-192x192.png"]},
 {name:"Bingr",url:"https://bingr.one/",domain:"bingr.one",ads:2,pop:73,smooth:56,langs:70,new:false,desc:"Movie and TV discovery/streaming platform.",logoSources:["https://bingr.one/favicon.svg","https://bingr.one/icons/favicon-96x96.png","https://bingr.one/favicon.ico"]},
 {name:"Cinejoy",url:"https://cinejoy.to/",domain:"cinejoy.to",ads:2,pop:68,smooth:52,langs:66,new:false,desc:"Movies, TV and short-drama streaming platform.",logoSources:["https://cinejoy.to/favicon.svg","https://cinejoy.to/brand/logomark-white.svg","https://cinejoy.to/favicon.png","https://cinejoy.to/favicon.ico"]},
 {name:"Cinegram",url:"https://cinegram.tv/",domain:"cinegram.tv",ads:1,pop:77,smooth:75,langs:76,new:false,desc:"Movies and series streaming platform.",logoSources:["https://cinegram.tv/sizes/fav-192.png","https://cinegram.tv/favicon.ico","https://cinegram.tv/favicon.png"]},
@@ -371,7 +405,6 @@ const LOCAL_LOGOS={
     "cinehd|cinehd.vc":"cinehd-site",
     "nightflix|nightflix.vg":"nightflix-vg",
     "pvrplay|pvrplay.online":"pvrplay-site",
-    "nightflix|nightflix.to":"nightflix-to",
     "bingr|bingr.one":"bingr",
     "cinejoy|cinejoy.to":"cinejoy",
     "cinegram|cinegram.tv":"cinegram",
@@ -395,10 +428,26 @@ function localLogoFor(type,item){
   const key=String(item.name||"").toLowerCase()+"|"+String(item.domain||"").toLowerCase();
   return (LOCAL_LOGOS[type]||{})[key]||"";
 }
+function playCardEntrance(container){
+  if(!container)return;
+  const start=function(){
+    const cards=container.querySelectorAll(".card");
+    cards.forEach(function(card,i){card.classList.remove("mf-enter");card.style.setProperty("--mf-stagger",String(Math.min(i,10)))});
+    void container.offsetWidth;
+    cards.forEach(function(card){card.classList.add("mf-enter")});
+  };
+  if(document.documentElement.classList.contains("intro-on"))document.addEventListener("mahiflix:intro-finished",start,{once:true});
+  else start();
+}
+
 function renderView(type){
   const el=document.getElementById(type==="sites"?"sitesView":"appsView");
   const base=type==="sites"?S:A;
-  const data=base.concat(readCustomItems(type)).map(function(item){
+  const source=base.concat(readCustomItems(type)).filter(function(item,index,all){
+    const name=String(item.name||"").trim().toLowerCase();
+    return name&&all.findIndex(function(candidate){return String(candidate.name||"").trim().toLowerCase()===name})===index;
+  });
+  const data=source.map(function(item){
     return Object.assign({},item,{logoAsset:item.logoAsset||localLogoFor(type,item)});
   });
   const label=type==="sites"?"Websites":"Apps";
@@ -419,7 +468,7 @@ function renderView(type){
     });
   });
   const track=el.querySelector(".track");
-  if(track)track.querySelectorAll(".card").forEach(function(card,i){card.style.animationDelay=(Math.min(i,8)*35)+"ms"});
+  playCardEntrance(el);
 }
 // Initial grid render is intentionally deferred until all handlers and the add dialog are initialized.
 function svgPlay(){return "<svg viewBox='0 0 24 24' fill='currentColor'><path d='M6 4l14 8-14 8z'/></svg>"}
@@ -439,6 +488,7 @@ document.querySelectorAll(".mode").forEach(function(btn){
     var mode=btn.dataset.mode;
     document.getElementById("sitesView").classList.toggle("active",mode==="sites");
     document.getElementById("appsView").classList.toggle("active",mode==="apps");
+    playCardEntrance(document.getElementById(mode==="sites"?"sitesView":"appsView"));
     document.getElementById("q").value="";
     document.querySelectorAll(".card").forEach(function(card){card.style.display=""});
     document.querySelectorAll(".row-section").forEach(function(row){row.style.display=""});
@@ -498,7 +548,7 @@ document.getElementById("yr").textContent=new Date().getFullYear();
   var d=document.documentElement;
   if(!d.classList.contains("intro-on"))return;
   var done=false;
-  function end(){if(done)return;done=true;try{sessionStorage.setItem("nf-intro","1")}catch(e){}d.classList.add("intro-leave");setTimeout(function(){d.classList.remove("intro-on","intro-leave")},650)}
+  function end(){if(done)return;done=true;try{sessionStorage.setItem("nf-intro","1")}catch(e){}d.classList.add("intro-leave");setTimeout(function(){d.classList.remove("intro-on","intro-leave");document.dispatchEvent(new Event("mahiflix:intro-finished"))},650)}
   document.getElementById("intro").addEventListener("click",end);setTimeout(end,2750)
 })();
 
@@ -532,7 +582,7 @@ document.getElementById("yr").textContent=new Date().getFullYear();
       let u;try{u=new URL(pendingUrl)}catch(e){error.textContent="The URL looks invalid. Please try again.";return}
       const item={name:name,url:pendingUrl,domain:u.hostname.toLowerCase(),ads:1,pop:70,smooth:70,langs:70,new:true,desc:"Added to MahiFlix by you.",logoSources:["https://www.google.com/s2/favicons?sz=128&domain="+encodeURIComponent(u.hostname),"https://icons.duckduckgo.com/ip3/"+encodeURIComponent(u.hostname)+".ico","https://"+u.hostname+"/favicon.ico"],custom:true};
       const key=addType==="apps"?"apps":"sites";
-      if((key==="apps"?A:S).some(function(x){return x.url.toLowerCase()===item.url.toLowerCase()})||readCustomItems(key).some(function(x){return x.url.toLowerCase()===item.url.toLowerCase()})){error.textContent="This URL is already in that list.";return}
+      if((key==="apps"?A:S).some(function(x){return x.url.toLowerCase()===item.url.toLowerCase()||String(x.name||"").trim().toLowerCase()===item.name.trim().toLowerCase()})||readCustomItems(key).some(function(x){return x.url.toLowerCase()===item.url.toLowerCase()||String(x.name||"").trim().toLowerCase()===item.name.trim().toLowerCase()})){error.textContent="This URL or service name is already in that list.";return}
       if(!saveCustomItem(key,item)){error.textContent="Could not save the item. Check your browser storage settings.";return}
       close();renderView(key);q.dispatchEvent(new Event("input"));return;
     }
