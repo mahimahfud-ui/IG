@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Photo &amp; Video Gallery</title>
+<title>mahimahfud</title>
 <meta name="description" content="A cinematic visual constellation for photographs and motion.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#141414;--text:#f4f5f7;--muted:#8d95a6;--line:rgba(255,255,255,.10);--line2:rgba(255,255,255,.18);--ease:cubic-bezier(.22,1,.36,1)}
+:root{--bg:#05070c;--text:#f4f5f7;--muted:#8d95a6;--line:rgba(255,255,255,.10);--line2:rgba(255,255,255,.18);--ease:cubic-bezier(.22,1,.36,1)}
 *{box-sizing:border-box}
 html{background:var(--bg);scroll-behavior:smooth}
-body{margin:0;background:radial-gradient(circle at 50% -10%,#25070a 0,#181818 32%,#141414 72%);color:var(--text);font:400 14px/1.55 "DM Sans",system-ui,sans-serif;overflow-x:hidden}
+body{margin:0;background:radial-gradient(circle at 50% -10%,#15213a 0,#080b12 32%,#05070c 72%);color:var(--text);font:400 14px/1.55 "DM Sans",system-ui,sans-serif;overflow-x:hidden}
 body.modal-open{overflow:hidden}
 a{color:inherit;text-decoration:none}button,input,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}
 #webgl{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.98}
@@ -40,7 +40,7 @@ a{color:inherit;text-decoration:none}button,input,textarea{font:inherit}button{c
 .card-info{position:absolute;z-index:2;left:16px;right:16px;bottom:15px;text-align:center}.card-title{font:600 14px Manrope,sans-serif}.card-caption{margin-top:3px;font-size:11px;color:#c0c5cf}.badge{display:inline-flex;align-items:center;gap:5px;margin-bottom:7px;padding:5px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(8,11,18,.42);backdrop-filter:blur(10px);font-size:8px;letter-spacing:.13em;text-transform:uppercase;color:#d9deea}
 .empty{grid-column:1/-1;min-height:300px;display:grid;place-items:center;text-align:center;border:1px dashed rgba(255,255,255,.12);border-radius:22px;background:rgba(255,255,255,.018);padding:34px}.empty h3{font:500 24px Manrope,sans-serif;margin:0}.empty p{max-width:420px;margin:9px auto 17px;color:#7e8798;font-size:12px}.empty button{border:1px solid var(--line2);border-radius:999px;padding:9px 13px;background:rgba(255,255,255,.045);color:#e8ebf0}
 .footer{padding:0 0 34px;text-align:center;color:#616a7b;font-size:10px;letter-spacing:.04em}.footer-links{display:flex;justify-content:center;gap:16px;margin-top:8px}.footer button{border:0;background:none;color:inherit;padding:0}
-.modal,.viewer{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:16px}.modal-bg{position:absolute;inset:0;background:rgba(2,4,8,.76);backdrop-filter:blur(18px)}.panel{position:relative;z-index:1;width:min(500px,100%);max-height:min(88svh,760px);overflow:auto;padding:26px;border:1px solid rgba(255,255,255,.14);border-radius:22px;background:rgba(24,24,24,.94);box-shadow:0 40px 120px rgba(0,0,0,.6)}.close{position:absolute;top:10px;right:12px;border:0;background:none;color:#8b95a6;font-size:28px}.eyebrow{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:#717b8c}.panel h2{font:500 28px/1.1 Manrope,sans-serif;letter-spacing:-.05em;text-align:center;margin:7px 0 0}.note,.status{text-align:center;color:#80899b;font-size:11px;min-height:17px}
+.modal,.viewer{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:16px}.modal-bg{position:absolute;inset:0;background:rgba(2,4,8,.76);backdrop-filter:blur(18px)}.panel{position:relative;z-index:1;width:min(500px,100%);max-height:min(88svh,760px);overflow:auto;padding:26px;border:1px solid rgba(255,255,255,.14);border-radius:22px;background:rgba(10,13,21,.94);box-shadow:0 40px 120px rgba(0,0,0,.6)}.close{position:absolute;top:10px;right:12px;border:0;background:none;color:#8b95a6;font-size:28px}.eyebrow{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:#717b8c}.panel h2{font:500 28px/1.1 Manrope,sans-serif;letter-spacing:-.05em;text-align:center;margin:7px 0 0}.note,.status{text-align:center;color:#80899b;font-size:11px;min-height:17px}
 .switches{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:4px;margin-top:16px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.025)}.switch{border:0;background:none;color:#727c8d;padding:9px;border-radius:8px}.switch.active{background:rgba(255,255,255,.09);color:#eff2f7}
 .form{display:grid;gap:12px;margin-top:15px}.form label{display:grid;gap:7px;color:#c7cdd7;font-size:11px}.form input,.form textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:#0e121a;color:var(--text);outline:none}.drop{min-height:130px;border:1px dashed rgba(199,212,255,.25);border-radius:15px;display:grid!important;place-items:center;text-align:center;padding:20px;cursor:pointer}.drop:hover{border-color:rgba(199,212,255,.5);background:rgba(152,177,255,.035)}.queue{display:grid;gap:7px}.queue-item{padding:9px 10px;border:1px solid var(--line);border-radius:10px;color:#aeb6c3;font-size:11px}.queue-item strong{color:#eef1f5;font-weight:500}.remove{float:right;border:0;background:none;color:#70798a}.primary{border:1px solid #dfe6ff;border-radius:999px;padding:10px 14px;background:#edf1ff;color:#0a0d14}
 .viewer{background:rgba(1,3,7,.97);backdrop-filter:blur(18px)}.viewer-stage{width:min(94vw,1500px);height:min(84dvh,900px);display:grid;place-items:center}.viewer-stage img,.viewer-stage video{max-width:100%;max-height:100%;object-fit:contain}.viewer-close{position:absolute;top:13px;right:16px;border:0;background:none;color:#fff;font-size:36px;z-index:2}.viewer-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:46px;height:46px;border:1px solid var(--line2);border-radius:50%;background:rgba(255,255,255,.06);color:#fff;font-size:30px}.viewer-nav.prev{left:14px}.viewer-nav.next{right:14px}.viewer-caption{position:absolute;left:50%;bottom:17px;transform:translateX(-50%);max-width:82vw;text-align:center;color:#c9ced7;font-size:11px}
@@ -65,7 +65,7 @@ a{color:inherit;text-decoration:none}button,input,textarea{font:inherit}button{c
 body.menu-open .menu-label{opacity:0}
 body.menu-open .bars i:first-child{transform:rotate(45deg)}
 body.menu-open .bars i:last-child{width:56px;transform:rotate(-45deg)}
-#menu{position:fixed;inset:0;z-index:90;background:#141414;display:grid;place-items:center;clip-path:inset(0 0 100% 0);pointer-events:none;transition:clip-path .8s cubic-bezier(.22,.61,.36,1)}
+#menu{position:fixed;inset:0;z-index:90;background:#050505;display:grid;place-items:center;clip-path:inset(0 0 100% 0);pointer-events:none;transition:clip-path .8s cubic-bezier(.22,.61,.36,1)}
 body.menu-open #menu{clip-path:inset(0);pointer-events:auto}
 #menu nav{display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center}
 .menu-link{font:500 clamp(34px,7.6vw,78px)/1.06 Manrope,sans-serif;letter-spacing:-.06em;color:#f4f5f7;opacity:.5;transition:.35s}
@@ -84,7 +84,7 @@ body.menu-open #menu{clip-path:inset(0);pointer-events:auto}
 <div id="webgl"></div><div id="veil"></div><div class="grain"></div>
 
 <header class="site-header site">
-  <a href="/" class="brand">Photo &amp; Video</a>
+  <a href="/" class="brand">mahimahfud<span class="brand-dot">.</span></a>
   <div class="socials" aria-label="Social accounts">
     <a id="ig" class="social" href="https://www.instagram.com/mahimahfud/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1.1" class="fill"/></svg></a>
     <a id="yt" class="social" href="https://www.youtube.com/@mahimahfud" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M21 12s0-3.6-.46-5.28a2.6 2.6 0 0 0-1.82-1.84C17.12 4.42 12 4.42 12 4.42s-5.12 0-6.72.46a2.6 2.6 0 0 0-1.82 1.84C3 8.4 3 12 3 12s0 3.6.46 5.28a2.6 2.6 0 0 0 1.82 1.84C17.12 19.58 12 19.58 12 19.58s5.12 0 6.72-.46a2.6 2.6 0 0 0 1.82-1.84C21 15.6 21 12 21 12Z"/><path d="m10 8.8 5.2 3.2-5.2 3.2Z" class="fill"/></svg></a>
@@ -95,7 +95,7 @@ body.menu-open #menu{clip-path:inset(0);pointer-events:auto}
 <main>
 <section class="hero site">
   <p class="hero-label">visual archive · photographs · motion</p>
-  <h1 id="heroTitle" class="hero-title">Photo &amp; Video</h1>
+  <h1 id="heroTitle" class="hero-title">mahimahfud<span class="dot">.</span></h1>
   <p id="bio" class="bio">photographs · motion · moments</p>
   <div class="selected">selected work</div>
   <button id="addWork" class="add-button" aria-label="Add photos or videos" title="Add photos or videos"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
@@ -114,7 +114,7 @@ body.menu-open #menu{clip-path:inset(0);pointer-events:auto}
 <div id="menu"><nav><a class="menu-link" href="#archiveSection" data-menu-archive>The Archive</a><a class="menu-link" href="#archiveSection">Field Notes</a><a class="menu-link" href="#" data-menu-studio>Studio</a><a class="menu-link" href="#footer">Contact</a></nav><div class="menu-address">mahimahfud · photographs · motion · moments</div></div>
 <div id="dot"></div>
 
-<footer id="footer" class="footer site">
+<footer class="footer site">
   <div>© <span id="year"></span> mahimahfud</div>
   <div class="footer-links"><a href="https://www.instagram.com/mahimahfud/" target="_blank" rel="noopener noreferrer">Instagram</a><a id="fyt" href="https://www.youtube.com/@mahimahfud" target="_blank" rel="noopener noreferrer">YouTube</a><button id="faccount" type="button">Account</button></div>
 </footer>
@@ -135,7 +135,7 @@ const state={cfg:{},sb:null,session:null,user:null,profile:null,media:[],files:[
 const esc=v=>String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const modal=(id,on)=>{const el=typeof id==='string'?$(id):id;if(!el)return;el.classList.toggle('hidden',!on);document.body.classList.toggle('modal-open',on)};
 const toast=m=>{const e=$('#toast');e.textContent=m;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),2600)};
-async function config(){try{state.cfg=await(await fetch('/lumr/api/config',{cache:'no-store'})).json();if(state.cfg.supabaseUrl&&state.cfg.publishableKey)state.sb=createClient(state.cfg.supabaseUrl,state.cfg.publishableKey)}catch{}if(state.cfg.youtubeUrl){$('#yt').href=state.cfg.youtubeUrl;$('#fyt').href=state.cfg.youtubeUrl}}
+async function config(){try{state.cfg=await(await fetch('/api/config',{cache:'no-store'})).json();if(state.cfg.supabaseUrl&&state.cfg.publishableKey)state.sb=createClient(state.cfg.supabaseUrl,state.cfg.publishableKey)}catch{}if(state.cfg.youtubeUrl){$('#yt').href=state.cfg.youtubeUrl;$('#fyt').href=state.cfg.youtubeUrl}}
 async function initAuth(){if(!state.sb)return;const {data}=await state.sb.auth.getSession();if(data?.session)await syncSession(data.session);state.sb.auth.onAuthStateChange((event,session)=>{setTimeout(()=>{syncSession(session,event)},0)})}
 async function syncSession(session,event){state.session=session||null;state.user=session?.user||null;if(session){await own();startRealtime();if(!state.profile&&event!=='SIGNED_OUT')openProfileSetup()}else{stopRealtime();state.profile=null}accountUI();if(!state.routeProfile){state.media=await loadMedia();window.__MMF_MEDIA__=state.media;window.dispatchEvent(new CustomEvent('mmf-media-ready',{detail:state.media}));render();scrollMotion()}}
 async function own(){if(!state.sb||!state.session?.user){state.profile=null;return}const {data,error}=await state.sb.from('profiles').select('*').eq('id',state.session.user.id).maybeSingle();state.profile=error?null:data}
