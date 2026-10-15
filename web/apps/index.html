@@ -142,7 +142,8 @@ const movieApps=[
 {name:"Hdghartv",url:"/download/app/hdghartv",domain:"hdghartv.com.pk",ads:0,pop:72,smooth:86,langs:70,new:false,desc:"Free Android movies and TV app; its site advertises an ad-free experience.",logoSources:["https://hdghartv.com.pk/wp-content/uploads/2026/08/hdghartv-logo.png","https://hdghartv.com.pk/logo.png","https://hdghartv.com.pk/apple-touch-icon.png","https://hdghartv.com.pk/favicon.png","https://hdghartv.com.pk/favicon.ico"]},
 {name:"Anivortex",url:"/download/app/anivortex",domain:"anivortex.in",ads:1,pop:70,smooth:72,langs:80,new:false,desc:"Anime-focused streaming app.",logoSources:["https://anivortex.in/images/anivortex_logo_transparent.webp","https://anivortex.in/images/anivortex_logo.webp","https://anivortex.in/apple-touch-icon.png","https://anivortex.in/favicon.png","https://anivortex.in/favicon.ico"]},
 {name:"Nxsha",url:"/download/app/nxsha",domain:"nxsha.app",ads:1,pop:74,smooth:84,langs:90,new:false,desc:"Movies, TV, anime and K-drama discovery app.",logoSources:["https://nxsha.app/apple-touch-icon.png","https://nxsha.app/icon-192.png","https://nxsha.app/favicon.png","https://nxsha.app/favicon.ico"]},
-{name:"DooFlix",url:"/download/app/dooflix",domain:"dooflixapk.com",ads:1,pop:70,smooth:78,langs:76,new:true,desc:"DooFlix Android app — direct APK download.",logoSources:["https://dooflixapk.com/logo.png","https://dooflixapk.com/apple-touch-icon.png","https://dooflixapk.com/favicon.png","https://dooflixapk.com/favicon.ico"]}
+{name:"DooFlix",url:"/download/app/dooflix",domain:"dooflixapk.com",ads:1,pop:70,smooth:78,langs:76,new:true,desc:"DooFlix Android app — direct APK download.",logoSources:["https://dooflixapk.com/logo.png","https://dooflixapk.com/apple-touch-icon.png","https://dooflixapk.com/favicon.png","https://dooflixapk.com/favicon.ico"]},
+{name:"OnStream",url:"https://onstreamapks.app/apk5/",domain:"onstreamapks.app",ads:1,pop:78,smooth:78,langs:78,new:true,externalWebsite:true,linkLabel:"Visit website",sublabel:"Third-party website · APK safety not verified",desc:"Third-party OnStream APK information and download website. Review the source carefully before downloading or installing any APK.",logoSources:["https://onstreamapks.app/favicon.ico","https://onstreamapks.app/wp-content/uploads/site-icon.png"]}
 ];
 const playStore=q=>"https://play.google.com/store/search?q="+encodeURIComponent(q)+"&c=apps";
 const musicApps=[
@@ -211,10 +212,10 @@ function render(){
   const ads=x.ads===0?'<span class="ad-low">No / minimal ads</span>':x.ads===1?'<span class="ad-mid">Some ads</span>':'<span class="ad-high">More ads</span>';
   const fresh=x.new?'<span class="fresh">NEW</span>':'';
   const domain=x.domain?'<span>'+esc(x.domain)+'</span>':'';
-  const tags=isMovie?'<div class="movie-app-tags">'+fresh+ads+domain+'</div>':'<div class="movie-app-tags">'+fresh+'<span class="download-tag">DIRECT DOWNLOAD</span>'+domain+'</div>';
+  const tags=isMovie?(x.externalWebsite?'<div class="movie-app-tags">'+fresh+'<span class="download-tag">EXTERNAL WEBSITE</span>'+domain+'</div>':'<div class="movie-app-tags">'+fresh+ads+domain+'</div>'):'<div class="movie-app-tags">'+fresh+'<span class="download-tag">DIRECT DOWNLOAD</span>'+domain+'</div>';
   const destination=x.url||"#",description=x.desc||x.description||"";
-  const label=isMovie?"Download APK":"Download app";
-  const sublabel=isMovie?"Latest available APK":"Direct app download";
+  const label=x.linkLabel||(isMovie?"Download APK":"Download app");
+  const sublabel=x.sublabel||(isMovie?"Latest available APK":"Direct app download");
   return '<article class="app-card" style="--accent:'+esc(accent)+';--accent2:'+esc(accent2)+';--accent-glow:'+esc(accent)+'30;animation:iosPanelIn .48s cubic-bezier(.22,1,.36,1) both;animation-delay:'+Math.min(i,8)*42+'ms">'+
    '<div class="card-top">'+icon+'<span class="kind">'+(isMovie?"MOVIE & TV":"MUSIC")+'</span></div>'+
    '<h3>'+esc(x.name)+'</h3><p>'+esc(description)+'</p>'+tags+
