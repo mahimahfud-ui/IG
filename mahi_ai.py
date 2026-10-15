@@ -319,7 +319,7 @@ def _fetch_public(url: str, max_bytes: int = 2_000_000, *, allow_truncate: bool 
             try:
                 response = session.get(current, allow_redirects=False, stream=True, timeout=(8, 18),
                                        headers={"User-Agent": "MahiCloud-AI-Control/1.0",
-                                                "Accept": "text/html,application/octet-stream,*/*;q=0.7"})
+                                                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"})
             except requests.RequestException as exc:
                 raise MahiAIError("That public link could not be fetched. Check that it is accessible and try again.", 502) from exc
             if response.status_code in (301, 302, 303, 307, 308):
@@ -390,20 +390,50 @@ class _MetadataParser(HTMLParser):
 
 
 def _looks_like_html(content_type: str, body: bytes) -> bool:
-    """Accept actual HTML even when a site sends an incorrect MIME type."""
+    """Accept readable HTML mislabeled as a generic MIME type without accepting binary files."""
     kind = (content_type or "").split(";", 1)[0].strip().lower()
     if kind in ("text/html", "application/xhtml+xml"):
         return True
-    # Some hosts/CDNs label HTML as text/plain or application/octet-stream.
-    # Inspect only a small bounded prefix; do not treat arbitrary binary files as pages.
+
+    # Inspect a bounded prefix only. Some hosts put short anti-XSSI/proxy text
+    # before the HTML shell, so the HTML marker is not always byte zero.
     prefix = body[:8192].lstrip(b"\xef\xbb\xbf\x00\t\r\n ")
-    # Many SPA shells start with script/style/container tags rather than html/head.
-    # Check a bounded prefix for common HTML document elements while rejecting binary data.
-    return bool(re.match(
-        rb"(?is)^(?:<!--.*?-->\s*)*(?:<!doctype\s+html\b|<html\b|<head\b|<body\b|"
-        rb"<meta\b|<title\b|<script\b|<style\b|<main\b|<div\b|<noscript\b|<link\b)",
-        prefix,
-    ))
+    if not prefix or b"\x00" in prefix:
+        return False
+    text = prefix.decode("utf-8", errors="replace")
+    if text.count("\ufffd") > max(2, len(text) // 100):
+        return False
+    # Do not mistake JSON APIs that happen to contain an HTML string for pages.
+    if text.lstrip().startswith(("{", "[")):
+        try:
+            json.loads(text.lstrip())
+            return False
+        except (ValueError, TypeError):
+            pass
+
+    start_pattern = (
+        r"(?is)^(?:<!--.*?-->\s*)*(?:<\?xml[^>]*>\s*)?"
+        r"(?:<!doctype\s+html\b|<html\b|<head\b|<body\b|"
+        r"<meta\b|<title\b|<script\b|<style\b|<main\b|<div\b|"
+        r"<noscript\b|<link\b)"
+    )
+    if re.match(start_pattern, text):
+        return True
+
+    # Fallback for readable documents with a harmless preamble before their tags.
+    # Reject binary-looking payloads even if they contain an isolated "<html" string.
+    controls = sum(1 for char in text if ord(char) < 32 and char not in "\t\r\n\f")
+    if controls / max(1, len(text)) > 0.005:
+        return False
+    if re.search(r"(?is)<!doctype\s+html\b|<\s*(?:html|head|body|meta|title)\b", text):
+        return True
+    tags = re.findall(
+        r"(?is)</?\s*(?:html|head|body|meta|title|script|style|main|div|noscript|link|"
+        r"section|article|header|footer|nav|span|p|form|button|input)\b[^>]{0,300}>",
+        text,
+    )
+    return len(tags) >= 2
+
 
 
 def _metadata_for_url(url: str) -> dict:
@@ -441,9 +471,17 @@ def _metadata_for_url(url: str) -> dict:
                     415,
                 ) from exc
         else:
+            if path == "/":
+                raise MahiAIError(
+                    f"The site's homepage did not return a readable HTML page "
+                    f"(Content-Type: {content_type or 'unknown'}). If it opens as a normal webpage in your browser, "
+                    "the host may be blocking automated requests; try a public page URL or its app-store listing. "
+                    "Direct downloads and API endpoints are not supported.",
+                    415,
+                )
             raise MahiAIError(
                 f"This link did not return a readable HTML page (Content-Type: {content_type or 'unknown'}). "
-                "Try the site's official homepage or app-store listing. Direct downloads and API URLs are not supported.",
+                "This looks like a direct file or API URL. Paste the site's official homepage or app-store listing instead.",
                 415,
             )
     source = body.decode("utf-8", errors="replace")
