@@ -380,19 +380,26 @@ function card(it,i,isTop){
 
 
 
-const CUSTOM_KEY="mahiflix-custom-items-v1";
-function readCustomItems(type){
-  try{
-    const all=JSON.parse(localStorage.getItem(CUSTOM_KEY)||"{}");
-    return Array.isArray(all[type])?all[type].filter(function(x){return x&&typeof x.name==="string"&&typeof x.url==="string"&&typeof x.domain==="string"}):[];
-  }catch(e){return []}
+const CATALOG_API="https://husydmiujigyonlxbuuj.supabase.co/functions/v1/mahiflix-catalog";
+const CATALOG_PUBLIC_KEY="sb_publishable_zzAitNIGOutgaS5EGZKfrQ_osRrlu8U";
+const SHARED_ITEMS={sites:[],apps:[]};
+function readCustomItems(type){return SHARED_ITEMS[type]||[]}
+function catalogItem(row){
+  const domain=String(row.domain||"").toLowerCase();
+  return {id:row.id,name:row.name,url:row.url,domain:domain,ads:1,pop:70,smooth:70,langs:70,new:true,desc:row.description||"Community-added to MahiFlix.",custom:true,logoSources:["https://www.google.com/s2/favicons?sz=128&domain="+encodeURIComponent(domain),"https://icons.duckduckgo.com/ip3/"+encodeURIComponent(domain)+".ico","https://"+domain+"/favicon.ico"]};
 }
-function saveCustomItem(type,item){
-  const all=(()=>{try{return JSON.parse(localStorage.getItem(CUSTOM_KEY)||"{}")}catch(e){return {}}})();
-  if(!Array.isArray(all[type]))all[type]=[];
-  if(all[type].some(function(x){return x.url.toLowerCase()===item.url.toLowerCase()}))return false;
-  all[type].push(item);
-  try{localStorage.setItem(CUSTOM_KEY,JSON.stringify(all));return true}catch(e){return false}
+async function loadSharedCatalog(){
+  try{
+    const response=await fetch(CATALOG_API,{headers:{"apikey":CATALOG_PUBLIC_KEY},cache:"no-store"});
+    if(!response.ok)throw new Error("Shared catalogue unavailable.");
+    const payload=await response.json();
+    SHARED_ITEMS.sites=[];SHARED_ITEMS.apps=[];
+    (Array.isArray(payload.items)?payload.items:[]).forEach(function(row){
+      if(row&&typeof row.name==="string"&&typeof row.url==="string"&&(row.kind==="sites"||row.kind==="apps"))SHARED_ITEMS[row.kind].push(catalogItem(row));
+    });
+    renderView("sites");
+loadSharedCatalog();renderView("apps");q.dispatchEvent(new Event("input"));
+  }catch(e){console.warn("MahiFlix public catalogue could not be loaded.",e)}
 }
 const LOCAL_LOGOS={
   sites:{
@@ -551,16 +558,14 @@ document.getElementById("yr").textContent=new Date().getFullYear();
 })();
 
 (function(){
-  const ADD_PIN="6993";
-  let stage="pin",addType="sites",pendingUrl="",dialogInput=null,errorNode=null;
+  let stage="url",addType="sites",pendingUrl="",dialogInput=null,errorNode=null;
   const overlay=document.createElement("div");
   overlay.id="mf-add-overlay";
   overlay.setAttribute("role","presentation");
-  overlay.innerHTML="<section id='mf-add-dialog' role='dialog' aria-modal='true' aria-labelledby='mf-add-title'><div class='mf-kicker'>MahiFlix · Add to collection</div><h2 id='mf-add-title'>Enter passcode</h2><p id='mf-add-copy'>Confirm the passcode to add a website.</p><form id='mf-add-form' novalidate><label id='mf-add-label' for='mf-add-input'>Passcode</label><input id='mf-add-input' autocomplete='off' required><div id='mf-add-error' class='mf-error' role='status' aria-live='polite'></div><div class='mf-actions'><button type='button' class='mf-btn' id='mf-add-cancel'>Cancel</button><button type='submit' class='mf-btn primary' id='mf-add-next'>Continue</button></div></form></section>";
+  overlay.innerHTML="<section id='mf-add-dialog' role='dialog' aria-modal='true' aria-labelledby='mf-add-title'><div class='mf-kicker'>MahiFlix · Community collection</div><h2 id='mf-add-title'>Add a website</h2><p id='mf-add-copy'>Submit a public HTTPS link. It will appear for everyone after validation.</p><form id='mf-add-form' novalidate><label id='mf-add-label' for='mf-add-input'>Website URL</label><input id='mf-add-input' autocomplete='url' required><div id='mf-add-error' class='mf-error' role='status' aria-live='polite'></div><div class='mf-actions'><button type='button' class='mf-btn' id='mf-add-cancel'>Cancel</button><button type='submit' class='mf-btn primary' id='mf-add-next'>Next</button></div></form></section>";
   document.body.appendChild(overlay);
   const title=overlay.querySelector("#mf-add-title"),copy=overlay.querySelector("#mf-add-copy"),label=overlay.querySelector("#mf-add-label"),input=overlay.querySelector("#mf-add-input"),error=overlay.querySelector("#mf-add-error"),form=overlay.querySelector("#mf-add-form"),next=overlay.querySelector("#mf-add-next");
-  function open(type){addType=type;stage="pin";pendingUrl="";input.value="";error.textContent="";input.type="password";input.inputMode="numeric";input.autocomplete="current-password";input.placeholder="••••";title.textContent="Enter passcode";copy.textContent="Unlock the add form for "+(type==="apps"?"Apps":"Websites")+".";
-    label.textContent="Passcode";input.setAttribute("aria-label","Passcode");next.textContent="Continue";overlay.classList.add("open");setTimeout(function(){input.focus()},40)}
+  function open(type){addType=type;stage="url";pendingUrl="";input.value="";error.textContent="";input.type="url";input.inputMode="url";input.autocomplete="url";input.placeholder="https://example.com";title.textContent="Website URL";copy.textContent="Add a public HTTPS link to the shared "+(type==="apps"?"Apps":"Websites")+" collection. Its logo will load automatically.";label.textContent="Website URL";input.setAttribute("aria-label","Website URL");next.textContent="Next";overlay.classList.add("open");setTimeout(function(){input.focus()},40)}
   window.mahiFlixOpenAdd=open;
   function close(){overlay.classList.remove("open");form.reset();error.textContent=""}
   function showUrl(){stage="url";input.value="";input.type="url";input.inputMode="url";input.autocomplete="url";input.placeholder="https://example.com";title.textContent="Website URL";copy.textContent="Paste the official homepage URL. Its favicon will be fetched automatically.";label.textContent="Website URL";input.setAttribute("aria-label","Website URL");next.textContent="Next";error.textContent="";setTimeout(function(){input.focus()},20)}
@@ -570,19 +575,26 @@ document.getElementById("yr").textContent=new Date().getFullYear();
     if(!/^https?:\/\//i.test(raw))raw="https://"+raw;
     try{const u=new URL(raw);if(u.protocol!=="https:"||!u.hostname||u.username||u.password)return "";return u.href}catch(e){return ""}
   }
-  form.addEventListener("submit",function(e){
-    e.preventDefault();error.textContent="";
+  form.addEventListener("submit",async function(e){
+    e.preventDefault();if(next.disabled)return;error.textContent="";
     const value=input.value.trim();
-    if(stage==="pin"){if(value!==ADD_PIN){error.textContent="Incorrect passcode.";input.select();return}showUrl();return}
     if(stage==="url"){pendingUrl=normaliseUrl(value);if(!pendingUrl){error.textContent="Enter a valid HTTPS website URL.";return}showName();return}
     if(stage==="name"){
       const name=value;if(!name||name.length>80){error.textContent="Name must be between 1 and 80 characters.";return}
       let u;try{u=new URL(pendingUrl)}catch(e){error.textContent="The URL looks invalid. Please try again.";return}
-      const item={name:name,url:pendingUrl,domain:u.hostname.toLowerCase(),ads:1,pop:70,smooth:70,langs:70,new:true,desc:"Added to MahiFlix by you.",logoSources:["https://www.google.com/s2/favicons?sz=128&domain="+encodeURIComponent(u.hostname),"https://icons.duckduckgo.com/ip3/"+encodeURIComponent(u.hostname)+".ico","https://"+u.hostname+"/favicon.ico"],custom:true};
+      const host=u.hostname.toLowerCase();
+      if(host==="localhost"||host.endsWith(".localhost")||host.endsWith(".local")||/^127\./.test(host)||/^10\./.test(host)||/^192\.168\./.test(host)||/^172\.(1[6-9]|2\d|3[01])\./.test(host)||/^\d{1,3}(\.\d{1,3}){3}$/.test(host)){error.textContent="Enter a public website URL, not a private/local address.";return}
+      const item={name:name,url:pendingUrl,domain:host,ads:1,pop:70,smooth:70,langs:70,new:true,desc:"Community-added to MahiFlix.",custom:true};
       const key=addType==="apps"?"apps":"sites";
-      if((key==="apps"?A:S).some(function(x){return x.url.toLowerCase()===item.url.toLowerCase()||String(x.name||"").trim().toLowerCase()===item.name.trim().toLowerCase()})||readCustomItems(key).some(function(x){return x.url.toLowerCase()===item.url.toLowerCase()||String(x.name||"").trim().toLowerCase()===item.name.trim().toLowerCase()})){error.textContent="This URL or service name is already in that list.";return}
-      if(!saveCustomItem(key,item)){error.textContent="Could not save the item. Check your browser storage settings.";return}
-      close();renderView(key);q.dispatchEvent(new Event("input"));return;
+      if((key==="apps"?A:S).some(function(x){return x.url.toLowerCase()===item.url.toLowerCase()||String(x.name||"").trim().toLowerCase()===item.name.trim().toLowerCase()})||readCustomItems(key).some(function(x){return x.url.toLowerCase()===item.url.toLowerCase()||String(x.name||"").trim().toLowerCase()===item.name.trim().toLowerCase()})){error.textContent="This name or URL is already in the public list.";return}
+      next.disabled=true;next.textContent="Publishing…";
+      try{
+        const published=await publishSharedItem(key,item);
+        SHARED_ITEMS[key].unshift(published);
+        close();renderView(key);q.dispatchEvent(new Event("input"));
+      }catch(err){error.textContent=err&&err.message?err.message:"Could not publish. Please try again."}
+      finally{next.disabled=false;next.textContent="Add to "+(key==="apps"?"Apps":"Websites")}
+      return;
     }
   });
   overlay.querySelector("#mf-add-cancel").addEventListener("click",close);
