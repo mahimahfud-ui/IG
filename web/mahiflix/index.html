@@ -277,7 +277,9 @@ function logoHTML(it){
     "https://"+it.domain+"/favicon.ico"
   ];
   const json=JSON.stringify(sources);
-  return "<img loading='lazy' decoding='async' fetchpriority='low' width='58' height='58' alt='"+clean(it.name)+" logo' src='"+clean(sources[0])+"' data-logo-sources='"+clean(json)+"' data-logo-index='0' onload='this.classList.add(\"logo-ready\")' onerror='nextLogo(this)'>";
+  const local=it.logoAsset?"/mahiflix/logos/"+it.logoAsset+".webp":"";
+  const src=local||sources[0];
+  return "<img loading='lazy' decoding='async' fetchpriority='low' width='58' height='58' alt='"+clean(it.name)+" logo' src='"+clean(src)+"' data-logo-sources='"+clean(json)+"' data-logo-index='"+(local?"-1":"0")+"' onload='this.classList.add(\"logo-ready\")' onerror='nextLogo(this)'>";
 }
 function nextLogo(img){
   try{
@@ -349,13 +351,62 @@ function saveCustomItem(type,item){
   all[type].push(item);
   try{localStorage.setItem(CUSTOM_KEY,JSON.stringify(all));return true}catch(e){return false}
 }
+const LOCAL_LOGOS={
+  sites:{
+    "bcine|cineyz.com":"bcine",
+    "7reel|7reels.cc":"seven-reel",
+    "plex|plex.tv":"plex",
+    "m4uhd|m4uhd.gold":"m4uhd",
+    "cinehd|cinehd.vc":"cinehd-site",
+    "nightflix|nightflix.vg":"nightflix-vg",
+    "pvrplay|pvrplay.online":"pvrplay-site",
+    "nightflix|nightflix.to":"nightflix-to",
+    "bingr|bingr.one":"bingr",
+    "cinejoy|cinejoy.to":"cinejoy",
+    "cinegram|cinegram.tv":"cinegram",
+    "watchott|watchott.org":"watchott",
+    "1tube|1tube.org":"1tube"
+  },
+  apps:{
+    "filmtv|filmtvapp.com":"filmtv",
+    "nuvix|nuvixapp.in":"nuvix",
+    "vega|vega.zendax.me":"vega",
+    "netmirror|netmirror.gg":"netmirror",
+    "cinehd|cinehd.dev":"cinehd-app",
+    "moviboxapk|moviboxapk.com":"moviboxapk",
+    "pvrplay|pvrplay.online":"pvrplay-app",
+    "hdghartv|hdghartv.com.pk":"hdghartv",
+    "anivortex|anivortex.in":"anivortex",
+    "nxsha|nxsha.app":"nxsha"
+  }
+};
+function localLogoFor(type,item){
+  const key=String(item.name||"").toLowerCase()+"|"+String(item.domain||"").toLowerCase();
+  return (LOCAL_LOGOS[type]||{})[key]||"";
+}
 function renderView(type){
   const el=document.getElementById(type==="sites"?"sitesView":"appsView");
   const base=type==="sites"?S:A;
-  const data=base.concat(readCustomItems(type));
+  const data=base.concat(readCustomItems(type)).map(function(item){
+    return Object.assign({},item,{logoAsset:item.logoAsset||localLogoFor(type,item)});
+  });
   const label=type==="sites"?"Websites":"Apps";
   const sorted=data.slice().sort(function(a,b){return qualityScore(b)-qualityScore(a)});
   el.innerHTML=rowHTML(label,sorted,{kind:type==="sites"?"site":"app",note:"Your curated MahiFlix collection"});
+  /* Bind directly after each render; the modal controller is registered later in this script. */
+  el.querySelectorAll(".add-item-btn").forEach(function(btn){
+    btn.addEventListener("click",function(event){
+      event.preventDefault();
+      event.stopPropagation();
+      if(typeof window.mahiFlixOpenAdd==="function"){
+        window.mahiFlixOpenAdd(btn.dataset.addType==="apps"?"apps":"sites");
+      }else{
+        const overlay=document.getElementById("mf-add-overlay");
+        if(overlay){overlay.classList.add("open");}
+        else {console.error("MahiFlix add dialog failed to initialize.");}
+      }
+    });
+  });
   const track=el.querySelector(".track");
   if(track)track.querySelectorAll(".card").forEach(function(card,i){card.style.animationDelay=(Math.min(i,8)*35)+"ms"});
 }
@@ -461,6 +512,7 @@ document.getElementById("yr").textContent=new Date().getFullYear();
   const title=overlay.querySelector("#mf-add-title"),copy=overlay.querySelector("#mf-add-copy"),label=overlay.querySelector("#mf-add-label"),input=overlay.querySelector("#mf-add-input"),error=overlay.querySelector("#mf-add-error"),form=overlay.querySelector("#mf-add-form"),next=overlay.querySelector("#mf-add-next");
   function open(type){addType=type;stage="pin";pendingUrl="";input.value="";error.textContent="";input.type="password";input.inputMode="numeric";input.autocomplete="current-password";input.placeholder="••••";title.textContent="Enter passcode";copy.textContent="Unlock the add form for "+(type==="apps"?"Apps":"Websites")+".";
     label.textContent="Passcode";input.setAttribute("aria-label","Passcode");next.textContent="Continue";overlay.classList.add("open");setTimeout(function(){input.focus()},40)}
+  window.mahiFlixOpenAdd=open;
   function close(){overlay.classList.remove("open");form.reset();error.textContent=""}
   function showUrl(){stage="url";input.value="";input.type="url";input.inputMode="url";input.autocomplete="url";input.placeholder="https://example.com";title.textContent="Website URL";copy.textContent="Paste the official homepage URL. Its favicon will be fetched automatically.";label.textContent="Website URL";input.setAttribute("aria-label","Website URL");next.textContent="Next";error.textContent="";setTimeout(function(){input.focus()},20)}
   function showName(){stage="name";input.value="";input.type="text";input.inputMode="text";input.autocomplete="off";input.placeholder="Website or app name";title.textContent="Website name";copy.textContent="Enter the name that should appear on the "+(addType==="apps"?"Apps":"Websites")+" grid.";label.textContent="Website name";input.setAttribute("aria-label","Website name");next.textContent="Add to "+(addType==="apps"?"Apps":"Websites");error.textContent="";setTimeout(function(){input.focus()},20)}
@@ -487,7 +539,7 @@ document.getElementById("yr").textContent=new Date().getFullYear();
   overlay.querySelector("#mf-add-cancel").addEventListener("click",close);
   overlay.addEventListener("click",function(e){if(e.target===overlay)close()});
   document.addEventListener("keydown",function(e){if(e.key==="Escape"&&overlay.classList.contains("open"))close()});
-  document.addEventListener("click",function(e){const btn=e.target.closest("[data-add-type]");if(btn){e.preventDefault();open(btn.dataset.addType==="apps"?"apps":"sites")}});
+  // Plus buttons are wired directly by renderView after each grid render.
 })();
 
 </script>
