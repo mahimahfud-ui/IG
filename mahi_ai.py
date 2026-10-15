@@ -409,7 +409,7 @@ def _metadata_for_url(url: str) -> dict:
         parts = urlsplit(final_url)
         path = parts.path or "/"
         file_like = bool(re.search(
-            r"(?i)\\.(?:apk|aab|zip|rar|7z|exe|msi|dmg|iso|pdf|mp4|mkv|webm|mp3|wav|png|jpe?g|gif|webp|svg|ico|bat|js|css|json|xml|txt|woff2?)(?:$)",
+            r"(?i)\.(?:apk|aab|zip|rar|7z|exe|msi|dmg|iso|pdf|mp4|mkv|webm|mp3|wav|png|jpe?g|gif|webp|svg|ico|bat|js|css|json|xml|txt|woff2?)(?:$)",
             path,
         ))
         endpoint_like = bool(re.match(r"(?i)^/(?:api|graphql|download|downloads|files|assets|cdn-cgi)(?:/|$)", path))
