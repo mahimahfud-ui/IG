@@ -58,6 +58,30 @@ class MahiCloudRouteTests(unittest.TestCase):
                 response = self.client.get(path)
                 self.assertEqual(response.status_code, 200)
 
+    def test_security_headers_and_api_cache_control(self):
+        response = self.client.get("/api/config", headers={"X-Forwarded-Proto": "https"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.headers.get("X-Content-Type-Options"), "nosniff")
+        self.assertEqual(response.headers.get("X-Frame-Options"), "SAMEORIGIN")
+        self.assertEqual(response.headers.get("Referrer-Policy"), "strict-origin-when-cross-origin")
+        self.assertEqual(response.headers.get("Permissions-Policy"), "camera=(), microphone=(), geolocation=()")
+        self.assertEqual(response.headers.get("Strict-Transport-Security"), "max-age=31536000; includeSubDomains")
+        self.assertEqual(response.headers.get("Cache-Control"), "no-store")
+
+    def test_start_endpoint_has_a_rate_limit(self):
+        from app import _rate_events, _rate_lock
+
+        key = ("start", self.client.get("/health").request.environ.get("REMOTE_ADDR") or "unknown")
+        with _rate_lock:
+            _rate_events.pop(key, None)
+
+        for _ in range(5):
+            response = self.client.post("/api/start", data={})
+            self.assertEqual(response.status_code, 400)
+        response = self.client.post("/api/start", data={})
+        self.assertEqual(response.status_code, 429)
+        self.assertIn("Retry-After", response.headers)
+
     def test_lumr_config_api_is_available_at_both_paths(self):
         for path in ("/api/config", "/lumr/api/config"):
             with self.subTest(path=path):
