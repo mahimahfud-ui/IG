@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
 <meta name="description" content="Social Media Tools — professional Instagram account workspace powered by your existing browser session.">
+<meta name="theme-color" content="#141414">
+<link rel="icon" href="/brand-m.webp" type="image/webp">
+<meta property="og:image" content="https://mahicloud.onrender.com/brand-m.webp">
 <title>Social Media Tools</title>
 <style>
 :root{
@@ -18,8 +21,8 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 20% 10%,rgba
 button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
 .app{max-width:1380px;margin:0 auto;padding:16px 20px 110px}
 .header{display:flex;align-items:center;justify-content:space-between;gap:14px;height:54px}
-.brand{display:flex;align-items:center;gap:10px}.logo{width:38px;height:38px;border-radius:13px;background:linear-gradient(135deg,var(--pink),var(--purple) 58%,var(--blue));display:grid;place-items:center;font:800 17px/1 ui-sans-serif;box-shadow:0 0 35px rgba(255,59,118,.18)}
-.brand strong{font-weight:800;letter-spacing:-.04em}.brand small{display:block;color:#777985;font-size:8px;letter-spacing:.16em;text-transform:uppercase;margin-top:3px}
+.brand{display:flex;align-items:center;gap:10px}.logo{width:38px;height:38px;border-radius:13px;background:transparent;display:grid;place-items:center;font:800 17px/1 ui-sans-serif;box-shadow:none;overflow:hidden}
+.logo img{display:block;width:100%;height:100%;object-fit:contain;border-radius:inherit}.brand strong{font-weight:800;letter-spacing:-.04em}.brand small{display:block;color:#777985;font-size:8px;letter-spacing:.16em;text-transform:uppercase;margin-top:3px}
 .top{display:flex;align-items:center;gap:8px}.pill{display:flex;align-items:center;gap:8px;padding:8px 11px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.03);font-size:9px;color:#9b9eaa}.dot{width:6px;height:6px;border-radius:50%;background:#777;box-shadow:0 0 9px rgba(255,255,255,.15)}.online .dot{background:var(--green);box-shadow:0 0 12px rgba(85,227,158,.8)}
 .icon-btn{width:35px;height:35px;border:1px solid var(--line);border-radius:50%;background:rgba(255,255,255,.03);color:#c8cad2}
 .hero{padding:50px 2px 22px;display:flex;justify-content:space-between;gap:28px;align-items:flex-end}
@@ -120,11 +123,12 @@ button,a,[role="button"],input[type="button"],input[type="submit"]{-webkit-tap-h
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important;transition-delay:0ms!important;}
 }
 </style>
+<link rel="stylesheet" href="/mahicloud-theme.css">
 </head>
 <body>
 <div class="app">
 <header class="header">
-  <div class="brand"><div class="logo">M</div><div><strong>SOCIAL MEDIA TOOLS</strong><small>browser-session workspace</small></div></div>
+  <div class="brand"><div class="logo"><img src="/brand-m.webp" alt="MahiCloud logo" width="38" height="38" decoding="async"></div><div><strong>SOCIAL MEDIA TOOLS</strong><small>browser-session workspace</small></div></div>
   <div class="top">
     <div class="pill" id="sessionPill"><i class="dot"></i><span id="sessionText">EXTENSION OFFLINE</span></div>
     <button class="icon-btn" id="settingsBtn" type="button" aria-label="Settings">⚙</button>
