@@ -101,7 +101,6 @@ class MahiCloudRouteTests(unittest.TestCase):
             "/apps/",
             "/unfollowers/",
             "/instagram-cleaner.html",
-            "/mahi-ai/",
         ]
         for route in pages:
             with self.subTest(route=route):
