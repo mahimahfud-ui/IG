@@ -301,6 +301,42 @@ def apps_index():
     return send_from_directory(os.path.join(app.root_path, "web", "apps"), "index.html")
 
 
+# Friendly MahiCloud route aliases. Canonical project routes remain unchanged.
+@app.get("/windows-tools")
+def windows_tools_redirect():
+    return redirect("/linkora/", code=308)
+
+
+@app.get("/windows-tools/")
+def windows_tools_index():
+    return redirect("/linkora/", code=308)
+
+
+@app.get("/gallery")
+def gallery_redirect():
+    return redirect("/lumr/", code=308)
+
+
+@app.get("/gallery/")
+def gallery_index():
+    return redirect("/lumr/", code=308)
+
+
+@app.get("/social-tools")
+def social_tools_redirect():
+    return redirect("/social-tools/", code=308)
+
+
+@app.get("/social-tools/")
+def social_tools_index():
+    return send_from_directory(os.path.join(app.root_path, "web"), "instagram-cleaner.html")
+
+
+@app.get("/social-tools/instagram-cleaner")
+def social_tools_cleaner_redirect():
+    return redirect("/social-tools/", code=308)
+
+
 @app.get("/unfollowers")
 def unfollowers_redirect():
     return redirect("/unfollowers/", code=308)
