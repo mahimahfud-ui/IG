@@ -389,10 +389,28 @@ class _MetadataParser(HTMLParser):
             self.title_parts.append(data.strip())
 
 
+def _looks_like_html(content_type: str, body: bytes) -> bool:
+    """Accept actual HTML even when a site sends an incorrect MIME type."""
+    kind = (content_type or "").split(";", 1)[0].strip().lower()
+    if kind in ("text/html", "application/xhtml+xml"):
+        return True
+    # Some hosts/CDNs label HTML as text/plain or application/octet-stream.
+    # Inspect only a small bounded prefix; do not treat arbitrary binary files as pages.
+    prefix = body[:8192].lstrip(b"\\xef\\xbb\\xbf\\x00\\t\\r\\n ")
+    return bool(re.match(
+        rb"(?is)^(?:<!--.*?-->\\s*)*(?:<!doctype\\s+html\\b|<html\\b|<head\\b|<body\\b|<meta\\b|<title\\b)",
+        prefix,
+    ))
+
+
 def _metadata_for_url(url: str) -> dict:
     final_url, content_type, body = _fetch_public(url, max_bytes=2_000_000, allow_truncate=True)
-    if content_type not in ("text/html", "application/xhtml+xml", ""):
-        raise MahiAIError("The link is not an HTML website. For a Windows script, use Add BAT file with a direct .bat URL.", 415)
+    if not _looks_like_html(content_type, body):
+        raise MahiAIError(
+            "This link serves a direct file or non-HTML response, not a readable website page. "
+            "Use the official homepage or app-store listing, not an APK, ZIP, API, or direct-download URL.",
+            415,
+        )
     source = body.decode("utf-8", errors="replace")
     parser = _MetadataParser()
     try:
