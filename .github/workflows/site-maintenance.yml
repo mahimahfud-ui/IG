@@ -31,7 +31,6 @@ jobs:
     env:
       SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://mahicloud.onrender.com' }}
       OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.5' }}
-      AI_REPAIR_ENABLED: ${{ secrets.OPENAI_API_KEY != '' }}
       MAINTENANCE_REPORT: ${{ runner.temp }}/mahi-site-maintenance-report.json
     steps:
       - name: Checkout repository
@@ -70,7 +69,7 @@ jobs:
 
       - name: Ask AI for a minimal code repair (when configured)
         id: repair
-        if: steps.diagnostics.outcome == 'failure' && env.AI_REPAIR_ENABLED == 'true'
+        if: steps.diagnostics.outcome == 'failure'
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: ${{ env.OPENAI_MODEL }}
@@ -110,7 +109,6 @@ jobs:
         env:
           MAINTENANCE_REPORT: ${{ env.MAINTENANCE_REPORT }}
           PR_URL: ${{ steps.create_pr.outputs.pull-request-url }}
-          AI_REPAIR_ENABLED: ${{ env.AI_REPAIR_ENABLED }}
         with:
           script: |
             const fs = require('fs');
@@ -131,9 +129,7 @@ jobs:
               : '- None';
             const repairStatus = process.env.PR_URL
               ? 'A validated AI repair pull request was opened: ' + process.env.PR_URL
-              : (process.env.AI_REPAIR_ENABLED === 'true'
-                ? 'No validated AI pull request was opened for this run. See workflow logs and artifact.'
-                : 'AI repair is not configured. Add an OPENAI_API_KEY Actions secret to enable guarded repair pull requests.');
+              : 'No validated AI pull request was opened. Check workflow logs; configure the OPENAI_API_KEY Actions secret to enable AI repair.';
             const body = [
               '## MahiCloud background maintenance report',
               '',
