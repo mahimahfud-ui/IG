@@ -336,6 +336,11 @@ footer{text-align:center}
 @media(hover:hover){.card:hover .icon,.card:focus-within .icon{transform:translateY(-3px) scale(1.035);filter:saturate(1.08) brightness(1.04);box-shadow:0 16px 32px color-mix(in srgb,var(--c1) 34%,transparent)}}
 @media(max-width:720px){.card-top{min-height:68px}.card .icon{width:56px;height:56px;flex-basis:56px;border-radius:16px}}
 @media(prefers-reduced-motion:reduce){.card .icon{transition:none!important}.card:hover .icon,.card:focus-within .icon{transform:none;filter:none}}
+/* Refined brand marks: a richer glass tile, sharper edge and consistent glow. */
+.card .icon{width:66px;height:66px;flex:0 0 66px;border-radius:20px;outline:1px solid rgba(255,255,255,.16);outline-offset:0;box-shadow:0 13px 30px color-mix(in srgb,var(--c1) 31%,transparent),0 2px 4px rgba(0,0,0,.22);filter:saturate(1.07) contrast(1.02)}
+.card .icon:hover{filter:saturate(1.12) contrast(1.025)}
+@media(max-width:720px){.card .icon{width:58px;height:58px;flex-basis:58px;border-radius:18px}}
+@media(prefers-reduced-motion:reduce){.card .icon{filter:none!important}}
 </style>
 
 <style id="mc-motionsites-premium-layer">
@@ -599,9 +604,9 @@ var projects = [
   {id:"linkora", title:"Windows Tools", cat:"util", catLabel:"Windows & utilities", status:"Live", url:"/linkora/", local:true, repo:"https://github.com/mahimahfud-ui/linkora",
    desc:"A growing library of practical Windows scripts, workflow helpers and ready-to-run utilities.", tags:["Windows","Automation","Scripts"], c1:"#d7ff79", c2:"#5fcf4a", glyph:"terminal", ink:"#10150a"},
   {id:"social-cleaner", title:"Social Media Tools", cat:"util", catLabel:"Instagram tools", status:"In this repo", url:"/instagram-cleaner.html", local:true, repo:"https://github.com/mahimahfud-ui/mahicloud",
-   desc:"An Instagram workspace for account cleanup and local data insights. The original dashboard stays available alongside this portfolio.", tags:["Instagram","Dashboard","Flask"], c1:"#b57bff", c2:"#ff5fb2", glyph:"spark"},
+   desc:"An Instagram workspace for account cleanup and local data insights. The original dashboard stays available alongside this portfolio.", tags:["Instagram","Dashboard","Flask"], c1:"#b57bff", c2:"#ff5fb2", glyph:"social"},
   {id:"quick-link", title:"Quick Link", cat:"privacy", catLabel:"Privacy & Network", status:"External link", url:"https://tinyurl.com/ypy5x9wv", local:false, repo:"https://tinyurl.com/ypy5x9wv",
-   desc:"A saved short link, kept in its own privacy and network collection. The destination is opened externally.", tags:["Short link","External","One tap"], c1:"#b6f36b", c2:"#1a9c8c", glyph:"shield"},
+   desc:"A saved short link, kept in its own privacy and network collection. The destination is opened externally.", tags:["Short link","External","One tap"], c1:"#b6f36b", c2:"#1a9c8c", glyph:"link"},
   {id:"nextdns", title:"NextDNS Endpoint", cat:"privacy", catLabel:"Privacy & Network", status:"Endpoint", url:"https://f1388b.dns.nextdns.io", local:false, repo:"https://nextdns.io/",
    desc:"Your provided NextDNS hostname, available as a quick-access card for network and DNS configuration.", tags:["NextDNS","DNS","Network"], c1:"#70d6ff", c2:"#5b4bdb", glyph:"dns"}
 ];
@@ -610,20 +615,42 @@ var N = projects.length;
 /* ===== Brand icons: each project gets its own squircle logo (shared by cards and the hero canvas) ===== */
 var CS='fill="currentColor" stroke="none"';
 var GLYPHS={
-  play:'<path d="M47 36 L87 60 L47 84 Z" fill="currentColor"/>',
-  apps:'<rect x="32" y="32" width="24" height="24" rx="7" '+CS+'/><rect x="64" y="32" width="24" height="24" rx="7" '+CS+'/><rect x="32" y="64" width="24" height="24" rx="7" '+CS+'/><rect x="64" y="64" width="24" height="24" rx="7" '+CS+' opacity=".55"/>',
-  terminal:'<path d="M36 44 L56 60 L36 76"/><path d="M64 80 H86"/>',
-  lens:'<circle cx="60" cy="60" r="27"/><circle cx="60" cy="60" r="9" '+CS+'/>',
-  unfollow:'<circle cx="50" cy="46" r="13"/><path d="M26 88 C26 72 36 64 50 64 C64 64 74 72 74 88"/><path d="M80 46 H98"/>',
-  spark:'<path d="M58 28 L66 52 L90 60 L66 68 L58 92 L50 68 L26 60 L50 52 Z" fill="currentColor" stroke-width="3"/><path d="M94 26 V42 M86 34 H102"/>',
-  browser:'<rect x="28" y="34" width="64" height="52" rx="10"/><path d="M28 50 H92"/><circle cx="40" cy="42" r="1.5" fill="currentColor"/>',
-  warn:'<path d="M60 32 L92 88 H28 Z"/><path d="M60 54 V68"/><circle cx="60" cy="78" r="1.5" fill="currentColor"/>',
-  shield:'<path d="M60 24 L91 36 V57 C91 76 78 90 60 99 C42 90 29 76 29 57 V36 Z"/><path d="M45 60 L55 70 L76 48"/>',
-  dns:'<circle cx="60" cy="60" r="31"/><path d="M29 60 H91 M60 29 C44 43 44 77 60 91 M60 29 C76 43 76 77 60 91 M35 43 H85 M35 77 H85"/>'
+  play:'<path d="M43 31H77Q89 31 89 43V77Q89 89 77 89H43Q31 89 31 77V43Q31 31 43 31Z" fill="currentColor" fill-opacity=".09" stroke="currentColor" stroke-width="4.5"/><path d="M50 43L75 60L50 77Z" fill="currentColor" stroke="none"/><path d="M39 23V28M81 23V28" stroke-width="4.5"/>',
+  apps:'<rect x="31" y="30" width="26" height="26" rx="8" fill="currentColor" stroke="none"/><rect x="64" y="30" width="26" height="26" rx="8" fill="none" stroke="currentColor" stroke-width="4.5"/><rect x="31" y="64" width="26" height="26" rx="8" fill="none" stroke="currentColor" stroke-width="4.5"/><rect x="64" y="64" width="26" height="26" rx="8" fill="currentColor" fill-opacity=".55" stroke="none"/><path d="M70 43H84M37 77H51" stroke-width="3.5" opacity=".62"/>',
+  terminal:'<rect x="28" y="30" width="64" height="61" rx="12" fill="currentColor" fill-opacity=".08" stroke="currentColor" stroke-width="4.5"/><path d="M29 47H91" stroke-width="4.5"/><circle cx="40" cy="39" r="2.5" fill="currentColor" stroke="none"/><circle cx="49" cy="39" r="2.5" fill="currentColor" stroke="none" opacity=".62"/><circle cx="58" cy="39" r="2.5" fill="currentColor" stroke="none" opacity=".35"/><path d="M40 59L50 67L40 75M58 76H77" stroke-width="4.5"/>',
+  social:'<rect x="28" y="34" width="48" height="55" rx="12" fill="currentColor" fill-opacity=".07" stroke="currentColor" stroke-width="4.5"/><circle cx="52" cy="51" r="8.5" fill="currentColor" stroke="none"/><path d="M36 77C37 65 67 65 68 77" stroke-width="4.5"/><path d="M85 26L89.5 38.5L102 43L89.5 47.5L85 60L80.5 47.5L68 43L80.5 38.5Z" fill="currentColor" stroke="none"/><circle cx="84" cy="78" r="4" fill="currentColor" stroke="none" opacity=".76"/>',
+  lens:'<circle cx="55" cy="53" r="25" stroke-width="4.5"/><circle cx="55" cy="53" r="9" fill="currentColor" stroke="none"/><path d="M73 72L91 90" stroke-width="7"/>',
+  unfollow:'<circle cx="45" cy="43" r="11" stroke-width="4.5"/><path d="M24 85C26 68 34 61 45 61C56 61 64 68 66 85" stroke-width="4.5"/><path d="M73 42H95M84 31V53" stroke-width="4.5"/><circle cx="84" cy="42" r="13" fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-width="3.5"/>',
+  browser:'<rect x="27" y="32" width="66" height="57" rx="12" fill="currentColor" fill-opacity=".07" stroke="currentColor" stroke-width="4.5"/><path d="M29 49H91" stroke-width="4.5"/><circle cx="39" cy="40.5" r="2.5" fill="currentColor" stroke="none"/><circle cx="48" cy="40.5" r="2.5" fill="currentColor" stroke="none" opacity=".55"/><path d="M41 62H79M41 73H68" stroke-width="4.5" opacity=".8"/>',
+  warn:'<path d="M60 28L94 88H26Z" fill="currentColor" fill-opacity=".08" stroke="currentColor" stroke-width="4.5"/><path d="M60 48V66" stroke-width="5.5"/><circle cx="60" cy="77" r="3" fill="currentColor" stroke="none"/>',
+  shield:'<path d="M60 25L91 37V57C91 76 78 90 60 99C42 90 29 76 29 57V37Z" fill="currentColor" fill-opacity=".08" stroke="currentColor" stroke-width="4.5"/><path d="M44 61L55 71L76 49" stroke-width="5"/>',
+  link:'<path d="M49 69L42 76A13 13 0 0 1 24 58L38 44A13 13 0 0 1 56 44" stroke-width="5.5"/><path d="M71 51L78 44A13 13 0 0 1 96 62L82 76A13 13 0 0 1 64 76" stroke-width="5.5"/><path d="M44 76L76 44" stroke-width="5.5"/>',
+  dns:'<circle cx="60" cy="60" r="31" stroke-width="4.5"/><path d="M29 60H91M60 29C43 43 43 77 60 91M60 29C77 43 77 77 60 91M36 45C50 52 70 52 84 45M36 75C50 68 70 68 84 75" stroke-width="3.8"/><circle cx="84" cy="36" r="4.5" fill="currentColor" stroke="none"/>'
 };
 function iconURI(p){
   var ink=p.ink||"#fff";
-  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+p.c1+'"/><stop offset="1" stop-color="'+p.c2+'"/></linearGradient><linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect width="120" height="120" rx="27" fill="url(#g)"/><rect width="120" height="120" rx="27" fill="url(#h)"/><rect x="1.5" y="1.5" width="117" height="117" rx="26" fill="none" stroke="#fff" stroke-opacity=".34" stroke-width="2"/><rect x="7" y="7" width="106" height="106" rx="22" fill="none" stroke="#000" stroke-opacity=".13" stroke-width="1.5"/><circle cx="92" cy="25" r="17" fill="#fff" fill-opacity=".075"/><g color="'+ink+'" fill="none" stroke="'+ink+'" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">'+GLYPHS[p.glyph]+'</g></svg>';
+  var glyph=GLYPHS[p.glyph]||GLYPHS.apps;
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">'+
+    '<defs>'+
+      '<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+p.c1+'"/><stop offset="1" stop-color="'+p.c2+'"/></linearGradient>'+
+      '<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".34"/><stop offset=".48" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#000" stop-opacity=".12"/></linearGradient>'+
+      '<linearGradient id="plate" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".17"/><stop offset="1" stop-color="#fff" stop-opacity=".035"/></linearGradient>'+
+      '<radialGradient id="aura" cx=".12" cy=".04" r="1"><stop stop-color="#fff" stop-opacity=".23"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'+
+      '<filter id="depth" x="-25%" y="-25%" width="150%" height="160%"><feDropShadow dx="0" dy="2.5" stdDeviation="2.6" flood-color="#000" flood-opacity=".27"/></filter>'+
+      '<pattern id="microgrid" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M12 0H0V12" fill="none" stroke="#fff" stroke-opacity=".055" stroke-width=".7"/></pattern>'+
+    '</defs>'+
+    '<rect width="120" height="120" rx="29" fill="url(#g)"/>'+
+    '<rect width="120" height="120" rx="29" fill="url(#aura)"/>'+
+    '<path d="M-8 88C14 53 35 34 68 20C88 11 109 17 129-4V35C105 58 82 66 61 84C39 103 14 108-8 112Z" fill="#fff" fill-opacity=".065"/>'+
+    '<rect width="120" height="120" rx="29" fill="url(#microgrid)" opacity=".58"/>'+
+    '<circle cx="98" cy="21" r="28" fill="#fff" fill-opacity=".065"/>'+
+    '<rect x="1.5" y="1.5" width="117" height="117" rx="27.5" fill="none" stroke="#fff" stroke-opacity=".42" stroke-width="1.7"/>'+
+    '<rect x="7" y="7" width="106" height="106" rx="24" fill="none" stroke="#000" stroke-opacity=".14" stroke-width="1.4"/>'+
+    '<rect x="14" y="14" width="92" height="92" rx="27" fill="url(#plate)" stroke="#fff" stroke-opacity=".31" stroke-width="1.5"/>'+
+    '<rect x="19" y="19" width="82" height="82" rx="22" fill="none" stroke="#fff" stroke-opacity=".09" stroke-width="1"/>'+
+    '<g filter="url(#depth)" color="'+ink+'" fill="none" stroke="'+ink+'" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round">'+glyph+'</g>'+
+    '<path d="M20 31C40 16 68 14 93 24" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="1.5" stroke-linecap="round"/>'+
+    '</svg>';
   return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
 }
 projects.forEach(function(p){ p.icon = iconURI(p); });
