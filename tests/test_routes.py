@@ -159,5 +159,58 @@ class MahiCloudRouteTests(unittest.TestCase):
             self.assertIn("Paste a link", response.get_json().get("error", ""))
 
 
+
+    def test_quick_add_is_category_first_with_distinct_url_and_script_steps(self):
+        launcher = self.client.get("/mahi-ai-launcher.js")
+        self.assertEqual(launcher.status_code, 200)
+        source = launcher.get_data(as_text=True)
+        for fragment in (
+            "Choose a category",
+            "Movie Websites",
+            "Movie Apps",
+            "Music Apps",
+            "Windows Automation (.BAT)",
+            "Windows Automation (.PY)",
+            "function showUrl()",
+            "function showCode()",
+            "function showName()",
+            "category:selectedCategory",
+            "PIN remains required",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, source)
+
+    def test_category_add_rejects_unknown_categories_and_invalid_scripts_before_publish(self):
+        import os
+        from unittest.mock import patch
+
+        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "6993", "MAHI_AI_GITHUB_TOKEN": "", "OPENAI_API_KEY": ""}):
+            unknown = self.client.post("/api/catalog-add", json={
+                "password": "6993", "category": "unknown_category", "input": "https://example.com", "name": "Test"
+            })
+            self.assertEqual(unknown.status_code, 400)
+            self.assertIn("supported Quick Add categories", unknown.get_json().get("error", ""))
+
+            invalid_python = self.client.post("/api/catalog-add", json={
+                "password": "6993", "category": "windows_python", "input": "def broken(:", "name": "Test Script"
+            })
+            self.assertEqual(invalid_python.status_code, 400)
+            self.assertIn("syntax error", invalid_python.get_json().get("error", ""))
+
+            invalid_bat = self.client.post("/api/catalog-add", json={
+                "password": "6993", "category": "windows_bat", "input": "print('not a BAT file')", "name": "Test Script"
+            })
+            self.assertEqual(invalid_bat.status_code, 400)
+            self.assertIn("readable Windows BAT", invalid_bat.get_json().get("error", ""))
+
+            valid_python_without_github = self.client.post("/api/catalog-add", json={
+                "password": "6993", "category": "windows_python",
+                "input": "print('hello from a harmless utility')", "name": "Test Python Utility"
+            })
+            self.assertEqual(valid_python_without_github.status_code, 503)
+            self.assertIn("MAHI_AI_GITHUB_TOKEN", valid_python_without_github.get_json().get("error", ""))
+
+
+
 if __name__ == "__main__":
     unittest.main()
