@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<meta name="description" content="Social Media Tools — professional Instagram account workspace powered by your existing browser session.">
+<meta name="description" content="Social Media Tools — a browser-based workspace for reviewing and managing your Instagram activity.">
 <meta name="theme-color" content="#141414">
 <link rel="icon" href="/brand-m.webp" type="image/webp">
 <meta property="og:image" content="https://mahicloud.onrender.com/brand-m.webp">
@@ -352,7 +352,7 @@ button,a,[role="button"],input[type="button"],input[type="submit"]{-webkit-tap-h
   $('settingsBtn').onclick=()=>openPage('home');
   $('openInstagram').onclick=()=>window.open('https://www.instagram.com/','_blank','noopener');
   $('connectBtn').onclick=async()=>{window.open('https://www.instagram.com/','_blank','noopener');setTimeout(()=>syncSession(),900)};
-  $('installGuide').onclick=()=>window.open('https://github.com/mahimahfud-ui/mahicloud/blob/main/browser-helper/README.md','_blank','noopener');
+  $('installGuide').onclick=()=>window.open('/browser-helper-guide.html','_blank','noopener');
 
   function updateHome(d){
     if(d?.followingCount!=null)$('sFollowing').textContent=fmt(d.followingCount);
