@@ -444,13 +444,32 @@ def catalog_add_diagnose():
 
     repo = _repo_name()
     try:
+        # GET /user is an authenticated endpoint supported by fine-grained PATs.
+        # Unlike reading a public repository, it confirms the actual token identity.
+        identity = _github("GET", "/user")
+    except MahiAIError as exc:
+        return jsonify({
+            "ok": False,
+            "stage": "token_identity",
+            "message": "GitHub could not identify the account for MAHI_AI_GITHUB_TOKEN. The token saved in Render may be invalid, revoked/expired, or not the token you intended to use. Create a fresh Personal Access Token while signed in to the GitHub account that can write to mahimahfud-ui/mahicloud, replace the value on the Render mahicloud service, then save/redeploy. Details: " + exc.message
+        })
+
+    authenticated_as = str(identity.get("login") or "").strip()
+    if not authenticated_as:
+        return jsonify({
+            "ok": False,
+            "stage": "token_identity",
+            "message": "GitHub accepted the identity request but returned no account login. Replace MAHI_AI_GITHUB_TOKEN with a Personal Access Token generated from the GitHub account that can write to " + repo + "."
+        })
+
+    try:
         info = _github("GET", f"/repos/{repo}")
     except MahiAIError as exc:
         return jsonify({
             "ok": False,
             "stage": "repository_access",
-            "message": "The configured token could not read repository metadata. " + exc.message +
-                       " Check the token's resource owner, selected repository, and any pending organization approval."
+            "authenticated_as": authenticated_as,
+            "message": f"The configured token authenticates as @{authenticated_as}, but it could not read repository metadata. Check selected repository access and approval. " + exc.message
         })
 
     actual_repo = str(info.get("full_name") or "")
@@ -458,8 +477,12 @@ def catalog_add_diagnose():
         return jsonify({
             "ok": False,
             "stage": "repository_mismatch",
+            "authenticated_as": authenticated_as,
             "message": f"GitHub resolved the repository check to {actual_repo}, but MahiCloud is configured for {repo}."
         })
+
+    repository_permissions = info.get("permissions") or {}
+    push_permission = repository_permissions.get("push")
 
     try:
         _github("GET", f"/repos/{repo}/git/ref/heads/main")
@@ -467,38 +490,62 @@ def catalog_add_diagnose():
         return jsonify({
             "ok": False,
             "stage": "main_branch_access",
-            "message": "Repository metadata is readable, but the main branch reference check failed. " + exc.message
+            "authenticated_as": authenticated_as,
+            "repository_push_role": push_permission,
+            "message": "The repository/main read check failed. Since this repository is public, a successful GET alone does not prove token write access. " + exc.message
         })
 
     try:
-        # This makes an unreferenced blob object only: no visible file or branch changes.
-        # It probes the same Contents write permission required by Quick Add's first Git write.
+        # An unreferenced blob creates no visible file or branch update.
         _github("POST", f"/repos/{repo}/git/blobs", payload={
             "content": "MahiCloud Quick Add permission probe. Intentionally unattached to any tree or branch.",
             "encoding": "utf-8",
         })
     except MahiAIError as exc:
+        if authenticated_as.lower() != "mahimahfud-ui":
+            next_step = (
+                f"The Render token belongs to @{authenticated_as}, not the repository owner @mahimahfud-ui. "
+                "Either replace it with a token created while signed in as @mahimahfud-ui, or confirm that this account has Write access to the repository."
+            )
+        elif push_permission is False:
+            next_step = (
+                "GitHub reports that this account does not have push permission on the repository. "
+                "Grant the account Write or Admin access first; token permissions cannot exceed the account's repository role."
+            )
+        else:
+            next_step = (
+                "The token authenticates as the repository owner, or GitHub did not report a push-role value, "
+                "but write permission is still not effective. In the exact token's settings verify Resource owner = mahimahfud-ui, "
+                "Repository access includes mahicloud, and Repository permissions → Contents = Read and write. "
+                "If those are already correct, create a Personal access token (classic) while signed in as @mahimahfud-ui with the repo scope, "
+                "replace MAHI_AI_GITHUB_TOKEN on the Render mahicloud service with that new token, and save/redeploy. "
+                "Do not use an AI-provider API key or OAuth client secret in this field."
+            )
         return jsonify({
             "ok": False,
             "stage": "contents_write",
-            "message": "Repository and main-branch reads passed, but the Contents write probe failed. " +
-                       exc.message +
-                       " Check repository selection/approval and Contents: Read and write."
+            "authenticated_as": authenticated_as,
+            "repository_push_role": push_permission,
+            "message": (
+                "GitHub authenticated Render's token as @" + authenticated_as + ". "
+                "The hint contents=write describes what the endpoint requires; it does not prove what this token was granted. "
+                "Because this repository is public, repo and main-branch GETs may succeed without effective write access. "
+                + next_step + " Exact write-probe failure: " + exc.message
+            )
         })
 
-    permissions = info.get("permissions") or {}
     return jsonify({
         "ok": True,
         "stage": "contents_write",
-        "message": f"PASS: the configured token can access {repo}, read main, and create a Git blob. No visible file or branch was changed. If Publish still fails, its error will show the exact later API endpoint so we can distinguish a tree/commit/ref permission issue from branch protection.",
+        "message": f"PASS: the configured token authenticates as @{authenticated_as}, can access {repo}, read main, and create a Git blob. No visible file or branch was changed.",
         "checks": {
+            "authenticated_as": authenticated_as,
             "repository": actual_repo or repo,
             "main_ref": "readable",
             "contents_write_probe": "passed",
-            "repository_push_role": permissions.get("push"),
+            "repository_push_role": push_permission,
         }
     })
-
 
 @mahi_catalog_bp.post("/api/catalog-add")
 def catalog_add():
