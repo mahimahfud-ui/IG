@@ -50,7 +50,7 @@ class DesignSystemTests(unittest.TestCase):
         home = self.get_text("/")
         apps = self.get_text("/apps/")
         for page, needles in (
-            (home, ('id="mc-center-layout-fix"', ".panel{align-items:center;text-align:center}", ".foot-row{flex-direction:column")),
+            (home, ('id="mc-center-layout-fix"', ".panel{align-items:center;text-align:center}", ".foot-row{flex-direction:column", ".stats{width:auto;justify-content:center;align-items:center;margin-inline:auto;padding:0;border:0;align-self:auto")),
             (apps, ('id="mc-apps-center-layout-fix"', ".hero{display:flex;flex-direction:column;align-items:center;text-align:center", ".apps-grid{display:grid")),
         ):
             for needle in needles:
