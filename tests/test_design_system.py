@@ -100,6 +100,14 @@ class DesignSystemTests(unittest.TestCase):
         self.assertIn("Math.min(10,8*it.a)", home)
         self.assertIn("seekAt+=gap*0.28", home)
 
+    def test_homepage_panels_share_the_eased_intro_scroll_motion(self):
+        home = self.get_text("/")
+        self.assertIn("var visualProgress = reduced ? progress : seekAt;", home)
+        self.assertIn('meter.style.transform="scaleX("+visualProgress+")";', home)
+        self.assertIn("enter=ramp(visualProgress,c[0],c[1]), leave=ramp(visualProgress,c[2],c[3]);", home)
+        self.assertIn("var so=clamp(1-visualProgress*1.3,0,1);", home)
+        self.assertIn("if(keepAnimating) scheduleFrame();", home)
+
     def test_lumr_scroll_does_not_measure_and_rewrite_every_card(self):
         lumr = self.get_text("/lumr/")
         self.assertNotIn("$('.card').forEach((c,i)=>{const r=c.getBoundingClientRect()", lumr)
