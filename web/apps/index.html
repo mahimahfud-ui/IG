@@ -158,7 +158,7 @@ button,a,[role="button"],input[type="button"],input[type="submit"]{-webkit-tap-h
    App data, logos, links, search, tabs and favourites are untouched. */
 :root{--bg:var(--mc-bg);--text:var(--mc-fg);--muted:var(--mc-fg-soft);--faint:var(--mc-fg-faint);--line:var(--mc-line);--max:var(--mc-container)}
 body{font-family:var(--mc-font-body)}
-.wrap{width:min(var(--max),calc(100% - 2*var(--mc-gutter)))}
+.wrap{width:min(var(--max),calc(100% - var(--mc-gutter) - var(--mc-gutter)))}
 button:focus-visible,a:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:var(--mc-focus);outline-offset:3px}
 .ambient:before,.glow-ball{animation:none}
 .ambient:before{opacity:.55}
@@ -209,6 +209,60 @@ h1 .grad{background:none;color:var(--mc-accent);-webkit-text-fill-color:currentC
 @media(max-width:600px){.app-card{padding:14px 12px 12px}.app-card p{font-size:12px;min-height:0}}
 footer{text-align:left}
 footer .links{justify-content:flex-start}
+</style>
+
+<style id="mc-apps-center-layout-fix">
+/* Center alignment pass for the Apps collection. Data, app URLs, search, category
+   tabs, favourites, and the Add App publishing workflow remain unchanged. */
+.wrap{width:min(var(--mc-container),calc(100% - var(--mc-gutter) - var(--mc-gutter)));margin-left:auto;margin-right:auto}
+.nav{width:100%;height:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:14px 0 8px}
+.brand{position:static;left:auto;display:flex;justify-content:center;align-items:center;gap:10px;margin:0 auto;text-align:center}
+.nav-links{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 10px;margin:0 auto}
+.nav-links a{text-align:center}
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:clamp(48px,7vw,88px) 0 clamp(28px,4vw,48px)}
+.hero .kicker{align-self:center;justify-content:center;text-align:center;margin-left:auto;margin-right:auto}
+#heroTitle{width:100%;max-width:100%;text-align:center;margin-left:auto;margin-right:auto}
+.hero p{width:min(48ch,100%);max-width:100%;text-align:center;margin-left:auto;margin-right:auto}
+.scene-motion{display:flex;flex-direction:column;align-items:center;justify-content:center;margin-left:auto;margin-right:auto}
+.movie-scene,.music-scene{justify-content:center;align-self:center}
+.switch-wrap{display:flex;justify-content:center;align-items:center;margin-left:auto;margin-right:auto}
+.switch{width:min(100%,420px);justify-content:center;margin-left:auto;margin-right:auto}
+.switch button{flex:1 1 0;min-width:0;text-align:center;justify-content:center}
+.search-row{width:100%;display:flex;align-items:center;justify-content:center;margin-left:auto;margin-right:auto}
+.search-box{width:min(450px,100%);margin-left:auto;margin-right:auto}
+.results-bar{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center}
+.results-bar>*{text-align:center}
+.results-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-left:auto;margin-right:auto}
+.collection-title{display:block;width:100%;text-align:center;margin-left:auto;margin-right:auto}
+.apps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),220px));justify-content:center;align-items:stretch;gap:var(--mc-gap)}
+.app-card{width:100%;display:flex;flex-direction:column;align-items:center;text-align:center}
+.card-top{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.kind{position:static;align-self:center;margin:0 auto;order:2;text-align:center}
+.app-card h3{width:100%;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;text-align:center;margin-left:auto;margin-right:auto}
+.app-card p{width:100%;text-align:center;margin-left:auto;margin-right:auto;min-height:60px}
+.tags,.movie-app-tags{width:100%;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;margin-left:auto;margin-right:auto}
+.card-footer{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.card-footer small{text-align:center;margin-left:auto;margin-right:auto}
+.open-link{align-self:center;justify-content:center;text-align:center}
+.empty{width:100%;text-align:center;margin-left:auto;margin-right:auto}
+footer,footer .wrap{text-align:center}
+footer .links{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:12px 20px;margin-left:auto;margin-right:auto}
+@media(max-width:600px){
+  .wrap{width:calc(100% - 28px)}
+  .nav{width:100%;height:auto;justify-content:center;gap:9px}
+  .brand{position:static;left:auto;justify-content:center;margin-inline:auto}
+  .nav-links{justify-content:center;margin:0 auto;gap:4px 6px}
+  .nav-links a{font-size:10px;padding:8px 7px}
+  #heroTitle{font-size:clamp(38px,12.5vw,60px)}
+  .hero{padding:42px 0 28px}
+  .apps-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .app-card{padding:14px 10px 12px}
+  .app-card p{min-height:0}
+}
+@media(max-width:360px){
+  .nav-links a{font-size:9.5px;padding:7px 5px}
+  .apps-grid{grid-template-columns:minmax(0,260px)}
+}
 </style>
 </head>
 <body data-category="movie"><div class="ambient" aria-hidden="true"><span class="glow-ball a"></span><span class="glow-ball b"></span></div>
