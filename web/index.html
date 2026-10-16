@@ -568,7 +568,7 @@ body.mc-route-active{overflow:hidden;overscroll-behavior:none}body.mc-route-acti
     </section>
 
     <section class="shelf" id="projects" aria-labelledby="shelfTitle">
-      <div class="shelf-head"><h2 id="shelfTitle">Projects</h2><p>Take a look around and open whatever catches your eye. Every card carries its own brand.</p></div>
+      <div class="shelf-head"><h2 id="shelfTitle">Projects</h2><p>Open a project, or visit its source on GitHub. Every card carries its own brand.</p></div>
       <div class="controls">
         <div class="seg" id="seg" role="group" aria-label="Filter projects"><span class="glider" id="glider"></span>
           <button type="button" data-cat="all" aria-pressed="true">All</button>
@@ -597,17 +597,17 @@ body.mc-route-active{overflow:hidden;overscroll-behavior:none}body.mc-route-acti
 
 /* ===== Project data: one entry per site. Add a new object here to add a new project. ===== */
 var projects = [
-  {id:"mahiflix", title:"Movie Websites", cat:"ent", catLabel:"Entertainment", status:"Live", url:"/mahiflix/", local:true,
+  {id:"mahiflix", title:"Movie Websites", cat:"ent", catLabel:"Entertainment", status:"Live", url:"/mahiflix/", local:true, repo:"https://github.com/mahimahfud-ui/mahiflix",
    desc:"A cinematic discovery space for movies and web series—made for finding what to watch next.", tags:["Movies","Web series","Discovery"], c1:"#ff5a6a", c2:"#a3061b", glyph:"play"},
-  {id:"apps", title:"Apps", cat:"ent", catLabel:"Entertainment", status:"Live", url:"/apps/", local:true,
+  {id:"apps", title:"Apps", cat:"ent", catLabel:"Entertainment", status:"Live", url:"/apps/", local:true, repo:"https://github.com/mahimahfud-ui/mahicloud",
    desc:"A separate, animated app directory for movie apps and music players—all in one place.", tags:["Movie apps","Music apps","Android"], c1:"#6f8bff", c2:"#8f4dff", glyph:"apps"},
-  {id:"linkora", title:"Windows Tools", cat:"util", catLabel:"Windows & utilities", status:"Live", url:"/linkora/", local:true,
+  {id:"linkora", title:"Windows Tools", cat:"util", catLabel:"Windows & utilities", status:"Live", url:"/linkora/", local:true, repo:"https://github.com/mahimahfud-ui/linkora",
    desc:"A growing library of practical Windows scripts, workflow helpers and ready-to-run utilities.", tags:["Windows","Automation","Scripts"], c1:"#d7ff79", c2:"#5fcf4a", glyph:"terminal", ink:"#10150a"},
-  {id:"social-cleaner", title:"Social Media Tools", cat:"util", catLabel:"Instagram tools", status:"Live", url:"/instagram-cleaner.html", local:true,
+  {id:"social-cleaner", title:"Social Media Tools", cat:"util", catLabel:"Instagram tools", status:"In this repo", url:"/instagram-cleaner.html", local:true, repo:"https://github.com/mahimahfud-ui/mahicloud",
    desc:"An Instagram workspace for account cleanup and local data insights. The original dashboard stays available alongside this portfolio.", tags:["Instagram","Dashboard","Flask"], c1:"#b57bff", c2:"#ff5fb2", glyph:"social"},
-  {id:"quick-link", title:"Quick Link", cat:"privacy", catLabel:"Privacy & Network", status:"External link", url:"https://tinyurl.com/ypy5x9wv", local:false,
+  {id:"quick-link", title:"Quick Link", cat:"privacy", catLabel:"Privacy & Network", status:"External link", url:"https://tinyurl.com/ypy5x9wv", local:false, repo:"https://tinyurl.com/ypy5x9wv",
    desc:"A saved short link, kept in its own privacy and network collection. The destination is opened externally.", tags:["Short link","External","One tap"], c1:"#b6f36b", c2:"#1a9c8c", glyph:"link"},
-  {id:"nextdns", title:"NextDNS Endpoint", cat:"privacy", catLabel:"Privacy & Network", status:"Endpoint", url:"https://f1388b.dns.nextdns.io", local:false,
+  {id:"nextdns", title:"NextDNS Endpoint", cat:"privacy", catLabel:"Privacy & Network", status:"Endpoint", url:"https://f1388b.dns.nextdns.io", local:false, repo:"https://nextdns.io/",
    desc:"Your provided NextDNS hostname, available as a quick-access card for network and DNS configuration.", tags:["NextDNS","DNS","Network"], c1:"#70d6ff", c2:"#5b4bdb", glyph:"dns"}
 ];
 var N = projects.length;
@@ -819,8 +819,7 @@ function card(p,i){
     '<h3><a href="'+esc(p.url)+'"'+(ext?' target="_blank" rel="noopener noreferrer"':'')+'>'+esc(p.title)+'</a></h3>'+
     '<p class="cat">'+esc(p.catLabel)+'</p><p class="desc">'+esc(p.desc)+'</p>'+
     '<ul class="tags">'+p.tags.slice(0,3).map(function(t){return '<li>'+esc(t)+'</li>';}).join("")+'</ul>'+
-    '<div class="card-foot"><span class="get">'+(ext?'Open link':'Open')+'</span>'+
-    ''+'</div></article>';
+    '<div class="card-foot"><span class="get">'+(ext?'Open link':'Open')+'</span></div></article>';
 }
 function matches(p,term){
   if(curCat!=="all" && p.cat!==curCat) return false;
