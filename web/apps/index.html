@@ -150,12 +150,72 @@ button,a,[role="button"],input[type="button"],input[type="submit"]{-webkit-tap-h
 @media(max-width:600px){.results-actions{gap:7px}.add-app-button{min-height:32px;padding:0 10px;font-size:9px}.movie-card-actions .open-link{flex-basis:100%}#mf-add-dialog{padding:21px}}
 @media(prefers-reduced-motion:reduce){#mf-add-overlay.open,#mf-add-dialog{animation:none!important}.movie-fav,.add-app-button{transition:none!important}}
 </style>
+
+<link rel="stylesheet" href="/mahicloud-tokens.css">
+<script>document.documentElement.classList.add("mc-ready")</script>
+<style id="mc-apps-cinematic">
+/* MahiCloud cinematic layer for the Apps collection — presentation only.
+   App data, logos, links, search, tabs and favourites are untouched. */
+:root{--bg:var(--mc-bg);--text:var(--mc-fg);--muted:var(--mc-fg-soft);--faint:var(--mc-fg-faint);--line:var(--mc-line);--max:var(--mc-container)}
+body{font-family:var(--mc-font-body)}
+.wrap{width:min(var(--max),calc(100% - 2*var(--mc-gutter)))}
+button:focus-visible,a:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:var(--mc-focus);outline-offset:3px}
+.ambient:before,.glow-ball{animation:none}
+.ambient:before{opacity:.55}
+.nav-links a{font-size:11px;font-weight:500;letter-spacing:var(--mc-label-track);text-transform:uppercase;border-radius:var(--mc-r-sm)}
+.nav-links a:hover,.nav-links a:focus-visible{transform:translateY(-2px);background:rgba(243,239,232,.07);box-shadow:none}
+.hero{text-align:left;animation:none;padding:clamp(64px,8vw,112px) 0 clamp(26px,3.6vw,44px)}
+.kicker{padding:0;border:0;background:none;border-radius:0;color:var(--mc-fg-soft);font-size:11px;font-weight:500;letter-spacing:var(--mc-label-track)}
+.pulse{background:var(--mc-accent);box-shadow:0 0 12px var(--mc-accent-glow)}
+h1{font-family:var(--mc-font-display);font-weight:var(--mc-display-weight);font-size:clamp(46px,7.6vw,128px);line-height:var(--mc-display-leading);letter-spacing:var(--mc-display-track);text-transform:uppercase;margin:clamp(18px,2.2vw,28px) 0 clamp(20px,2.4vw,30px);max-width:none;text-wrap:balance}
+h1 .grad{background:none;color:var(--mc-accent);-webkit-text-fill-color:currentColor}
+.hero p{margin:0;max-width:48ch;font-size:clamp(15px,1.25vw,18px);line-height:1.55;color:var(--mc-fg-soft)}
+.scene-motion{margin:clamp(24px,3vw,40px) 0 0;width:min(560px,100%)}
+.movie-scene,.music-scene{justify-content:flex-start}
+@media(max-width:600px){
+  h1{font-size:clamp(40px,13.5vw,64px)}.scene-motion{height:140px}
+  .nav{justify-content:space-between;gap:10px}
+  .brand{position:static;flex:none}
+  .nav-links{margin-left:0;gap:0}
+  .nav-links a{font-size:10px;letter-spacing:.06em;padding:8px 6px;white-space:nowrap}
+  .nav-links a[href="/"]{display:none}
+}
+@media(max-width:400px){.brand>span>span{display:none}}
+.switch-wrap,.search-row{justify-content:flex-start}
+.switch{border-radius:var(--mc-r-md);background:var(--mc-surface-2)}
+.switch:before{border-radius:11px;background:var(--mc-fg);box-shadow:0 8px 25px rgba(0,0,0,.35)}
+.switch button{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.switch button.active{color:#0d0d0e}
+.search-box{width:min(480px,100%);border-radius:var(--mc-r-md)}
+.search-box:focus-within{border-color:var(--mc-line-strong);box-shadow:none}
+.search-box input{font-size:14px}
+.results-bar{font-size:11px;letter-spacing:var(--mc-label-track)}
+.add-app-button{border-radius:var(--mc-r-sm);font-size:11px;letter-spacing:.06em}
+.collection-title{justify-content:flex-start;font-family:var(--mc-font-display);font-size:clamp(20px,2.2vw,28px);font-weight:600;letter-spacing:-.02em;text-transform:uppercase}
+.collection-title:before{display:none}
+.apps-grid{gap:var(--mc-gap)}
+.app-card{border-radius:var(--mc-r-md);text-align:left;background:linear-gradient(165deg,rgba(255,255,255,.055),rgba(255,255,255,.014) 62%),var(--mc-surface-1);padding:18px 16px 16px}
+.app-card:hover,.app-card:focus-within{transform:translateY(-4px);box-shadow:var(--mc-shadow-lift),0 0 0 1px var(--accent)}
+.card-top{justify-content:flex-start}
+.kind{border-radius:6px;font-size:9.5px;letter-spacing:.1em}
+.app-card h3{justify-content:flex-start;font-size:17px;font-weight:600;letter-spacing:-.025em}
+.app-card p{font-size:12.5px;line-height:1.6;min-height:60px}
+.tags,.movie-app-tags{justify-content:flex-start}
+.tags span,.movie-app-tags span{font-size:10.5px;border-radius:6px;padding:4px 7px;color:var(--mc-fg-soft)}
+.card-footer{align-items:flex-start;gap:12px}
+.card-footer small{font-size:11px;align-self:flex-start;text-align:left}
+.open-link{font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-radius:var(--mc-r-sm)}
+.open-link:hover{transform:translateY(-2px);background:var(--mc-fg);color:#0d0d0e}
+@media(max-width:600px){.app-card{padding:14px 12px 12px}.app-card p{font-size:12px;min-height:0}}
+footer{text-align:left}
+footer .links{justify-content:flex-start}
+</style>
 </head>
 <body data-category="movie"><div class="ambient" aria-hidden="true"><span class="glow-ball a"></span><span class="glow-ball b"></span></div>
 <header id="header"><div class="wrap nav"><a class="brand" href="/" aria-label="Mahi homepage"><img class="site-brand-logo" src="/brand-m.webp" alt="Mahi logo" decoding="async"><span>Mahi <span style="color:var(--muted);font-weight:550">/ Apps</span></span></a><nav class="nav-links" aria-label="Site navigation"><a href="/">Home</a><a href="/mahiflix/">Movie Websites</a><a href="/linkora/">Windows Tools</a></nav></div></header>
-<main class="wrap"><section class="hero"><div class="kicker"><span class="pulse"></span> The app shelf · Curated by Mahi</div><h1 id="heroTitle">Screen worlds.<br><span class="grad">Next watch.</span></h1><p id="heroDescription">A curated shelf of movie and TV apps, with original logos and direct download workflow.</p>
+<main class="wrap"><section class="hero"><div class="kicker mc-rise" style="--d:.1s"><span class="pulse"></span> The app shelf · Curated by Mahi</div><h1 id="heroTitle" class="mc-rise" style="--d:.22s">Screen worlds.<br><span class="grad">Next watch.</span></h1><p id="heroDescription" class="mc-rise" style="--d:.42s">A curated shelf of movie and TV apps, with original logos and direct download workflow.</p>
 
-<div class="scene-motion" id="sceneMotion" aria-hidden="true">
+<div class="scene-motion mc-pop" id="sceneMotion" aria-hidden="true" style="--d:.6s">
 <div class="movie-scene"><div class="movie-beam"></div>
 <div class="film-poster poster-back"><span>01 / STORY</span><b>Beyond<br>the frame</b><small>DISCOVER</small></div>
 <div class="film-poster poster-center"><span>02 / CINEMA</span><b>Find your<br>next world</b><small>FEATURED</small></div>
