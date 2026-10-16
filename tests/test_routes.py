@@ -27,6 +27,42 @@ class MahiCloudRouteTests(unittest.TestCase):
                 response = self.client.get(route)
                 self.assertEqual(response.status_code, 200)
 
+    def test_public_pages_hide_own_source_signposts(self):
+        for path in ("/", "/apps/", "/mahiflix/", "/linkora/", "/instagram-cleaner.html", "/privacy", "/terms"):
+            with self.subTest(path=path):
+                response = self.client.get(path)
+                self.assertEqual(response.status_code, 200)
+                body = response.get_data(as_text=True).lower()
+                self.assertNotIn("github.com/mahimahfud-ui", body)
+                self.assertNotIn("source code", body)
+                self.assertNotIn("ai-generated", body)
+
+    def test_quick_add_ui_uses_neutral_public_copy(self):
+        response = self.client.get("/quick-add.js")
+        self.assertEqual(response.status_code, 200)
+        script = response.get_data(as_text=True).lower()
+        for phrase in ("github", "render", "source code", "repository", "ai-generated", "chatgpt", "claude", "openai"):
+            with self.subTest(phrase=phrase):
+                self.assertNotIn(phrase, script)
+
+    def test_browser_helper_guide_and_download_are_available_without_external_source_links(self):
+        import io
+        import zipfile
+
+        guide = self.client.get("/browser-helper-guide.html")
+        self.assertEqual(guide.status_code, 200)
+        self.assertIn(b"/download/browser-helper.zip", guide.data)
+        self.assertNotIn(b"github.com/mahimahfud-ui/mahicloud", guide.data)
+
+        bundle = self.client.get("/download/browser-helper.zip")
+        self.assertEqual(bundle.status_code, 200)
+        self.assertIn("application/zip", bundle.headers.get("Content-Type", ""))
+        with zipfile.ZipFile(io.BytesIO(bundle.data)) as archive:
+            names = set(archive.namelist())
+            for name in ("manifest.json", "background.js", "content.js", "dashboard-bridge.js", "popup.html", "popup.js"):
+                self.assertIn(name, names)
+            self.assertNotIn("README.md", names)
+
     def test_friendly_aliases_redirect_to_canonical_routes(self):
         cases = {
             "/windows-tools": "/linkora/",
@@ -131,8 +167,8 @@ class MahiCloudRouteTests(unittest.TestCase):
             with self.subTest(path=path):
                 page = self.client.get(path)
                 self.assertEqual(page.status_code, 200)
-                self.assertIn(b"/mahi-ai-launcher.js", page.data)
-        launcher = self.client.get("/mahi-ai-launcher.js")
+                self.assertIn(b"/quick-add.js", page.data)
+        launcher = self.client.get("/quick-add.js")
         self.assertEqual(launcher.status_code, 200)
         self.assertIn(b"mahi-catalog-plus", launcher.data)
         self.assertIn(b"/api/catalog-add", launcher.data)
@@ -161,7 +197,7 @@ class MahiCloudRouteTests(unittest.TestCase):
 
 
     def test_quick_add_is_category_first_with_distinct_url_and_script_steps(self):
-        launcher = self.client.get("/mahi-ai-launcher.js")
+        launcher = self.client.get("/quick-add.js")
         self.assertEqual(launcher.status_code, 200)
         source = launcher.get_data(as_text=True)
         for fragment in (

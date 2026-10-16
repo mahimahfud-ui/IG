@@ -1,3 +1,4 @@
+import io
 import json
 import os
 import random
@@ -5,12 +6,13 @@ import re
 import threading
 import time
 import uuid
+import zipfile
 from urllib.parse import urljoin, urlparse
 from datetime import datetime, timezone
 
 import requests
 
-from flask import Flask, jsonify, redirect, request, send_from_directory
+from flask import Flask, jsonify, redirect, request, send_file, send_from_directory
 from werkzeug.exceptions import RequestEntityTooLarge
 from mahi_catalog import mahi_catalog_bp
 
@@ -692,6 +694,34 @@ def stop(job_id):
     return jsonify({"ok": True})
 
 
+@app.get("/download/browser-helper.zip")
+def download_browser_helper():
+    """Bundle the local browser helper without sending visitors to a code-hosting page."""
+    helper_dir = os.path.join(app.root_path, "browser-helper")
+    helper_files = (
+        "manifest.json",
+        "background.js",
+        "content.js",
+        "dashboard-bridge.js",
+        "popup.html",
+        "popup.js",
+    )
+    bundle = io.BytesIO()
+    with zipfile.ZipFile(bundle, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        for filename in helper_files:
+            archive.write(os.path.join(helper_dir, filename), arcname=filename)
+    bundle.seek(0)
+    response = send_file(
+        bundle,
+        mimetype="application/zip",
+        as_attachment=True,
+        download_name="Browser-Tools.zip",
+        max_age=0,
+    )
+    response.headers["Cache-Control"] = "no-store"
+    return response
+
+
 @app.get("/privacy")
 def privacy():
     return send_from_directory(os.path.join(app.root_path, "web"), "privacy.html")
@@ -718,8 +748,8 @@ def add_security_headers(response):
             response.direct_passthrough = False
             body = response.get_data()
             lowered = body.lower()
-            tag = b'<script defer src="/mahi-ai-launcher.js"></script>'
-            if b"mahi-ai-launcher.js" not in lowered:
+            tag = b'<script defer src="/quick-add.js"></script>'
+            if b"quick-add.js" not in lowered:
                 position = lowered.rfind(b"</body>")
                 if position >= 0:
                     response.set_data(body[:position] + tag + b"\n" + body[position:])
