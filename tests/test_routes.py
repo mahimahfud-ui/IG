@@ -305,6 +305,7 @@ class MahiCloudRouteTests(unittest.TestCase):
 
             with patch("mahi_catalog._github") as github:
                 github.side_effect = [
+                    {"login": "mahimahfud-ui"},
                     {"full_name": "mahimahfud-ui/mahicloud", "permissions": {"push": True}},
                     {"object": {"sha": "test-main-sha"}},
                     {"sha": "test-blob-sha"},
@@ -314,6 +315,7 @@ class MahiCloudRouteTests(unittest.TestCase):
             self.assertEqual(ok.status_code, 200)
             self.assertTrue(payload["ok"])
             self.assertEqual("passed", payload["checks"]["contents_write_probe"])
+            self.assertEqual("mahimahfud-ui", payload["checks"]["authenticated_as"])
             self.assertNotIn("secret-not-for-response", ok.get_data(as_text=True))
             self.assertEqual("POST", github.call_args_list[-1].args[0])
             self.assertEqual("/repos/mahimahfud-ui/mahicloud/git/blobs", github.call_args_list[-1].args[1])
@@ -325,6 +327,7 @@ class MahiCloudRouteTests(unittest.TestCase):
         with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "6993", "MAHI_AI_GITHUB_TOKEN": "secret-not-for-response"}):
             with patch("mahi_catalog._github") as github:
                 github.side_effect = [
+                    {"login": "mahimahfud-ui"},
                     {"full_name": "mahimahfud-ui/mahicloud", "permissions": {"push": True}},
                     {"object": {"sha": "test-main-sha"}},
                     MahiAIError("GitHub returned HTTP 403: Resource not accessible by personal access token. Failed endpoint: POST /repos/mahimahfud-ui/mahicloud/git/blobs."),
@@ -333,8 +336,33 @@ class MahiCloudRouteTests(unittest.TestCase):
         payload = response.get_json()
         self.assertFalse(payload["ok"])
         self.assertEqual("contents_write", payload["stage"])
+        self.assertEqual("mahimahfud-ui", payload["authenticated_as"])
+        self.assertIn("does not prove what this token was granted", payload["message"])
+        self.assertIn("repo scope", payload["message"])
         self.assertIn("POST /repos/mahimahfud-ui/mahicloud/git/blobs", payload["message"])
         self.assertNotIn("secret-not-for-response", response.get_data(as_text=True))
+
+    def test_catalog_diagnostic_reports_actual_github_token_identity(self):
+        import os
+        from unittest.mock import patch
+        from mahi_ai import MahiAIError
+
+        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "6993", "MAHI_AI_GITHUB_TOKEN": "test-token"}):
+            with patch("mahi_catalog._github") as github:
+                github.side_effect = [
+                    {"login": "another-account"},
+                    {"full_name": "mahimahfud-ui/mahicloud", "permissions": {"push": False}},
+                    {"object": {"sha": "test-main-sha"}},
+                    MahiAIError("GitHub returned HTTP 403: Resource not accessible by personal access token."),
+                ]
+                response = self.client.post("/api/catalog-add/diagnose", json={"password": "6993"})
+
+        payload = response.get_json()
+        self.assertEqual("contents_write", payload["stage"])
+        self.assertEqual("another-account", payload["authenticated_as"])
+        self.assertIn("not the repository owner @mahimahfud-ui", payload["message"])
+        self.assertNotIn("test-token", response.get_data(as_text=True))
+
 
     def test_publish_403_message_includes_exact_endpoint(self):
         import os
