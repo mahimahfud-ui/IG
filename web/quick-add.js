@@ -19,8 +19,8 @@ const categories={
  movie_website:{title:"Movie Websites",short:"Movie Website",kind:"url",step:"Website URL",placeholder:"https://example.com",hint:"Paste the official movie or streaming website URL. The site and its logo are added to MahiFlix Websites.",icon:"<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"3\"/><path d=\"M3 9h18M7 6.5h.01M10 6.5h.01M7 12h10M7 15h7\"/>",color:"#ff7779"},
  movie_app:{title:"Movie Apps",short:"Movie App",kind:"url",step:"App website, store listing, or direct download URL",placeholder:"https://example.com/app or .../app.apk",hint:"Paste the official site/store listing or a public direct installer (.apk, .aab, .exe, .msi, .dmg). Direct downloads are supported; the publisher page is used to find the logo.",icon:"<rect x=\"6\" y=\"2.8\" width=\"12\" height=\"18.4\" rx=\"3\"/><path d=\"M10 5.8h4M10.5 18.1h3\"/>",color:"#b8a2ff"},
  music_app:{title:"Music Apps",short:"Music App",kind:"url",step:"App website, store listing, or direct download URL",placeholder:"https://example.com/music-app or .../app.apk",hint:"Paste the official site/store listing or a public direct installer (.apk, .aab, .exe, .msi, .dmg). Direct downloads are supported; the publisher page is used to find the logo.",icon:"<path d=\"M9 18V5l12-2v13\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><circle cx=\"18\" cy=\"16\" r=\"3\"/>",color:"#73e6ef"},
- windows_bat:{title:"Windows Automation (.BAT)",short:"Windows BAT",kind:"code",step:"Paste BAT source code",placeholder:"@echo off\r\nsetlocal\r\ntitle My Windows Tool\r\n\r\nrem Paste your BAT script here\r\npause",hint:"Paste the complete plain-text .bat script (not a file or URL). Do not include unrelated content. The backend checks for risky operations before publishing.",icon:"<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"3\"/><path d=\"M7 9l3 3-3 3M13 15h4\"/>",color:"#c9f77a"},
- windows_python:{title:"Windows Automation (.PY)",short:"Windows Python",kind:"code",step:"Paste Python source code",placeholder:"from pathlib import Path\r\n\r\ndef main():\r\n    print(\"My Windows utility\")\r\n\r\nif __name__ == \"__main__\":\r\n    main()",hint:"Paste the complete Python source code. It is syntax-checked and stored as a .py download; it is not executed on the server. Review it before running on your PC.",icon:"<path d=\"M12 3c-4 0-4 2-4 4v3h8V7c0-2 0-4-4-4Z\"/><path d=\"M8 10H6a3 3 0 0 0-3 3v3a3 3 0 0 0 3 3h3\"/><path d=\"M12 21c4 0 4-2 4-4v-3H8v3c0 2 0 4 4 4Z\"/><path d=\"M16 14h2a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3h-3\"/><circle cx=\"10.5\" cy=\"6.5\" r=\".7\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"13.5\" cy=\"17.5\" r=\".7\" fill=\"currentColor\" stroke=\"none\"/>",color:"#83b8ff"}
+ windows_bat:{title:"Windows Automation (.BAT)",short:"Windows BAT",kind:"code",step:"Paste a BAT script",placeholder:"@echo off\r\nsetlocal\r\ntitle My Windows Tool\r\n\r\nrem Paste your BAT script here\r\npause",hint:"Paste the complete plain-text .bat script here. Keep it focused on one task; risky operations may be rejected.",icon:"<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"3\"/><path d=\"M7 9l3 3-3 3M13 15h4\"/>",color:"#c9f77a"},
+ windows_python:{title:"Windows Automation (.PY)",short:"Windows Python",kind:"code",step:"Paste a Python script",placeholder:"from pathlib import Path\r\n\r\ndef main():\r\n    print(\"My Windows utility\")\r\n\r\nif __name__ == \"__main__\":\r\n    main()",hint:"Paste a complete Python script. It is checked for syntax and saved as a .py download; this website will not run it. Review it before running on your PC.",icon:"<path d=\"M12 3c-4 0-4 2-4 4v3h8V7c0-2 0-4-4-4Z\"/><path d=\"M8 10H6a3 3 0 0 0-3 3v3a3 3 0 0 0 3 3h3\"/><path d=\"M12 21c4 0 4-2 4-4v-3H8v3c0 2 0 4 4 4Z\"/><path d=\"M16 14h2a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3h-3\"/><circle cx=\"10.5\" cy=\"6.5\" r=\".7\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"13.5\" cy=\"17.5\" r=\".7\" fill=\"currentColor\" stroke=\"none\"/>",color:"#83b8ff"}
 };
 let stage="pin",selectedCategory="",pendingInput="",lastInputStage="url",savedScroll="",pin="";
 function iconSvg(mark){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+mark+'</svg>'}
@@ -75,37 +75,27 @@ function showName(){
  screen.querySelector("#mc-add-name-form").addEventListener("submit",async function(e){
   e.preventDefault();const name=input.value.trim();
   if(!name||!pin){showError("Unlock Quick Add with the PIN before publishing.");return}
-  const publish=screen.querySelector("#mc-add-publish");publish.disabled=true;publish.textContent="Publishing…";status.textContent="Validating the entry and preparing the GitHub update…";status.className="mc-add-status";
+  const publish=screen.querySelector("#mc-add-publish");publish.disabled=true;publish.textContent="Publishing…";status.textContent="Checking the entry and preparing the update…";status.className="mc-add-status";
   try{
    const response=await fetch("/api/catalog-add",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:pin,input:pendingInput,category:selectedCategory,name:name})});
    const data=await response.json().catch(function(){return {ok:false,error:"Unreadable server response."}});
    if(!response.ok||!data.ok){
     publish.disabled=false;publish.textContent="Publish item ↗";
-    const publishError=data.error||"The item could not be added. Check the values and retry.";
-    showError(publishError);
-    if(/GitHub returned HTTP 403/i.test(publishError)&&pin){
-     status.textContent=publishError+"\n\nChecking the actual Render token and GitHub repository access…";
-     try{
-      const checkResponse=await fetch("/api/catalog-add/diagnose",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:pin})});
-      const check=await checkResponse.json().catch(function(){return {ok:false,message:"The diagnostic returned an unreadable response."}});
-      showError(publishError+"\n\n"+(check.message||"GitHub token diagnostic did not return details."));
-     }catch(_){showError(publishError+"\n\nCould not run the GitHub token diagnostic. Try again after checking the Render deployment.")}
-    }
-    return
+    const publishError=(response.status>=500||response.status===403)?"Could not add this item right now. Check the details and try again.":(data.error||"The item could not be added. Check the values and retry.");showError(publishError);return
    }
    showResult(data);
-  }catch(_){publish.disabled=false;publish.textContent="Publish item ↗";showError("Could not contact the publishing service. Check the host and retry.")}
+  }catch(_){publish.disabled=false;publish.textContent="Publish item ↗";showError("Could not complete the request. Check your connection and try again.")}
  });
 }
 function showResult(data){
  stage="result";const c=categories[selectedCategory];
- setHeader("Published successfully","The GitHub repository has been updated.",false);
+ setHeader("Added to the collection","Your item is now available in the collection.",false);
  screen.innerHTML='<div class="mc-add-success-mark" aria-hidden="true">✓</div><div class="mc-add-result-title"></div><p class="mc-add-result-copy"></p><div class="mc-add-result-links" id="mc-add-result-links"></div><div class="mc-add-actions"><button class="mc-add-secondary" type="button" data-add-another>Add another</button><div class="mc-add-actions-right"><button class="mc-add-submit" type="button" data-add-close>Done</button></div></div>';
  screen.querySelector(".mc-add-result-title").textContent=data.name||"Added to catalog";
  screen.querySelector(".mc-add-result-copy").textContent=data.message||("Added to "+c.title+".");
  const links=screen.querySelector("#mc-add-result-links");
  if(data.category_label){const pill=document.createElement("span");pill.className="mc-add-pill";pill.textContent=data.category_label;links.appendChild(pill)}
- if(typeof data.commit_url==="string"&&/^https:\/\/github\.com\/[^/]+\/[^/]+\/commit\//.test(data.commit_url)){const a=document.createElement("a");a.href=data.commit_url;a.target="_blank";a.rel="noopener noreferrer";a.textContent="View GitHub commit ↗";links.appendChild(a)}
+ 
 }
 function showError(message){status.textContent=message;status.className="mc-add-status mc-add-error"}
 function previous(){if(stage==="url"||stage==="code"){showCategories();return}if(stage==="name"){if(lastInputStage==="code")showCode();else showUrl();return}if(stage==="result"){showCategories();return}}
