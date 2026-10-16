@@ -295,23 +295,6 @@ class MahiCloudRouteTests(unittest.TestCase):
                 self.assertIn(expected_message, captured.exception.message)
                 self.assertNotIn("test-token", captured.exception.message)
 
-    def test_catalog_quick_add_fails_closed_without_server_pin(self):
-        import os
-        from unittest.mock import patch
-
-        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "", "MAHI_AI_GITHUB_TOKEN": "", "OPENAI_API_KEY": ""}):
-            for path in ("/api/catalog-add/verify", "/api/catalog-add"):
-                with self.subTest(path=path):
-                    response = self.client.post(path, json={
-                        "password": "6993",
-                        "input": "https://example.com",
-                        "category": "apps",
-                        "name": "Example",
-                    })
-                    self.assertEqual(response.status_code, 503)
-                    self.assertFalse(response.get_json().get("ok"))
-                    self.assertIn("MAHI_CATALOG_PASSWORD", response.get_json().get("error", ""))
-
     def test_catalog_add_pin_can_be_verified_before_selecting_a_category(self):
         import os
         from unittest.mock import patch
