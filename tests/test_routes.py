@@ -295,6 +295,65 @@ class MahiCloudRouteTests(unittest.TestCase):
                 self.assertIn(expected_message, captured.exception.message)
                 self.assertNotIn("test-token", captured.exception.message)
 
+    def test_catalog_add_diagnostic_requires_pin_and_never_returns_token(self):
+        import os
+        from unittest.mock import patch
+        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "6993", "MAHI_AI_GITHUB_TOKEN": "secret-not-for-response"}):
+            denied = self.client.post("/api/catalog-add/diagnose", json={"password": "wrong"})
+            self.assertEqual(denied.status_code, 401)
+            self.assertNotIn("secret-not-for-response", denied.get_data(as_text=True))
+
+            with patch("mahi_catalog._github") as github:
+                github.side_effect = [
+                    {"full_name": "mahimahfud-ui/mahicloud", "permissions": {"push": True}},
+                    {"object": {"sha": "test-main-sha"}},
+                    {"sha": "test-blob-sha"},
+                ]
+                ok = self.client.post("/api/catalog-add/diagnose", json={"password": "6993"})
+            payload = ok.get_json()
+            self.assertEqual(ok.status_code, 200)
+            self.assertTrue(payload["ok"])
+            self.assertEqual("passed", payload["checks"]["contents_write_probe"])
+            self.assertNotIn("secret-not-for-response", ok.get_data(as_text=True))
+            self.assertEqual("POST", github.call_args_list[-1].args[0])
+            self.assertEqual("/repos/mahimahfud-ui/mahicloud/git/blobs", github.call_args_list[-1].args[1])
+
+    def test_catalog_add_diagnostic_identifies_contents_write_failure(self):
+        import os
+        from unittest.mock import patch
+        from mahi_ai import MahiAIError
+        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "6993", "MAHI_AI_GITHUB_TOKEN": "secret-not-for-response"}):
+            with patch("mahi_catalog._github") as github:
+                github.side_effect = [
+                    {"full_name": "mahimahfud-ui/mahicloud", "permissions": {"push": True}},
+                    {"object": {"sha": "test-main-sha"}},
+                    MahiAIError("GitHub returned HTTP 403: Resource not accessible by personal access token. Failed endpoint: POST /repos/mahimahfud-ui/mahicloud/git/blobs."),
+                ]
+                response = self.client.post("/api/catalog-add/diagnose", json={"password": "6993"})
+        payload = response.get_json()
+        self.assertFalse(payload["ok"])
+        self.assertEqual("contents_write", payload["stage"])
+        self.assertIn("POST /repos/mahimahfud-ui/mahicloud/git/blobs", payload["message"])
+        self.assertNotIn("secret-not-for-response", response.get_data(as_text=True))
+
+    def test_publish_403_message_includes_exact_endpoint(self):
+        import os
+        from unittest.mock import Mock, patch
+        from mahi_ai import MahiAIError, _github
+
+        response = Mock()
+        response.status_code = 403
+        response.content = b'{"message":"Resource not accessible by personal access token"}'
+        response.json.return_value = {"message": "Resource not accessible by personal access token"}
+        response.headers = {"X-Accepted-GitHub-Permissions": "contents=write"}
+        with patch.dict(os.environ, {"MAHI_AI_GITHUB_TOKEN": "secret-not-for-response"}):
+            with patch("mahi_ai.requests.request", return_value=response):
+                with self.assertRaises(MahiAIError) as captured:
+                    _github("POST", "/repos/mahimahfud-ui/mahicloud/git/blobs", payload={"content": "probe"})
+        self.assertIn("POST /repos/mahimahfud-ui/mahicloud/git/blobs", captured.exception.message)
+        self.assertIn("contents=write", captured.exception.message)
+        self.assertNotIn("secret-not-for-response", captured.exception.message)
+
     def test_catalog_add_pin_can_be_verified_before_selecting_a_category(self):
         import os
         from unittest.mock import patch
