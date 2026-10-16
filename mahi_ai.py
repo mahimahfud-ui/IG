@@ -377,24 +377,28 @@ def _fetch_public(url: str, max_bytes: int = 2_000_000, *, allow_truncate: bool 
         session.close()
 
 class _MetadataParser(HTMLParser):
+    """Read page metadata and identify likely brand artwork without executing page scripts."""
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
         self.title_parts: list[str] = []
         self.in_title = False
         self.meta: dict[str, str] = {}
         self.icons: list[str] = []
+        self.logo_images: list[str] = []
         self._icon_scores: dict[str, int] = {}
+        self._logo_image_scores: dict[str, int] = {}
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         data = dict(attrs)
-        if tag.lower() == "title":
+        tag = tag.lower()
+        if tag == "title":
             self.in_title = True
-        if tag.lower() == "meta":
+        if tag == "meta":
             key = (data.get("property") or data.get("name") or data.get("itemprop") or "").strip().lower()
             content = (data.get("content") or "").strip()
             if key and content and key not in self.meta:
                 self.meta[key] = content[:1000]
-        if tag.lower() == "link":
+        if tag == "link":
             rels = (data.get("rel") or "").lower().split()
             href = (data.get("href") or "").strip()
             if href and any(key in rels for key in ("icon", "apple-touch-icon", "mask-icon")):
@@ -425,6 +429,47 @@ class _MetadataParser(HTMLParser):
                     self._icon_scores,
                     key=lambda candidate: (-self._icon_scores[candidate], candidate.lower()),
                 )
+
+        # Some sites render their actual brand logo as a header image instead of a favicon link.
+        if tag == "img":
+            descriptions = " ".join(str(data.get(key) or "") for key in
+                                     ("alt", "class", "id", "title", "aria-label", "itemprop")).lower()
+            sources = []
+            for key in ("src", "data-src", "data-lazy-src", "data-original", "data-image"):
+                value = (data.get(key) or "").strip()
+                if value:
+                    sources.append(value)
+            srcset = (data.get("srcset") or data.get("data-srcset") or "").strip()
+            if srcset:
+                candidates = []
+                for entry in srcset.split(","):
+                    parts = entry.strip().split()
+                    if not parts:
+                        continue
+                    descriptor = parts[1] if len(parts) > 1 else ""
+                    number = re.match(r"(\d+)(?:w|x)?$", descriptor)
+                    candidates.append((int(number.group(1)) if number else 0, parts[0]))
+                if candidates:
+                    sources.append(max(candidates, key=lambda item: item[0])[1])
+            path_signal = any(re.search(r"(?:^|[/_.-])(?:logo|brand|wordmark|site-mark|app-icon)(?:[/_.-]|$)",
+                                        source.lower().split("?", 1)[0]) for source in sources)
+            text_signal = bool(re.search(r"\b(?:logo|brand|wordmark|site.?mark|app.?icon)\b", descriptions))
+            itemprop_signal = (data.get("itemprop") or "").strip().lower() == "logo"
+            if path_signal or text_signal or itemprop_signal:
+                width = int(data.get("width") or 0) if str(data.get("width") or "").isdigit() else 0
+                height = int(data.get("height") or 0) if str(data.get("height") or "").isdigit() else 0
+                base_score = 110 if (path_signal or itemprop_signal) else 90
+                base_score += min(max(width, height), 1024) // 32
+                for source in sources:
+                    clean_source = source.strip()
+                    if not clean_source or clean_source.startswith(("data:", "blob:", "javascript:")):
+                        continue
+                    score = base_score + (12 if clean_source.lower().split("?", 1)[0].endswith(".svg") else 0)
+                    self._logo_image_scores[clean_source] = max(score, self._logo_image_scores.get(clean_source, -1))
+                self.logo_images = sorted(
+                    self._logo_image_scores,
+                    key=lambda candidate: (-self._logo_image_scores[candidate], candidate.lower()),
+                )[:16]
 
     def handle_endtag(self, tag: str) -> None:
         if tag.lower() == "title":
@@ -539,33 +584,40 @@ def _metadata_for_url(url: str) -> dict:
         pass
     domain = (urlsplit(final_url).hostname or "").lower()
     logos = []
-    for raw in parser.icons:
-        icon_url = urljoin(final_url, raw)
+
+    def add_logo_candidate(raw: str) -> None:
+        if not raw or raw.strip().lower().startswith(("data:", "blob:", "javascript:")):
+            return
+        icon_url = urljoin(final_url, raw.strip())
         parts = urlsplit(icon_url)
-        if parts.scheme == "https" and parts.hostname and not parts.username and not parts.password:
-            try:
-                _assert_public_host(icon_url)
-                logos.append(urlunsplit(("https", parts.netloc, parts.path, parts.query, "")))
-            except MahiAIError:
-                pass
+        if parts.scheme != "https" or not parts.hostname or parts.username or parts.password:
+            return
+        try:
+            _assert_public_host(icon_url)
+            logos.append(urlunsplit(("https", parts.netloc, parts.path, parts.query, "")))
+        except MahiAIError:
+            return
+
+    # Prefer explicit high-resolution app/site icons, then header logo images.
+    for raw in parser.icons[:6]:
+        add_logo_candidate(raw)
+    for raw in parser.logo_images[:8]:
+        add_logo_candidate(raw)
+    # Social preview image is useful where a standalone brand image is not exposed.
     for key in ("og:image", "twitter:image", "og:image:secure_url"):
-        raw = parser.meta.get(key)
-        if raw:
-            img = urljoin(final_url, raw)
-            parts = urlsplit(img)
-            if parts.scheme == "https" and parts.hostname and not parts.username and not parts.password:
-                try:
-                    _assert_public_host(img)
-                    logos.append(urlunsplit(("https", parts.netloc, parts.path, parts.query, "")))
-                except MahiAIError:
-                    pass
+        add_logo_candidate(parser.meta.get(key))
+    # Last-resort common paths; the publisher tries only a bounded list.
+    root_parts = urlsplit(final_url)
+    root = urlunsplit(("https", root_parts.netloc, "/", "", ""))
+    for path in ("/apple-touch-icon.png", "/favicon.ico", "/favicon.png", "/logo.png"):
+        add_logo_candidate(urljoin(root, path))
     logos.append("https://www.google.com/s2/favicons?sz=128&domain=" + quote(domain, safe=""))
     desc = parser.meta.get("description") or parser.meta.get("og:description") or parser.meta.get("twitter:description") or ""
     site_name = parser.meta.get("og:site_name") or parser.meta.get("application-name") or ""
     title = " ".join(parser.title_parts).strip() or parser.meta.get("og:title") or parser.meta.get("twitter:title") or site_name or domain
     return {"url": final_url, "domain": domain, "title": title[:160], "site_name": site_name[:120],
             "description": re.sub(r"\s+", " ", desc)[:500],
-            "logo_sources": list(dict.fromkeys(logos))[:6],
+            "logo_sources": list(dict.fromkeys(logos))[:16],
             "content_hint": re.sub(r"<[^>]+>", " ", source[:12000])[:1200]}
 
 

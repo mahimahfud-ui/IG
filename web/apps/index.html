@@ -287,7 +287,7 @@ footer .links{display:flex;justify-content:center;align-items:center;flex-wrap:w
 <div class="music-scene"><div class="vinyl-disc"><span></span></div>
 <div class="music-visualizer"><i style="--h:20px;--d:-.2s"></i><i style="--h:44px;--d:-.6s"></i><i style="--h:28px;--d:-.3s"></i><i style="--h:64px;--d:-.8s"></i><i style="--h:37px;--d:-.1s"></i><i style="--h:53px;--d:-.5s"></i><i style="--h:25px;--d:-.4s"></i><i style="--h:70px;--d:-.9s"></i><i style="--h:34px;--d:-.2s"></i><i style="--h:54px;--d:-.7s"></i><i style="--h:22px;--d:-.4s"></i><i style="--h:40px;--d:-.8s"></i><i style="--h:27px;--d:-.1s"></i></div></div>
 </div></section>
-<div class="switch-wrap"><div class="switch" role="tablist" aria-label="App category"><button class="active" data-category="movie" type="button" role="tab" aria-selected="true">▣ Movie apps</button><button data-category="music" type="button" role="tab" aria-selected="false">♫ Music apps</button></div></div>
+<div class="switch-wrap"><div class="switch" role="tablist" aria-label="App category"><button class="active" data-category="movie" type="button" role="tab" aria-selected="true">▣ Movie apps</button><button data-category="music" type="button" role="tab" aria-selected="false">♫ Music apps</button><button data-category="apps" type="button" role="tab" aria-selected="false">▦ Apps</button></div></div>
 <div class="search-row"><label class="search-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="query" type="search" placeholder="Search apps..." autocomplete="off" aria-label="Search apps"></label></div>
 <div class="results-bar"><span id="activeTitle">Movie apps</span><span class="results-actions"><strong id="count">10</strong> apps <button class="add-app-button" id="addAppBtn" type="button">+ Add app</button></span></div><h2 class="collection-title" id="collectionTitle">For your next watch</h2><section class="apps-grid" id="grid" aria-live="polite"></section><p class="empty" id="empty">No apps matched that search.</p></main>
 <footer><div class="wrap">A little space for good sound and good stories · <span id="year"></span><div class="links"><a href="/">Personal site</a><a href="/mahiflix/">Movie Websites</a><a href="https://github.com/mahimahfud-ui/mahicloud" target="_blank" rel="noopener noreferrer">Source ↗</a></div></div></footer>
@@ -319,6 +319,7 @@ const musicApps=[
 {name:"LastWave",kind:"app",url:"/download/app/lastwave",domain:"github.com",ads:0,pop:75,smooth:84,langs:82,new:true,desc:"LastWave Native music app — direct universal APK download.",logoSources:["https://raw.githubusercontent.com/Clash-Projects/LastWave-Native/main/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png","https://raw.githubusercontent.com/Clash-Projects/LastWave-Native/main/lastwave_logo.png","https://github.com/favicon.ico"]},
 {name:"Meld",kind:"app",url:"https://github.com/FrancescoGrazioso/Meld/releases/download/v0.7.2/Meld-izzy.apk",domain:"github.com/FrancescoGrazioso/Meld",ads:0,pop:84,smooth:88,langs:86,new:true,desc:"Meld is an Android music player combining YouTube Music playback with Spotify-powered search, playlists and recommendations. Version 0.7.2 APK.",logoSources:[]}
 ];
+const otherApps=[];
 const LOCAL_LOGOS={
  "filmtv|filmtvapp.com":"filmtv",
  "nuvix|nuvixapp.in":"nuvix",
@@ -357,8 +358,8 @@ function svgCheck(){return '<svg viewBox="0 0 24 24" fill="none" stroke="current
 function favoriteButton(item){const on=favourites.has(item.name);return '<button class="movie-fav" type="button" data-fav-for="'+esc(item.name)+'" aria-pressed="'+(on?"true":"false")+'" aria-label="'+(on?"Remove "+esc(item.name)+" from My List":"Add "+esc(item.name)+" to My List")+'" title="'+(on?"Remove from My List":"Add to My List")+'">'+(on?svgCheck():svgPlus())+'</button>'}
 function normaliseUrl(value){let raw=String(value||"").trim();if(!raw)return "";if(!/^https?:\/\//i.test(raw))raw="https://"+raw;try{const u=new URL(raw);if(u.protocol!=="https:"||!u.hostname||u.username||u.password)return "";return u.href}catch(e){return ""}}
 function render(){
- const isMovie=category==="movie";
- let data=isMovie?movieApps.concat(readCustomApps()):musicApps.slice();
+ const isMovie=category==="movie",isMusic=category==="music";
+ let data=isMovie?movieApps.concat(readCustomApps()):isMusic?musicApps.slice():otherApps.slice();
  const seen=new Set();
  data=data.filter(function(x){const key=String(x.name||"").trim().toLowerCase();if(!key||seen.has(key))return false;seen.add(key);return true}).sort(function(a,b){return qualityScore(b)-qualityScore(a)});
  const q=query.value.trim().toLowerCase();
@@ -366,15 +367,16 @@ function render(){
  document.body.dataset.category=category;
  const heroTitle=document.getElementById("heroTitle"),heroDescription=document.getElementById("heroDescription");
  if(isMovie){heroTitle.innerHTML='Screen worlds.<br><span class="grad">Next watch.</span>';heroDescription.textContent="The original MahiFlix movie-app collection, with app pages, direct APK links and saved favourites.";activeTitle.textContent="Movie apps";collectionTitle.textContent="For your next watch"}
- else{heroTitle.innerHTML='Find your rhythm.<br><span class="grad">Feel the sound.</span>';heroDescription.textContent="Music players from our curated collection, with original artwork and their download links.";activeTitle.textContent="Music apps";collectionTitle.textContent="For every kind of mood"}
- count.textContent=String(shown.length).padStart(2,"0");empty.style.display=shown.length?"none":"block";addAppButton.hidden=!isMovie;
+ else if(isMusic){heroTitle.innerHTML='Find your rhythm.<br><span class="grad">Feel the sound.</span>';heroDescription.textContent="Music players from our curated collection, with original artwork and their download links.";activeTitle.textContent="Music apps";collectionTitle.textContent="For every kind of mood"}
+ else{heroTitle.innerHTML='Useful apps.<br><span class="grad">One place.</span>';heroDescription.textContent="Other apps and useful online tools, with their official pages and brand artwork.";activeTitle.textContent="Apps";collectionTitle.textContent="Explore apps and tools"}
+  count.textContent=String(shown.length).padStart(2,"0");empty.style.display=shown.length?"none":"block";addAppButton.hidden=!isMovie;
  grid.innerHTML=shown.map(function(x,i){
   const accent=x.accent||(isMovie?"#ff7166":"#80e5f4"),accent2=x.accent2||(isMovie?"#8e202d":"#7253bd");
   const artwork=logoSourcesFor(x,isMovie),source=artwork.sources[0]||"",domain=x.domain?'<span>'+esc(x.domain)+'</span>':"";
   const icon='<div class="app-icon '+(isMovie?"movie-logo":"music-logo")+'"><img class="movie-app-logo" loading="lazy" decoding="async" alt="'+esc(x.name)+' logo" src="'+esc(source)+'" data-logo-sources="'+esc(JSON.stringify(artwork.sources))+'" data-logo-index="'+artwork.index+'"></div>';
   const fresh=x.new?'<span class="fresh">NEW</span>':"";
   const ads=x.ads===0?'<span class="ad-low">No / minimal ads</span>':x.ads===1?'<span class="ad-mid">Some ads</span>':x.ads===2?'<span class="ad-high">More / heavier ads</span>':"";
-  const tags=isMovie?'<div class="movie-app-tags">'+fresh+ads+domain+(x.custom?'<span class="download-tag">YOUR APP</span>':"")+'</div>':'<div class="movie-app-tags">'+fresh+'<span class="download-tag">DIRECT DOWNLOAD</span>'+domain+'</div>';
+  const tags=isMovie?'<div class="movie-app-tags">'+fresh+ads+domain+(x.custom?'<span class="download-tag">YOUR APP</span>':"")+'</div>':isMusic?'<div class="movie-app-tags">'+fresh+'<span class="download-tag">DIRECT DOWNLOAD</span>'+domain+'</div>':'<div class="movie-app-tags">'+fresh+'<span class="download-tag">APP</span>'+domain+'</div>';
   const desc=x.desc||x.description||"";
   if(isMovie){
    const fav=favoriteButton(x);
@@ -386,12 +388,12 @@ function render(){
     '<div class="card-footer"><small>Language coverage score · '+esc(x.langs==null?"—":x.langs)+'/100</small>'+actions+'</div></article>';
   }
   return '<article class="app-card" style="--accent:'+esc(accent)+';--accent2:'+esc(accent2)+';--accent-glow:'+esc(accent)+'30;animation:iosPanelIn .48s cubic-bezier(.22,1,.36,1) both;animation-delay:'+Math.min(i,8)*42+'ms">'+
-   '<div class="card-top">'+icon+'<span class="kind">MUSIC</span></div><h3>'+esc(x.name)+'</h3><p>'+esc(desc)+'</p>'+tags+
-   '<div class="card-footer"><small>'+(x.sublabel||"Direct app download")+'</small><a class="open-link" href="'+esc(x.url||"#")+'" target="_blank" rel="noopener noreferrer">'+esc(x.linkLabel||"Download app")+' <span aria-hidden="true">↗</span></a></div></article>';
+   '<div class="card-top">'+icon+'<span class="kind">'+(isMusic?"MUSIC":"APP")+'</span></div><h3>'+esc(x.name)+'</h3><p>'+esc(desc)+'</p>'+tags+
+   '<div class="card-footer"><small>'+(x.sublabel||(isMusic?"Direct app download":"Official website"))+'</small><a class="open-link" href="'+esc(x.url||"#")+'" target="_blank" rel="noopener noreferrer">'+esc(x.linkLabel||(isMusic?"Download app":"Visit website"))+' <span aria-hidden="true">↗</span></a></div></article>';
  }).join("");
  grid.querySelectorAll(".movie-app-logo").forEach(function(img){img.addEventListener("error",function(){nextLogo(img)})});
 }
-document.querySelectorAll(".switch button").forEach(function(btn){btn.addEventListener("click",function(){const next=btn.dataset.category==="music"?"music":"movie";if(next===category)return;category=next;document.querySelectorAll(".switch button").forEach(function(other){const active=other.dataset.category===category;other.classList.toggle("active",active);other.setAttribute("aria-selected",active?"true":"false")});query.value="";render();if(document.startViewTransition&&!matchMedia("(prefers-reduced-motion: reduce)").matches){/* rendering is synchronous by design */}})});
+document.querySelectorAll(".switch button").forEach(function(btn){btn.addEventListener("click",function(){const next=["movie","music","apps"].includes(btn.dataset.category)?btn.dataset.category:"movie";if(next===category)return;category=next;document.querySelectorAll(".switch button").forEach(function(other){const active=other.dataset.category===category;other.classList.toggle("active",active);other.setAttribute("aria-selected",active?"true":"false")});query.value="";render();if(document.startViewTransition&&!matchMedia("(prefers-reduced-motion: reduce)").matches){/* rendering is synchronous by design */}})});
 query.addEventListener("input",render);
 document.addEventListener("click",function(e){
  const fav=e.target.closest&&e.target.closest(".movie-fav");
