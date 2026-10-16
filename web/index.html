@@ -781,9 +781,11 @@ function frame(time){
   if(ready){
     var gap=seekTo-seekAt;
     if(reduced) seekAt=seekTo;
-    else if(Math.abs(gap)>0.001){
-      seekAt+=gap*0.28;
-      if(Math.abs(seekTo-seekAt)<=0.001) seekAt=seekTo;
+    else if(Math.abs(gap)>0.0002){
+      /* Keep the original orbit/dock artwork; only ease the scroll-follow motion.
+         This matches the smoother 0.115 damping used by the provided reference. */
+      seekAt+=gap*0.115;
+      if(Math.abs(seekTo-seekAt)<=0.0002) seekAt=seekTo;
       else keepAnimating=true;
     } else seekAt=seekTo;
     var onHero=window.pageYOffset < heroEnd + window.innerHeight && !document.hidden;
@@ -819,8 +821,7 @@ function card(p,i){
     '<h3><a href="'+esc(p.url)+'"'+(ext?' target="_blank" rel="noopener noreferrer"':'')+'>'+esc(p.title)+'</a></h3>'+
     '<p class="cat">'+esc(p.catLabel)+'</p><p class="desc">'+esc(p.desc)+'</p>'+
     '<ul class="tags">'+p.tags.slice(0,3).map(function(t){return '<li>'+esc(t)+'</li>';}).join("")+'</ul>'+
-    '<div class="card-foot"><span class="get">'+(ext?'View source':'Open')+'</span>'+
-    (p.local?'<a class="src" href="'+esc(p.repo)+'" target="_blank" rel="noopener noreferrer" aria-label="'+esc(p.title)+' source on GitHub">Source code</a>':'')+'</div></article>';
+    '<div class="card-foot"><span class="get">'+(ext?'Open link':'Open')+'</span></div></article>';
 }
 function matches(p,term){
   if(curCat!=="all" && p.cat!==curCat) return false;

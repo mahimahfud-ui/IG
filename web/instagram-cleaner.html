@@ -264,7 +264,7 @@ button,a,[role="button"],input[type="button"],input[type="submit"]{-webkit-tap-h
   <div class="card"><div class="card-pad">
    <div class="title">Local-only runner</div><div class="sub">Render is not used to execute a Selenium browser. This builder only generates the Python file.</div>
    <div class="notice">Source basis: InstaPy/InstaPy (GPL-3.0). The generated file is a small original configuration wrapper; upstream source is not copied into the website.</div>
-   <div class="toolbar"><button class="btn" id="openIpyDocs">OPEN DOCS</button><button class="btn" id="openIpySource">GITHUB</button></div>
+   <div class="toolbar"><button class="btn" id="openIpyDocs">OPEN DOCS</button></div>
   </div></div>
  </div>
 </section>
@@ -459,7 +459,7 @@ button,a,[role="button"],input[type="button"],input[type="submit"]{-webkit-tap-h
   function buildIpy(){const s=py();$('ipyPreview').textContent=s;return s}
   $('buildIpy').onclick=()=>{buildIpy();toast('Script ready')};$('copyIpy').onclick=()=>navigator.clipboard.writeText(buildIpy()).then(()=>toast('Script copied')).catch(()=>toast('Copy failed'));
   $('downloadIpy').onclick=()=>{const blob=new Blob([buildIpy()],{type:'text/x-python'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mahi-instapy-runner.py';a.click();URL.revokeObjectURL(a.href);toast('Script downloaded')};
-  $('openIpyDocs').onclick=()=>window.open('https://github.com/InstaPy/InstaPy/tree/master/docs','_blank','noopener');$('openIpySource').onclick=()=>window.open('https://github.com/InstaPy/InstaPy','_blank','noopener');buildIpy();
+  $('openIpyDocs').onclick=()=>window.open('https://github.com/InstaPy/InstaPy/tree/master/docs','_blank','noopener');buildIpy();
 
   function userKey(x){let s=(x?.username||x?.title||'').toString().trim().toLowerCase();if(!s&&x?.href){try{s=new URL(x.href).pathname.split('/').filter(Boolean)[0]?.toLowerCase()||''}catch(_){}}return s.replace(/^@/,'')}
   function flatten(node,name,out=[]){if(Array.isArray(node)){node.forEach(x=>flatten(x,name,out));return out}if(!node||typeof node!=='object')return out;
