@@ -781,9 +781,10 @@ function frame(time){
   if(ready){
     var gap=seekTo-seekAt;
     if(reduced) seekAt=seekTo;
-    else if(Math.abs(gap)>0.001){
-      seekAt+=gap*0.28;
-      if(Math.abs(seekTo-seekAt)<=0.001) seekAt=seekTo;
+    else if(Math.abs(gap)>0.0002){
+      /* Keep the original orbit and dock; soften only scroll-follow easing. */
+      seekAt+=gap*0.115;
+      if(Math.abs(seekTo-seekAt)<=0.0002) seekAt=seekTo;
       else keepAnimating=true;
     } else seekAt=seekTo;
     var onHero=window.pageYOffset < heroEnd + window.innerHeight && !document.hidden;
