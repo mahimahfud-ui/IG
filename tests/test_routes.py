@@ -36,6 +36,7 @@ class MahiCloudRouteTests(unittest.TestCase):
                 self.assertNotIn("github.com/mahimahfud-ui", body)
                 self.assertNotIn("source code", body)
                 self.assertNotIn("ai-generated", body)
+                self.assertNotIn("browser-helper folder", body)
 
     def test_quick_add_ui_uses_neutral_public_copy(self):
         response = self.client.get("/quick-add.js")
