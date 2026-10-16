@@ -124,7 +124,7 @@ export function startScene({ canvas, state, onReady, onFail }) {
     if (!(probe.getContext('webgl2') || probe.getContext('webgl'))) throw new Error('no webgl');
     renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: 'high-performance' });
     if (!renderer.getContext()) throw new Error('no context');
-  } catch (e) { onFail(); return { invalidate() {}, dispose() {} }; }
+  } catch (e) { onFail(); return { invalidate() {}, dispose() {}, setVisible() {} }; }
 
   const mqPhone = matchMedia('(max-width:760px)'), mqTab = matchMedia('(max-width:1100px)');
   const lowEnd = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4;
@@ -222,7 +222,7 @@ export function startScene({ canvas, state, onReady, onFail }) {
   }
 
   // ---- loop + quality governor ----
-  let raf = 0, last = performance.now(), ready = false, warm = 2, acc = 0, cnt = 0, bad = 0, dead = false;
+  let raf = 0, invalidateRaf = 0, last = performance.now(), ready = false, warm = 2, acc = 0, cnt = 0, bad = 0, dead = false, workspaceVisible = true;
   let base = 1;                                                         // fastest frame seen ≈ the display's refresh interval
   function govern(dt) {
     if (dt > .004) base = Math.min(base, dt);
@@ -244,11 +244,16 @@ export function startScene({ canvas, state, onReady, onFail }) {
     if (!ready) { ready = true; onReady(); }
     govern(dt);
   }
-  function start() { if (dead || state.reduced || raf || document.hidden) return; last = performance.now(); raf = requestAnimationFrame(frame); }
-  function stop() { cancelAnimationFrame(raf); raf = 0; }
+  function start() { if (dead || state.reduced || raf || document.hidden || !workspaceVisible) return; last = performance.now(); raf = requestAnimationFrame(frame); }
+  function stop() { if (raf) cancelAnimationFrame(raf); raf = 0; if (invalidateRaf) cancelAnimationFrame(invalidateRaf); invalidateRaf = 0; }
   function invalidate() {                                               // one static frame (reduced motion / paused)
-    if (dead || raf) return;
-    requestAnimationFrame(now => { update(.016, now, true); renderer.render(scene, camera); if (!ready) { ready = true; onReady(); } });
+    if (dead || raf || invalidateRaf || document.hidden || !workspaceVisible) return;
+    invalidateRaf = requestAnimationFrame(now => { invalidateRaf = 0; if (dead || document.hidden || !workspaceVisible) return; update(.016, now, true); renderer.render(scene, camera); if (!ready) { ready = true; onReady(); } });
+  }
+  function setVisible(visible) {
+    workspaceVisible = !!visible;
+    if (!workspaceVisible || document.hidden) { stop(); return; }
+    if (state.reduced) invalidate(); else start();
   }
   function fail() { dispose(); onFail(); }
 
@@ -272,5 +277,5 @@ export function startScene({ canvas, state, onReady, onFail }) {
 
   resize(true); applyLevel();
   state.reduced ? invalidate() : start();
-  return { invalidate, dispose };
+  return { invalidate, dispose, setVisible };
 }
