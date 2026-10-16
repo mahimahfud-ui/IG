@@ -713,7 +713,7 @@ setTimeout(start,1600); /* never strand the page behind the preloader */
 function resize(){
   var w=window.innerWidth, h=window.innerHeight;
   if(w===W && Math.abs(h-H)<90) return; /* ignore mobile URL-bar resizes */
-  W=w; H=h; DPR=Math.min(window.devicePixelRatio||1,w<=720?1.25:1.5);
+  W=w; H=h; DPR=Math.min(window.devicePixelRatio||1,w<=720?1:1.15);
   cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); if(ctx) ctx.setTransform(DPR,0,0,DPR,0,0); needDraw=true;
   scheduleFrame();
 }
@@ -754,7 +754,7 @@ function draw(t,time){
     var it=items[k], im=imgs[it.i];
     if(it.s<1 || !im.complete || !im.naturalWidth) continue;
     ctx.save(); ctx.globalAlpha=clamp(it.a,0,1);
-    ctx.shadowColor=projects[it.i].c1; ctx.shadowBlur=22*it.a; ctx.drawImage(im,it.x-it.s/2,it.y-it.s/2,it.s,it.s); ctx.restore();
+    ctx.shadowColor=projects[it.i].c1; ctx.shadowBlur=W<=720?0:Math.min(10,8*it.a); ctx.drawImage(im,it.x-it.s/2,it.y-it.s/2,it.s,it.s); ctx.restore();
   }
 }
 
@@ -782,7 +782,7 @@ function frame(time){
     var gap=seekTo-seekAt;
     if(reduced) seekAt=seekTo;
     else if(Math.abs(gap)>0.001){
-      seekAt+=gap*0.18;
+      seekAt+=gap*0.28;
       if(Math.abs(seekTo-seekAt)<=0.001) seekAt=seekTo;
       else keepAnimating=true;
     } else seekAt=seekTo;
@@ -965,5 +965,6 @@ resize(); measure(); readScroll(); build(); moveGlider(); scheduleFrame();
  shellTop();if(location.hash)navigate(routeFromHash(),{fromHistory:true});
 })();
 </script>
+<script src="/scroll-performance.js" defer></script>
 </body>
 </html>

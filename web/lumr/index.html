@@ -37,7 +37,7 @@ a{color:inherit;text-decoration:none}button,input,textarea{font:inherit}button{c
 .add-button:hover{transform:translateY(-4px) rotate(90deg);background:rgba(156,179,255,.14);border-color:rgba(199,212,255,.55);box-shadow:0 0 70px rgba(111,139,255,.20)}.add-button svg{width:22px;height:22px}
 .account-line{margin-top:11px;border:0;background:none;color:#6f788a;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:5px}.account-line:hover{color:#d5d9e2}
 .archive{padding:0 0 100px}.archive-head{text-align:center;margin-bottom:28px}.archive-head .eyebrow{font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#737d8f;margin:0 0 10px}.archive-head h2{font:500 clamp(36px,7vw,70px)/1 Manrope,sans-serif;letter-spacing:-.065em;margin:0}.archive-head p{margin:12px auto 0;max-width:520px;color:#7f8796;font-size:12px}
-.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.card{grid-column:span 4;position:relative;overflow:hidden;min-height:320px;border:1px solid rgba(255,255,255,.07);border-radius:18px;background:rgba(255,255,255,.025);transform:translate3d(0,var(--scroll-y,0px),0);will-change:transform;cursor:pointer}.card:nth-child(1),.card:nth-child(4),.card:nth-child(7){grid-column:span 7;min-height:470px}.card:nth-child(2),.card:nth-child(5),.card:nth-child(8){grid-column:span 5;min-height:380px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.card{grid-column:span 4;position:relative;overflow:hidden;min-height:320px;border:1px solid rgba(255,255,255,.07);border-radius:18px;background:rgba(255,255,255,.025);transform:translate3d(0,var(--scroll-y,0px),0);cursor:pointer}.card:nth-child(1),.card:nth-child(4),.card:nth-child(7){grid-column:span 7;min-height:470px}.card:nth-child(2),.card:nth-child(5),.card:nth-child(8){grid-column:span 5;min-height:380px}
 .media,.media img,.media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.media img,.media video{filter:saturate(.92) contrast(1.03);transition:transform 1s var(--ease),filter 1s var(--ease)}.card:hover .media img,.card:hover .media video{transform:scale(1.045);filter:saturate(1.06) contrast(1.05)}
 .card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 50%,rgba(0,0,0,.72));pointer-events:none}
 .card-info{position:absolute;z-index:2;left:16px;right:16px;bottom:15px;text-align:center}.card-title{font:600 14px Manrope,sans-serif}.card-caption{margin-top:3px;font-size:11px;color:#c0c5cf}.badge{display:inline-flex;align-items:center;gap:5px;margin-bottom:7px;padding:5px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(8,11,18,.42);backdrop-filter:blur(10px);font-size:8px;letter-spacing:.13em;text-transform:uppercase;color:#d9deea}
@@ -181,7 +181,7 @@ async function loadMedia(){if(!state.sb)return [];const {data,error}=await state
 async function loadProfile(){if(!location.pathname.startsWith('/@'))return;const username=decodeURIComponent(location.pathname.slice(2));state.routeProfile={username};$('#heroTitle').textContent='@'+username;if(!state.sb)return;const {data:p}=await state.sb.from('profiles').select('*').eq('username',username).maybeSingle();if(!p)return;state.routeProfile=p;$('#heroTitle').textContent='@'+p.username;$('#bio').textContent=p.bio||'photographs · motion · moments';if(p.instagram_url)$('#ig').href=p.instagram_url;if(p.youtube_url){$('#yt').href=p.youtube_url;$('#fyt').href=p.youtube_url}const {data:m}=await state.sb.from('media').select('*').eq('user_id',p.id).eq('visibility','public').order('created_at',{ascending:false}).limit(80);state.media=m||[]}
 function render(){const g=$('#grid');if(!state.media.length){g.innerHTML='<div class="empty"><div><h3>nothing in the constellation yet</h3><p>Add your first photograph or motion clip with the + button above.</p><button id="emptyAdd" type="button">Add first frame +</button></div></div>';$('#emptyAdd').onclick=openComposer;return}g.innerHTML=state.media.map((m,i)=>'<article class="card" data-i="'+i+'"><div class="media">'+(m.type==='video'?'<video src="'+esc(m.original_url)+'" poster="'+esc(m.thumbnail_url||'')+'" muted loop playsinline preload="metadata"></video>':'<img src="'+esc(m.original_url||m.thumbnail_url||'')+'" alt="'+esc(m.title||'media')+'" loading="lazy">')+'</div><div class="card-info"><div class="badge">'+(m.type==='video'?'motion':'still')+'</div><div class="card-title">'+esc(m.title||'Untitled')+'</div><div class="card-caption">'+esc(m.caption||'')+'</div></div></article>').join('');$$('.card').forEach(c=>c.onclick=()=>viewer(+c.dataset.i))}
 let scrollRaf=0;
-function scrollMotion(){if(scrollRaf)return;scrollRaf=requestAnimationFrame(()=>{scrollRaf=0;$$('.card').forEach((c,i)=>{const r=c.getBoundingClientRect(),delta=(r.top+r.height/2-innerHeight*.52)/innerHeight,p=Math.max(-1,Math.min(1,delta));c.style.setProperty('--scroll-y',(-p*(i%2?24:38)).toFixed(1)+'px')})})}
+function scrollMotion(){ /* Per-card scroll parallax removed: native scrolling must not measure and rewrite the full gallery. */ }
 function accountUI(){const b=$('#accountLine'),signed=!!state.session;b.textContent=!signed?'create your gallery':!state.profile?'choose your username':'@'+state.profile.username;b.onclick=!signed?()=>showAuth():!state.profile?openProfileSetup:()=>modal('#upload',true);$('#signOutBtn').classList.toggle('hidden',!signed);$('#accountIdentity').textContent=state.profile?'signed in as @'+state.profile.username+' · your uploads stay attached to this account':signed?'finish your profile to publish':''}
 function setAuthStep(step){state.authStep=step;$('#phoneStep').classList.toggle('hidden',step!=='phone');$('#otpStep').classList.toggle('hidden',step!=='otp');if(step==='phone'){setTimeout(()=>$('#phone')?.focus(),80)}else{setTimeout(()=>$('#otp')?.focus(),80)}}
 function resetAuth(){if(state.resendTimer){clearInterval(state.resendTimer);state.resendTimer=null}state.phone='';state.authStep='phone';$('#phone').value='';$('#otp').value='';$('#authStatus').textContent='';$('#resendOtp').disabled=true;$('#resendOtp').textContent='Resend in 60s';setAuthStep('phone')}
@@ -231,30 +231,18 @@ start();
    tx=e.clientX;ty=e.clientY;dot.style.opacity='1';
    const hit=e.target.closest('a,button,.card,input,textarea');
    dot.classList.toggle('wide',!!hit);
+   if(cursorVisible&&!document.hidden&&!cursorRaf)cursorRaf=requestAnimationFrame(loop);
  },{passive:true});
  const stopCursor=()=>{cursorVisible=false;if(cursorRaf)cancelAnimationFrame(cursorRaf);cursorRaf=0};
- const loop=()=>{cursorRaf=0;if(!cursorVisible||document.hidden)return;x+=(tx-x)*.2;y+=(ty-y)*.2;dot.style.transform='translate3d('+x+'px,'+y+'px,0)';cursorRaf=requestAnimationFrame(loop)};
- const startCursor=()=>{if(document.hidden||cursorVisible)return;cursorVisible=true;cursorRaf=requestAnimationFrame(loop)};
+ const loop=()=>{cursorRaf=0;if(!cursorVisible||document.hidden)return;x+=(tx-x)*.2;y+=(ty-y)*.2;dot.style.transform='translate3d('+x+'px,'+y+'px,0)';if(Math.abs(tx-x)>.5||Math.abs(ty-y)>.5)cursorRaf=requestAnimationFrame(loop)};
+ const startCursor=()=>{if(document.hidden||cursorVisible)return;cursorVisible=true;if(!cursorRaf)cursorRaf=requestAnimationFrame(loop)};
  document.addEventListener('mahicloud:visibility',e=>e.detail&&e.detail.visible?startCursor():stopCursor());
- document.addEventListener('visibilitychange',()=>document.hidden?stopCursor():startCursor());loop();
+ document.addEventListener('mahicloud:scroll-start',stopCursor);
+ document.addEventListener('mahicloud:scroll-end',startCursor);
+ document.addEventListener('visibilitychange',()=>document.hidden?stopCursor():startCursor());
 })();
 </script>
 
-<script>
-(()=>{
- let raf=0;
- const update=()=>{
-   raf=0;
-   const cards=[...document.querySelectorAll('.card')];
-   cards.forEach((card,i)=>{
-     const r=card.getBoundingClientRect(), center=innerHeight*.55, delta=(r.top+r.height*.5-center)/innerHeight;
-     const clamped=Math.max(-1,Math.min(1,delta));
-     const scale=(.94+Math.max(0,.06-Math.abs(clamped)*.04));
-     card.style.setProperty('--parallax-y',(-clamped*(i%2?18:30)).toFixed(1)+'px');
-     card.style.setProperty('--card-scale',scale.toFixed(3));
-   });
- };
- const tick=()=>{if(!raf)raf=requestAnimationFrame(update)};addEventListener('scroll',tick,{passive:true});addEventListener('resize',tick);tick();
-})();
-</script>
+<!-- Removed: per-scroll all-card layout reads caused avoidable scroll jank. -->
+<script src="/scroll-performance.js" defer></script>
 </body></html>

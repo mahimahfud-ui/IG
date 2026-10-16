@@ -222,7 +222,7 @@ export function startScene({ canvas, state, onReady, onFail }) {
   }
 
   // ---- loop + quality governor ----
-  let raf = 0, invalidateRaf = 0, last = performance.now(), ready = false, warm = 2, acc = 0, cnt = 0, bad = 0, dead = false, workspaceVisible = true;
+  let raf = 0, invalidateRaf = 0, last = performance.now(), ready = false, warm = 2, acc = 0, cnt = 0, bad = 0, dead = false, workspaceVisible = true, workspaceScrolling = document.documentElement.classList.contains('mc-scroll-active');
   let base = 1;                                                         // fastest frame seen ≈ the display's refresh interval
   function govern(dt) {
     if (dt > .004) base = Math.min(base, dt);
@@ -244,20 +244,28 @@ export function startScene({ canvas, state, onReady, onFail }) {
     if (!ready) { ready = true; onReady(); }
     govern(dt);
   }
-  function start() { if (dead || state.reduced || raf || document.hidden || !workspaceVisible) return; last = performance.now(); raf = requestAnimationFrame(frame); }
+  function start() { if (dead || state.reduced || raf || document.hidden || !workspaceVisible || workspaceScrolling) return; last = performance.now(); raf = requestAnimationFrame(frame); }
   function stop() { if (raf) cancelAnimationFrame(raf); raf = 0; if (invalidateRaf) cancelAnimationFrame(invalidateRaf); invalidateRaf = 0; }
   function invalidate() {                                               // one static frame (reduced motion / paused)
-    if (dead || raf || invalidateRaf || document.hidden || !workspaceVisible) return;
+    if (dead || raf || invalidateRaf || document.hidden || !workspaceVisible || workspaceScrolling) return;
     invalidateRaf = requestAnimationFrame(now => { invalidateRaf = 0; if (dead || document.hidden || !workspaceVisible) return; update(.016, now, true); renderer.render(scene, camera); if (!ready) { ready = true; onReady(); } });
   }
   function setVisible(visible) {
     workspaceVisible = !!visible;
-    if (!workspaceVisible || document.hidden) { stop(); return; }
+    if (!workspaceVisible || document.hidden || workspaceScrolling) { stop(); return; }
     if (state.reduced) invalidate(); else start();
   }
   function fail() { dispose(); onFail(); }
 
   const onVis = () => (document.hidden ? stop() : state.reduced ? invalidate() : start());
+  const onScrollStart = () => { workspaceScrolling = true; stop(); };
+  const onScrollEnd = () => {
+    workspaceScrolling = false;
+    if (dead || document.hidden || !workspaceVisible) return;
+    if (state.reduced) invalidate(); else start();
+  };
+  document.addEventListener('mahicloud:scroll-start', onScrollStart);
+  document.addEventListener('mahicloud:scroll-end', onScrollEnd);
   let rt = 0; const onResize = () => { clearTimeout(rt); rt = setTimeout(() => resize(false), 120); };
   const onLost = e => { e.preventDefault(); stop(); canvas.classList.add('lost'); document.documentElement.classList.remove('gl-ready'); };
   const onRestored = () => { canvas.classList.remove('lost'); document.documentElement.classList.add('gl-ready'); start(); invalidate(); };
@@ -269,7 +277,7 @@ export function startScene({ canvas, state, onReady, onFail }) {
 
   function dispose() {
     dead = true; stop();
-    document.removeEventListener('visibilitychange', onVis); removeEventListener('resize', onResize);
+    document.removeEventListener('visibilitychange', onVis); document.removeEventListener('mahicloud:scroll-start', onScrollStart); document.removeEventListener('mahicloud:scroll-end', onScrollEnd); removeEventListener('resize', onResize);
     canvas.removeEventListener('webglcontextlost', onLost); canvas.removeEventListener('webglcontextrestored', onRestored);
     disposables.forEach(d => d.dispose()); renderer.dispose();
     try { renderer.forceContextLoss(); } catch (e) {}

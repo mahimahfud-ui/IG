@@ -78,6 +78,43 @@ class DesignSystemTests(unittest.TestCase):
         self.assertIn("function setVisible(visible)", cinema_scene)
         self.assertIn("!workspaceVisible", cinema_scene)
 
+    def test_scroll_performance_helper_is_loaded_on_all_public_pages(self):
+        helper = self.get_text("/scroll-performance.js")
+        for needle in (
+            "mc-scroll-performance",
+            "mc-scroll-active",
+            "mahicloud:scroll-start",
+            "mahicloud:scroll-end",
+            "backdrop-filter: none !important",
+        ):
+            with self.subTest(needle=needle):
+                self.assertIn(needle, helper)
+
+        for path in ("/", "/apps/", "/mahiflix/", "/lumr/", "/linkora/", "/instagram-cleaner.html"):
+            with self.subTest(path=path):
+                self.assertIn('/scroll-performance.js', self.get_text(path))
+
+    def test_homepage_canvas_uses_a_lower_scroll_render_budget(self):
+        home = self.get_text("/")
+        self.assertIn("w<=720?1:1.15", home)
+        self.assertIn("Math.min(10,8*it.a)", home)
+        self.assertIn("seekAt+=gap*0.28", home)
+
+    def test_lumr_scroll_does_not_measure_and_rewrite_every_card(self):
+        lumr = self.get_text("/lumr/")
+        self.assertNotIn("$('.card').forEach((c,i)=>{const r=c.getBoundingClientRect()", lumr)
+        self.assertNotIn("const cards=[...document.querySelectorAll('.card')];", lumr)
+        self.assertNotIn("will-change:transform;cursor:pointer", lumr)
+        cinematic = self.get_text("/lumr/cinematic.js")
+        self.assertIn('document.addEventListener("mahicloud:scroll-start"', cinematic)
+        self.assertIn('workspaceScrolling||visible', cinematic)
+
+    def test_mahiFlix_webgl_renderer_pauses_during_scroll(self):
+        scene = self.get_text("/mahiflix/cinema/scene.js")
+        self.assertIn("workspaceScrolling = document.documentElement.classList.contains", scene)
+        self.assertIn("mahicloud:scroll-start", scene)
+        self.assertIn("mahicloud:scroll-end", scene)
+
     def test_centered_layout_and_calc_compatibility(self):
         home = self.get_text("/")
         apps = self.get_text("/apps/")
