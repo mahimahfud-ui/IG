@@ -118,7 +118,7 @@ def _github(method: str, path: str, *, params: dict | None = None, payload: dict
             message = str(response.json().get("message") or "")
         except (ValueError, TypeError, AttributeError):
             message = ""
-        safe_message = re.sub(r"[\\r\\n\\t]+", " ", message).strip()[:220]
+        safe_message = re.sub(r"[\r\n\t]+", " ", message).strip()[:220]
         lower_message = safe_message.lower()
         if response.status_code == 401:
             raise MahiAIError(
