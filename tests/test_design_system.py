@@ -98,7 +98,18 @@ class DesignSystemTests(unittest.TestCase):
         home = self.get_text("/")
         self.assertIn("w<=720?1:1.15", home)
         self.assertIn("Math.min(10,8*it.a)", home)
-        self.assertIn("seekAt+=gap*0.28", home)
+        self.assertIn("seekAt+=gap*0.115", home)
+        self.assertIn("Math.abs(gap)>0.0002", home)
+        self.assertIn("if(keepAnimating) scheduleFrame();", home)
+
+    def test_homepage_intro_visual_design_remains_scroll_scrubbed(self):
+        home = self.get_text("/")
+        self.assertIn('meter.style.transform="scaleX("+progress+")";', home)
+        self.assertIn("enter=ramp(progress,c[0],c[1]), leave=ramp(progress,c[2],c[3]);", home)
+        self.assertNotIn("var visualProgress = reduced ? progress : seekAt;", home)
+        self.assertIn("function draw(t,time)", home)
+        self.assertIn("m2=ramp(t,.66,.90)", home)
+        self.assertIn("e=ramp(t,0,.12)", home)
 
     def test_lumr_scroll_does_not_measure_and_rewrite_every_card(self):
         lumr = self.get_text("/lumr/")
