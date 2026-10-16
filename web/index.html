@@ -760,14 +760,10 @@ function draw(t,time){
 
 /* ===== Panels: updated only when scroll/progress state changes ===== */
 function paint(){
-  /* Sync the text panels and progress UI with the eased canvas position.
-     This gives the scroll scrub one continuous motion instead of making the
-     headline fade/shift at raw scroll speed while the scene eases behind it. */
-  var visualProgress = reduced ? progress : seekAt;
-  meter.style.transform="scaleX("+visualProgress+")";
+  meter.style.transform="scaleX("+progress+")";
   for(var i=0;i<panels.length;i++){
     var c=CUES[i], el=panels[i];
-    var enter=ramp(visualProgress,c[0],c[1]), leave=ramp(visualProgress,c[2],c[3]);
+    var enter=ramp(progress,c[0],c[1]), leave=ramp(progress,c[2],c[3]);
     var o=enter*(1-leave), y=(1-enter)*DRIFT-leave*DRIFT;
     el.style.opacity=o;
     /* The first headline begins a little lower than the fixed navigation. */
@@ -776,7 +772,7 @@ function paint(){
     el.style.visibility=o>0.01?"visible":"hidden";
     el.style.pointerEvents=o>0.6?"auto":"none";
   }
-  var so=clamp(1-visualProgress*1.3,0,1); skip.style.opacity=so; skip.style.pointerEvents=so>.2?"auto":"none"; skip.style.visibility=so>.01?"visible":"hidden";
+  var so=clamp(1-progress*1.3,0,1); skip.style.opacity=so; skip.style.pointerEvents=so>.2?"auto":"none"; skip.style.visibility=so>.01?"visible":"hidden";
 }
 
 function frame(time){
@@ -785,9 +781,11 @@ function frame(time){
   if(ready){
     var gap=seekTo-seekAt;
     if(reduced) seekAt=seekTo;
-    else if(Math.abs(gap)>0.001){
-      seekAt+=gap*0.28;
-      if(Math.abs(seekTo-seekAt)<=0.001) seekAt=seekTo;
+    else if(Math.abs(gap)>0.0002){
+      /* Keep the original orbit/dock artwork; only ease the scroll-follow motion.
+         This matches the smoother 0.115 damping used by the provided reference. */
+      seekAt+=gap*0.115;
+      if(Math.abs(seekTo-seekAt)<=0.0002) seekAt=seekTo;
       else keepAnimating=true;
     } else seekAt=seekTo;
     var onHero=window.pageYOffset < heroEnd + window.innerHeight && !document.hidden;
