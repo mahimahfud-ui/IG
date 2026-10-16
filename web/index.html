@@ -422,6 +422,33 @@ body.mc-route-active{overflow:hidden;overscroll-behavior:none}body.mc-route-acti
 @media(max-width:390px){.mc-live-indicator{display:none}.mc-view-head p:not(.mc-view-kicker){max-width:27ch}.mc-network-actions{align-items:stretch}.mc-network-primary,.mc-network-copy{flex:1}.mc-mobile-dock{left:7px;right:7px;padding:5px}.mc-mobile-dock a{font-size:8.5px}}
 @media(prefers-reduced-motion:reduce){.mc-frame-panel.is-active,.mc-frame-panel.mc-frame-leave,.mc-view-copy{animation:none!important}.mc-spinner,.mc-live-indicator.is-loading i{animation:none!important}.mc-network-card,.mc-network-primary,.mc-network-copy,.mc-reload{transition:none!important}}
 </style>
+
+<style id="mc-fullscreen-project-layout">
+/* Project workspace: one persistent project switcher, full-height content beneath it. */
+:root{--mc-shell-bottom:0px}
+.mc-app-view{inset:0!important;left:0!important;right:0!important;top:0!important;bottom:0!important;width:auto!important;max-width:none!important;margin:0!important;padding:0!important;gap:0!important;border:0!important;border-radius:0!important;background:#141414!important;box-shadow:none!important;overflow:hidden!important}
+.mc-app-view::before{display:none!important}
+.mc-view-head{display:none!important}
+.mc-view-content{position:absolute!important;left:0!important;right:0!important;top:var(--mc-shell-top,128px)!important;bottom:var(--mc-shell-bottom,0px)!important;min-height:0!important;flex:none!important;border:0!important;border-radius:0!important;overflow:hidden!important;background:#141414!important;box-shadow:none!important}
+.mc-frame-stage{inset:0!important}
+.mc-frame-panel iframe{width:100%!important;height:100%!important}
+.mc-app-toast{bottom:calc(18px + env(safe-area-inset-bottom,0px))!important}
+@media(min-width:721px){
+ :root{--mc-shell-bottom:0px}
+ .mc-view-content{top:var(--mc-shell-top,128px)!important;bottom:0!important}
+}
+@media(max-width:720px){
+ :root{--mc-shell-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+ .mc-view-content{top:var(--mc-shell-top,91px)!important;bottom:var(--mc-shell-bottom)!important}
+ .mc-mobile-dock{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:2px!important}
+ .mc-mobile-dock a{padding-inline:1px;font-size:8px!important;letter-spacing:-.025em}
+ .mc-mobile-dock a svg{width:17px;height:17px}
+}
+@media(max-width:390px){
+ .mc-mobile-dock a{font-size:7.3px!important}
+ .mc-mobile-dock a svg{width:16px;height:16px}
+}
+</style>
 </head>
 <body id="top">
 <div class="boot" id="boot"><img src="/brand-m.webp" alt="" width="56" height="56"><div class="bar"><i id="bootBar"></i></div><p id="bootPct">LOADING 0%</p></div>
@@ -475,6 +502,8 @@ body.mc-route-active{overflow:hidden;overscroll-behavior:none}body.mc-route-acti
   <a href="#projects" data-mc-route="projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="5" rx="2"/><rect x="13" y="10" width="8" height="11" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/></svg><span>Projects</span></a>
   <a href="#apps" data-mc-route="apps"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>Apps</span></a>
   <a href="#windows" data-mc-route="windows"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5 11 4v7H4zM13 3.7 21 2v9h-8zM4 13h7v7l-7-1zM13 13h8v9l-8-1.5z"/></svg><span>Tools</span></a>
+  <a href="#movies" data-mc-route="movies"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="m10 8 6 4-6 4zM3 8h4M17 8h4M3 16h4M17 16h4"/></svg><span>Movies</span></a>
+  <a href="#social" data-mc-route="social"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 14.7 9.3 21 12l-6.3 2.7L12 21l-2.7-6.3L3 12l6.3-2.7z"/><path d="M19 3v4M17 5h4"/></svg><span>Social</span></a>
   <a href="#privacy" data-mc-route="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6z"/><path d="m9 12 2 2 4-4"/></svg><span>Privacy</span></a>
 </nav>
 
