@@ -337,6 +337,66 @@ footer{text-align:center}
 @media(max-width:720px){.card-top{min-height:68px}.card .icon{width:56px;height:56px;flex-basis:56px;border-radius:16px}}
 @media(prefers-reduced-motion:reduce){.card .icon{transition:none!important}.card:hover .icon,.card:focus-within .icon{transform:none;filter:none}}
 </style>
+
+<style id="mc-motionsites-premium-layer">
+/* MahiCloud motion polish: visual-only layer inspired by cinematic, motion-first design systems.
+   Existing sections, text, destinations, project data and application behavior remain untouched. */
+:root{--mc-motion-glass:rgba(18,18,20,.64);--mc-motion-edge:rgba(255,255,255,.13);--mc-motion-soft-shadow:0 22px 70px rgba(0,0,0,.30)}
+.stage::before{content:"";position:absolute;inset:-28%;z-index:1;pointer-events:none;opacity:.48;mix-blend-mode:screen;background:radial-gradient(ellipse at 52% 28%,rgba(255,255,255,.055),transparent 42%),linear-gradient(122deg,transparent 32%,rgba(255,255,255,.018) 44%,rgba(255,255,255,.075) 49%,rgba(255,255,255,.018) 53%,transparent 66%);transform:translate3d(-1%,0,0) rotate(-4deg);animation:mcAtmosphereDrift 22s ease-in-out infinite}
+@keyframes mcAtmosphereDrift{0%,100%{transform:translate3d(-1.5%,0,0) rotate(-4deg)}50%{transform:translate3d(1.5%,-1%,0) rotate(-2deg)}}
+.meter{box-shadow:0 0 13px rgba(229,9,20,.52),0 0 28px rgba(229,9,20,.18)}
+.chrome.solid{background:rgba(15,15,16,.72);border-bottom:1px solid rgba(255,255,255,.07);box-shadow:0 14px 40px rgba(0,0,0,.14);-webkit-backdrop-filter:saturate(1.35) blur(22px);backdrop-filter:saturate(1.35) blur(22px)}
+.mark img{filter:drop-shadow(0 0 18px rgba(229,9,20,.20));transition:transform .55s var(--spring),filter .55s var(--ease)}
+.mark:hover img{transform:rotate(-5deg) scale(1.055);filter:drop-shadow(0 0 22px rgba(229,9,20,.38))}
+.nav{gap:4px;padding:5px;border:1px solid var(--mc-motion-edge);border-radius:999px;background:var(--mc-motion-glass);-webkit-backdrop-filter:blur(22px) saturate(1.35);backdrop-filter:blur(22px) saturate(1.35);box-shadow:0 12px 36px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.07);transition:border-color .35s var(--ease),background .35s var(--ease),box-shadow .35s var(--ease)}
+.nav:hover{border-color:rgba(255,255,255,.19);box-shadow:0 16px 45px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.08)}
+.nav a:not(.pill){padding:10px 13px;border-radius:999px;letter-spacing:.105em;opacity:.76;transition:opacity .28s var(--ease),background .28s var(--ease),transform .28s var(--ease)}
+.nav a:not(.pill):hover{opacity:1;transform:translateY(-1px);background:rgba(255,255,255,.065)}
+.nav .pill{height:37px;padding:0 19px;margin-left:3px;border-radius:999px;box-shadow:0 7px 22px rgba(255,255,255,.07),inset 0 1px 0 rgba(255,255,255,.45)}
+.nav .pill:hover,.nav .pill:focus-visible{box-shadow:0 12px 30px rgba(229,9,20,.19),0 0 0 1px rgba(255,255,255,.3)}
+.panel h1{max-width:12.8em;text-shadow:0 14px 70px rgba(0,0,0,.24);text-wrap:balance}
+.grad{background:linear-gradient(108deg,#fff 0%,#e2e2e6 38%,#f1a0a5 73%,#e50914 100%);background-size:155% 100%;background-position:0 50%;background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 24px rgba(229,9,20,.075));animation:mcTextSheen 10s ease-in-out infinite alternate}
+@keyframes mcTextSheen{0%,15%{background-position:0 50%}85%,100%{background-position:100% 50%}}
+.eyebrow{width:fit-content;max-width:min(54ch,100%);padding:9px 14px 9px 12px;border:1px solid rgba(255,255,255,.105);border-radius:999px;background:rgba(255,255,255,.035);box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 10px 32px rgba(0,0,0,.08);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.hero-index{gap:clamp(8px,1.4vw,16px);border-top-color:rgba(255,255,255,.13)}
+.hero-index a{height:100%;padding:12px 10px;border:1px solid rgba(255,255,255,.045);border-radius:15px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012));transition:transform .38s var(--spring),background .38s var(--ease),border-color .38s var(--ease),box-shadow .38s var(--ease)}
+.hero-index a:hover,.hero-index a:focus-visible{transform:translateY(-3px);border-color:rgba(255,255,255,.15);background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.018));box-shadow:0 15px 36px rgba(0,0,0,.18)}
+.store{background-image:radial-gradient(ellipse 72% 260px at 50% 0%,rgba(255,255,255,.04),transparent 100%),linear-gradient(180deg,#19191a 0,var(--mc-bg,#141414) 420px)}
+.profile .avatar{box-shadow:0 0 0 1px rgba(255,255,255,.12),0 16px 44px rgba(0,0,0,.28),0 0 30px rgba(229,9,20,.08)}
+.stat b{text-shadow:0 6px 28px rgba(255,255,255,.04)}
+.ico,.ghost{box-shadow:inset 0 1px 0 rgba(255,255,255,.035);transition:transform .42s var(--spring),border-color .32s var(--ease),background .32s var(--ease),color .32s var(--ease),box-shadow .42s var(--ease)}
+.ico:hover,.ghost:hover{box-shadow:0 14px 32px rgba(0,0,0,.28),0 0 0 1px rgba(255,255,255,.055),inset 0 1px 0 rgba(255,255,255,.07)}
+.controls .seg{border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.035);box-shadow:inset 0 1px 0 rgba(255,255,255,.04);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.seg button{transition:color .28s var(--ease),background .28s var(--ease),transform .28s var(--ease)}
+.seg button:hover{color:var(--fg);transform:translateY(-1px)}
+.seg button[aria-pressed="true"]{text-shadow:0 0 16px rgba(255,255,255,.10)}
+.search input{box-shadow:inset 0 1px 0 rgba(255,255,255,.035);transition:border-color .32s var(--ease),background .32s var(--ease),box-shadow .32s var(--ease)}
+.search input:focus{box-shadow:0 0 0 4px rgba(255,255,255,.025),inset 0 1px 0 rgba(255,255,255,.055)}
+.card{isolation:isolate;background:linear-gradient(155deg,rgba(255,255,255,.058),rgba(255,255,255,.022) 46%,rgba(255,255,255,.012));box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 9px 28px rgba(0,0,0,.09)}
+.card .icon{box-shadow:0 10px 28px color-mix(in srgb,var(--c1) 26%,transparent),inset 0 1px 0 rgba(255,255,255,.3);transition:transform .5s var(--spring),filter .5s var(--ease),box-shadow .5s var(--ease)}
+@media(hover:hover) and (pointer:fine){
+ .card:hover{transform:translateY(-7px) scale(1.008);border-color:color-mix(in srgb,var(--c1) 46%,rgba(255,255,255,.18));background:radial-gradient(300px circle at var(--mc-pointer-x,50%) var(--mc-pointer-y,0%),color-mix(in srgb,var(--c1) 19%,transparent),transparent 72%),linear-gradient(155deg,rgba(255,255,255,.07),rgba(255,255,255,.018) 68%);box-shadow:0 26px 66px rgba(0,0,0,.42),0 0 0 1px color-mix(in srgb,var(--c1) 17%,transparent),inset 0 1px 0 rgba(255,255,255,.08)}
+ .card:hover .icon{transform:translateY(-3px) scale(1.055);filter:drop-shadow(0 0 13px color-mix(in srgb,var(--c1) 33%,transparent))}
+}
+.card:focus-within{border-color:color-mix(in srgb,var(--c1) 46%,rgba(255,255,255,.25));box-shadow:0 0 0 3px color-mix(in srgb,var(--c1) 10%,transparent),inset 0 1px 0 rgba(255,255,255,.06)}
+.get{transition:background .32s var(--ease),color .32s var(--ease),transform .32s var(--ease),box-shadow .32s var(--ease)}
+.card:hover .get{box-shadow:0 6px 18px rgba(0,0,0,.12)}
+.skip{background:rgba(18,18,20,.68);border-color:rgba(255,255,255,.13);box-shadow:0 12px 34px rgba(0,0,0,.2);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+footer{border-top-color:rgba(255,255,255,.13)}
+.foot-links a{transition:color .3s var(--ease),opacity .3s var(--ease),transform .3s var(--ease)}
+.foot-links a:hover{transform:translateY(-1px)}
+.mc-motion-reveal.mc-motion-visible{animation:mcSoftReveal .82s var(--spring) both;animation-delay:var(--mc-reveal-delay,0ms)}
+@keyframes mcSoftReveal{from{opacity:0;transform:translate3d(0,20px,0) scale(.992);filter:blur(3px)}to{opacity:1;transform:translate3d(0,0,0) scale(1);filter:blur(0)}}
+@media(max-width:720px){
+ .nav{gap:2px;padding:4px}
+ .nav .pill{height:35px;padding:0 17px}
+ .hero-index a{padding:10px 8px}
+ .card:hover{transform:none}
+}
+@media(hover:none){.nav a:not(.pill):hover,.hero-index a:hover,.foot-links a:hover{transform:none}}
+@media(prefers-reduced-motion:reduce){.stage::before,.grad{animation:none!important}}
+</style>
+
 </head>
 <body id="top">
 <div class="boot" id="boot"><img src="/brand-m.webp" alt="" width="56" height="56"><div class="bar"><i id="bootBar"></i></div><p id="bootPct">LOADING 0%</p></div>
@@ -665,5 +725,45 @@ resize(); measure(); readScroll(); build(); moveGlider(); paint();
 requestAnimationFrame(frame);
 })();
 </script>
+
+<script id="mc-motionsites-premium-script">
+(function(){
+  "use strict";
+  var reduced = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  var revealTargets = document.querySelectorAll(".profile,.shelf-head,.controls,.about,footer");
+  if (!reduced && "IntersectionObserver" in window) {
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("mc-motion-visible");
+        observer.unobserve(entry.target);
+      });
+    }, {threshold:0.08, rootMargin:"0px 0px -5% 0px"});
+    Array.prototype.forEach.call(revealTargets,function(el,index){
+      el.classList.add("mc-motion-reveal");
+      el.style.setProperty("--mc-reveal-delay", (index % 3) * 65 + "ms");
+      observer.observe(el);
+    });
+  }
+  var grid = document.getElementById("grid");
+  var finePointer = !!(window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches);
+  if (grid && finePointer && !reduced) {
+    grid.addEventListener("pointermove",function(event){
+      var node = event.target;
+      if (!node || node.nodeType !== 1) return;
+      var card = node.closest(".card");
+      if (!card || !grid.contains(card)) return;
+      var rect = card.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      var x = Math.max(0,Math.min(100,((event.clientX-rect.left)/rect.width)*100));
+      var y = Math.max(0,Math.min(100,((event.clientY-rect.top)/rect.height)*100));
+      card.style.setProperty("--mc-pointer-x",x.toFixed(1)+"%");
+      card.style.setProperty("--mc-pointer-y",y.toFixed(1)+"%");
+    },{passive:true});
+  }
+  document.documentElement.classList.add("mc-motion-polished");
+})();
+</script>
+
 </body>
 </html>
