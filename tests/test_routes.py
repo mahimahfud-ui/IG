@@ -272,6 +272,29 @@ class MahiCloudRouteTests(unittest.TestCase):
         self.assertEqual("/touch-icon.png", parser.icons[0])
 
 
+    def test_github_token_errors_distinguish_bad_credentials_permissions_and_rate_limit(self):
+        import os
+        from unittest.mock import Mock, patch
+        from mahi_ai import MahiAIError, _github
+
+        cases = [
+            (401, "Bad credentials", "HTTP 401 (Bad credentials)"),
+            (403, "Resource not accessible by personal access token", "Contents permission to Read and write"),
+            (403, "API rate limit exceeded for 127.0.0.1", "API rate limit was exceeded"),
+        ]
+        for status_code, github_message, expected_message in cases:
+            with self.subTest(status_code=status_code, github_message=github_message):
+                response = Mock()
+                response.status_code = status_code
+                response.content = b'{"message":"test"}'
+                response.json.return_value = {"message": github_message}
+                with patch.dict(os.environ, {"MAHI_AI_GITHUB_TOKEN": "test-token"}):
+                    with patch("mahi_ai.requests.request", return_value=response):
+                        with self.assertRaises(MahiAIError) as captured:
+                            _github("GET", "/user")
+                self.assertIn(expected_message, captured.exception.message)
+                self.assertNotIn("test-token", captured.exception.message)
+
     def test_catalog_add_pin_can_be_verified_before_selecting_a_category(self):
         import os
         from unittest.mock import patch
