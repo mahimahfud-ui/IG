@@ -59,12 +59,16 @@ class DesignSystemTests(unittest.TestCase):
         for page in (home, apps):
             self.assertNotIn("calc(100% - 2*var(--mc-gutter))", page)
 
-    def test_quick_add_has_category_specific_publish_flow(self):
+    def test_quick_add_has_pin_gate_and_category_specific_publish_flow(self):
         js = self.get_text("/mahi-ai-launcher.js")
         self.assertIn("/api/catalog-add", js)
+        self.assertIn("/api/catalog-add/verify", js)
         self.assertIn("mahi-catalog-plus", js)
         for step in (
+            "Unlock Quick Add",
+            "function showPin()",
             "Choose a category",
+            "Apps",
             "Movie Websites",
             "Movie Apps",
             "Music Apps",

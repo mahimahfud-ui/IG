@@ -175,7 +175,10 @@ class MahiCloudRouteTests(unittest.TestCase):
             "function showCode()",
             "function showName()",
             "category:selectedCategory",
-            "PIN remains required",
+            "function showPin()",
+            "/api/catalog-add/verify",
+            "Unlock Quick Add",
+            "Apps",
         ):
             with self.subTest(fragment=fragment):
                 self.assertIn(fragment, source)
@@ -230,6 +233,22 @@ class MahiCloudRouteTests(unittest.TestCase):
         self.assertIn("/assets/example-logo.svg", parser.logo_images)
         self.assertNotIn("/content/unrelated-photo.jpg", parser.logo_images)
         self.assertEqual("/touch-icon.png", parser.icons[0])
+
+
+    def test_catalog_add_pin_can_be_verified_before_selecting_a_category(self):
+        import os
+        from unittest.mock import patch
+
+        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "6993", "MAHI_AI_GITHUB_TOKEN": "", "OPENAI_API_KEY": ""}):
+            wrong = self.client.post("/api/catalog-add/verify", json={"password": "wrong"})
+            self.assertEqual(wrong.status_code, 401)
+            self.assertIn("Incorrect password", wrong.get_json().get("error", ""))
+
+            correct = self.client.post("/api/catalog-add/verify", json={"password": "6993"})
+            self.assertEqual(correct.status_code, 200)
+            self.assertTrue(correct.get_json().get("ok"))
+            self.assertNotIn("OPENAI_API_KEY", correct.get_data(as_text=True))
+
 
 
 if __name__ == "__main__":

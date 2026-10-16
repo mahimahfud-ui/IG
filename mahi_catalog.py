@@ -25,6 +25,26 @@ def _limited():
         return 0
 
 
+_verify_lock = threading.Lock()
+_verify_events: dict[str, list[float]] = {}
+_verify_global: list[float] = []
+
+
+def _limited_verify_pin():
+    now, key = time.monotonic(), request.remote_addr or "unknown"
+    with _verify_lock:
+        recent = _verify_events.setdefault(key, [])
+        recent[:] = [t for t in recent if now-t < 600]
+        _verify_global[:] = [t for t in _verify_global if now-t < 3600]
+        if len(recent) >= 5:
+            return max(1, int(600-(now-recent[0])))
+        if len(_verify_global) >= 100:
+            return max(1, int(3600-(now-_verify_global[0])))
+        recent.append(now)
+        _verify_global.append(now)
+        return 0
+
+
 def _url(value):
     m = re.search(r'https?://[^\s<>"\']+', value, re.I)
     if m:
@@ -118,6 +138,7 @@ def _catalog_display_name(value) -> str:
 
 
 _LINK_CATEGORIES = {
+    "app": ("other_app", "otherApps", "web/apps/index.html", "Apps", ["Apps", "Tools"]),
     "movie_website": ("movie_website", "S", "web/mahiflix/index.html", "Movie Websites", ["Movies", "Streaming"]),
     "movie_app": ("movie_app", "movieApps", "web/apps/index.html", "Movie Apps", ["Movie", "Android/iOS"]),
     "music_app": ("music_app", "musicApps", "web/apps/index.html", "Music Apps", ["Music", "Audio"]),
@@ -197,6 +218,8 @@ def _add_link(raw, url, category_override=None, custom_name=None):
         record.update({"externalWebsite": True, "linkLabel": "Visit website",
                        "sublabel": "Official website · Verify downloads before installing", "tags": tags})
     elif cat == "music_app":
+        record.update({"kind": "app", "linkLabel": "Visit website", "sublabel": "Official website", "tags": tags})
+    elif cat == "other_app":
         record.update({"kind": "app", "linkLabel": "Visit website", "sublabel": "Official website", "tags": tags})
     page = _repo_file(path, ref="main")
     content = _insert_js_array_item(page["content"], arr, record)
@@ -300,6 +323,22 @@ def _add_bat(raw):
     updated=_insert_js_array_item(page["content"],"SCRIPTS",record)
     url=_commit({bat_path:script,page_path:updated},{bat_path:None,page_path:page["sha"]})
     return {"ok":True,"name":title,"category_label":"Windows Tools","message":f"Added {title}. Review the commands before running the BAT file.","commit_url":url}
+
+
+@mahi_catalog_bp.post("/api/catalog-add/verify")
+def catalog_add_verify():
+    delay = _limited_verify_pin()
+    if delay:
+        response = jsonify({"ok": False, "error": "Too many PIN attempts. Please try again later."})
+        response.status_code = 429
+        response.headers["Retry-After"] = str(delay)
+        return response
+    data = request.get_json(silent=True) or {}
+    password = str(data.get("password") or "")
+    expected = os.environ.get("MAHI_CATALOG_PASSWORD", "6993").strip()
+    if not hmac.compare_digest(password, expected):
+        return jsonify({"ok": False, "error": "Incorrect password."}), 401
+    return jsonify({"ok": True})
 
 
 @mahi_catalog_bp.post("/api/catalog-add")

@@ -15,21 +15,42 @@ document.body.appendChild(overlay);
 
 const screen=overlay.querySelector("#mc-add-screen"),title=overlay.querySelector("#mc-add-title"),subtitle=overlay.querySelector("#mc-add-subtitle"),status=overlay.querySelector("#mc-add-status"),back=overlay.querySelector("#mc-add-back"),close=overlay.querySelector(".mc-add-close");
 const categories={
+ app:{title:"Apps",short:"App",kind:"url",step:"App website URL",placeholder:"https://example.com",hint:"Paste the official website or public app listing. This item will appear in the separate Apps collection.",icon:"<rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"5\"/><path d=\"M8 8h8v8H8zM8 12h8M12 8v8\"/>",color:"#d1a5ff"},
  movie_website:{title:"Movie Websites",short:"Movie Website",kind:"url",step:"Website URL",placeholder:"https://example.com",hint:"Paste the official movie or streaming website URL. The site and its logo are added to MahiFlix Websites.",icon:"<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"3\"/><path d=\"M3 9h18M7 6.5h.01M10 6.5h.01M7 12h10M7 15h7\"/>",color:"#ff7779"},
  movie_app:{title:"Movie Apps",short:"Movie App",kind:"url",step:"App website or store URL",placeholder:"https://example.com/app",hint:"Paste the public official website or app listing URL. This entry appears in the Movie Apps category.",icon:"<rect x=\"6\" y=\"2.8\" width=\"12\" height=\"18.4\" rx=\"3\"/><path d=\"M10 5.8h4M10.5 18.1h3\"/>",color:"#b8a2ff"},
  music_app:{title:"Music Apps",short:"Music App",kind:"url",step:"App website or store URL",placeholder:"https://example.com/music-app",hint:"Paste the public music app website or listing URL. This entry appears in Music Apps.",icon:"<path d=\"M9 18V5l12-2v13\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><circle cx=\"18\" cy=\"16\" r=\"3\"/>",color:"#73e6ef"},
  windows_bat:{title:"Windows Automation (.BAT)",short:"Windows BAT",kind:"code",step:"Paste BAT source code",placeholder:"@echo off\r\nsetlocal\r\ntitle My Windows Tool\r\n\r\nrem Paste your BAT script here\r\npause",hint:"Paste the complete plain-text .bat script (not a file or URL). Do not include unrelated content. The backend checks for risky operations before publishing.",icon:"<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"3\"/><path d=\"M7 9l3 3-3 3M13 15h4\"/>",color:"#c9f77a"},
  windows_python:{title:"Windows Automation (.PY)",short:"Windows Python",kind:"code",step:"Paste Python source code",placeholder:"from pathlib import Path\r\n\r\ndef main():\r\n    print(\"My Windows utility\")\r\n\r\nif __name__ == \"__main__\":\r\n    main()",hint:"Paste the complete Python source code. It is syntax-checked and stored as a .py download; it is not executed on the server. Review it before running on your PC.",icon:"<path d=\"M12 3c-4 0-4 2-4 4v3h8V7c0-2 0-4-4-4Z\"/><path d=\"M8 10H6a3 3 0 0 0-3 3v3a3 3 0 0 0 3 3h3\"/><path d=\"M12 21c4 0 4-2 4-4v-3H8v3c0 2 0 4 4 4Z\"/><path d=\"M16 14h2a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3h-3\"/><circle cx=\"10.5\" cy=\"6.5\" r=\".7\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"13.5\" cy=\"17.5\" r=\".7\" fill=\"currentColor\" stroke=\"none\"/>",color:"#83b8ff"}
 };
-let stage="categories",selectedCategory="",pendingInput="",lastInputStage="url",savedScroll="";
+let stage="pin",selectedCategory="",pendingInput="",lastInputStage="url",savedScroll="",pin="";
 function iconSvg(mark){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+mark+'</svg>'}
 function setHeader(heading,copy,showBack){title.textContent=heading;subtitle.textContent=copy;back.hidden=!showBack;status.textContent="";status.className="mc-add-status"}
-function openDialog(){showCategories();overlay.classList.add("open");overlay.setAttribute("aria-hidden","false");savedScroll=document.body.style.overflow;document.body.style.overflow="hidden";const first=screen.querySelector("button");if(first)first.focus()}
-function closeDialog(){overlay.classList.remove("open");overlay.setAttribute("aria-hidden","true");document.body.style.overflow=savedScroll;button.focus()}
+function openDialog(){pin="";pendingInput="";savedScroll=document.body.style.overflow;document.body.style.overflow="hidden";overlay.classList.add("open");overlay.setAttribute("aria-hidden","false");showPin()}
+function closeDialog(){pin="";overlay.classList.remove("open");overlay.setAttribute("aria-hidden","true");document.body.style.overflow=savedScroll;button.focus()}
+function showPin(){
+ stage="pin";
+ setHeader("Unlock Quick Add","Enter the publishing PIN first. After it is verified, choose what you want to add.",false);
+ screen.innerHTML='<form class="mc-add-form" id="mc-add-pin-form"><div><label class="mc-add-field-label" for="mc-add-access-pin">Quick Add PIN</label><input class="mc-add-field" id="mc-add-access-pin" name="password" type="password" required maxlength="64" autocomplete="current-password" placeholder="Enter publishing PIN"><p class="mc-add-help">The server verifies the PIN before opening the category picker. It is kept only for this open dialog, not browser storage.</p></div><div class="mc-add-actions"><span></span><div class="mc-add-actions-right"><button class="mc-add-submit" id="mc-add-unlock" type="submit">Unlock and continue →</button></div></div></form>';
+ const input=screen.querySelector("#mc-add-access-pin");
+ input.focus();
+ screen.querySelector("#mc-add-pin-form").addEventListener("submit",async function(e){
+  e.preventDefault();
+  const value=input.value;
+  if(!value){showError("Enter the Quick Add PIN.");return}
+  const unlock=screen.querySelector("#mc-add-unlock");
+  unlock.disabled=true;unlock.textContent="Verifying…";status.textContent="Verifying the PIN with the server…";status.className="mc-add-status";
+  try{
+   const response=await fetch("/api/catalog-add/verify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:value})});
+   const data=await response.json().catch(function(){return {ok:false,error:"Unreadable server response."}});
+   if(!response.ok||!data.ok){unlock.disabled=false;unlock.textContent="Unlock and continue →";showError(data.error||"PIN verification failed.");input.select();return}
+   pin=value;showCategories();
+  }catch(_){unlock.disabled=false;unlock.textContent="Unlock and continue →";showError("Could not verify the PIN. Check your connection and retry.")}
+ });
+}
 function showCategories(){
  stage="categories";selectedCategory="";pendingInput="";
  setHeader("Choose a category","Select what you want to add. Each category has its own form.",false);
- const order=["movie_website","movie_app","music_app","windows_bat","windows_python"];
+ const order=["app","movie_website","movie_app","music_app","windows_bat","windows_python"];
  screen.innerHTML='<div class="mc-add-categories">'+order.map(function(key){const c=categories[key];return '<button type="button" class="mc-add-category" data-add-category="'+key+'" style="--cat:'+c.color+'"><span class="mc-add-category-icon">'+iconSvg(c.icon)+'</span><span class="mc-add-category-copy"><b>'+c.title+'</b><small>'+(c.kind==="url"?"Paste URL, then give it a name":"Paste code, then give it a name")+'</small></span></button>'}).join("")+'</div><p class="mc-add-note">Website categories add links to the matching collection. Windows categories publish a downloadable script in Windows Tools.</p>';
 }
 function showUrl(){
@@ -49,11 +70,11 @@ function showCode(){
 function showName(){
  stage="name";const c=categories[selectedCategory];
  setHeader(c.title,"Step 2 of 2 · Choose the name visitors will see, then publish.",true);
- screen.innerHTML='<form class="mc-add-form" id="mc-add-name-form"><div><label class="mc-add-field-label" for="mc-add-name">Display name</label><input class="mc-add-field" id="mc-add-name" name="name" type="text" required maxlength="80" autocomplete="off" placeholder="'+c.short+' name"><p class="mc-add-help">This name is used on the collection card or Windows Tools library.</p></div><div><label class="mc-add-field-label" for="mc-add-pin">Quick Add PIN</label><input class="mc-add-field" id="mc-add-pin" name="pin" type="password" required maxlength="64" autocomplete="current-password" placeholder="Enter publishing PIN"><p class="mc-add-help">PIN remains required to prevent public visitors from publishing entries.</p></div><div class="mc-add-actions"><button class="mc-add-secondary" type="button" data-add-cancel>Cancel</button><div class="mc-add-actions-right"><button class="mc-add-submit" id="mc-add-publish" type="submit">Publish item ↗</button></div></div></form>';
+ screen.innerHTML='<form class="mc-add-form" id="mc-add-name-form"><div><label class="mc-add-field-label" for="mc-add-name">Display name</label><input class="mc-add-field" id="mc-add-name" name="name" type="text" required maxlength="80" autocomplete="off" placeholder="'+c.short+' name"><p class="mc-add-help">This name is used on the collection card or Windows Tools library.</p></div><div class="mc-add-actions"><button class="mc-add-secondary" type="button" data-add-cancel>Cancel</button><div class="mc-add-actions-right"><button class="mc-add-submit" id="mc-add-publish" type="submit">Publish item ↗</button></div></div></form>';
  const input=screen.querySelector("#mc-add-name");input.focus();
  screen.querySelector("#mc-add-name-form").addEventListener("submit",async function(e){
-  e.preventDefault();const name=input.value.trim(),pin=screen.querySelector("#mc-add-pin").value;
-  if(!name||!pin){showError("Enter both a display name and the Quick Add PIN.");return}
+  e.preventDefault();const name=input.value.trim();
+  if(!name||!pin){showError("Unlock Quick Add with the PIN before publishing.");return}
   const publish=screen.querySelector("#mc-add-publish");publish.disabled=true;publish.textContent="Publishing…";status.textContent="Validating the entry and preparing the GitHub update…";status.className="mc-add-status";
   try{
    const response=await fetch("/api/catalog-add",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:pin,input:pendingInput,category:selectedCategory,name:name})});
