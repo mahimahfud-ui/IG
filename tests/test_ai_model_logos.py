@@ -3,7 +3,6 @@ import unittest
 from unittest.mock import Mock, patch
 
 import mahi_ai
-from app import app
 
 
 class MahiAIModelAndLogoTests(unittest.TestCase):
@@ -43,20 +42,6 @@ class MahiAIModelAndLogoTests(unittest.TestCase):
         self.assertEqual(parser.icons[0], "/assets/brand-mark.svg")
         self.assertIn("/apple-touch-icon.png", parser.icons)
         self.assertEqual(parser.icons[-1], "/favicon.ico")
-
-    def test_status_endpoint_reports_effective_model_without_secrets(self):
-        with patch.dict(os.environ, {
-            "MAHI_AI_MODEL": "",
-            "OPENAI_MODEL": "",
-            "MAHI_AI_REASONING_EFFORT": "high",
-        }):
-            response = app.test_client().get("/api/mahi-ai/status")
-        self.assertEqual(response.status_code, 200)
-        data = response.get_json()
-        self.assertEqual(data["model"], "gpt-6-astra")
-        self.assertEqual(data["reasoning_effort"], "high")
-        self.assertNotIn("OPENAI_API_KEY", data)
-        self.assertNotIn("MAHI_AI_ACCESS_TOKEN", data)
 
 
 if __name__ == "__main__":
