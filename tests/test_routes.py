@@ -37,6 +37,14 @@ class MahiCloudRouteTests(unittest.TestCase):
                 self.assertNotIn("source code", body)
                 self.assertNotIn("ai-generated", body)
 
+    def test_quick_add_ui_uses_neutral_public_copy(self):
+        response = self.client.get("/quick-add.js")
+        self.assertEqual(response.status_code, 200)
+        script = response.get_data(as_text=True).lower()
+        for phrase in ("github", "render", "source code", "repository", "ai-generated", "chatgpt", "claude", "openai"):
+            with self.subTest(phrase=phrase):
+                self.assertNotIn(phrase, script)
+
     def test_browser_helper_guide_and_download_are_available_without_external_source_links(self):
         import io
         import zipfile
