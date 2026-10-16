@@ -46,6 +46,14 @@ class DesignSystemTests(unittest.TestCase):
         html = self.get_text("/")
         self.assertNotIn("animation:drift", html)
 
+    def test_homepage_canvas_animation_is_event_driven(self):
+        html = self.get_text("/")
+        self.assertIn("function scheduleFrame()", html)
+        self.assertIn("if(frameId || document.hidden) return", html)
+        self.assertIn('document.addEventListener("visibilitychange"', html)
+        self.assertNotIn("/* never cancelled */", html)
+        self.assertIn("@media(prefers-reduced-motion:reduce){.stage::before,.grad,.grid.in .card{animation:none!important}}", html)
+
     def test_centered_layout_and_calc_compatibility(self):
         home = self.get_text("/")
         apps = self.get_text("/apps/")
