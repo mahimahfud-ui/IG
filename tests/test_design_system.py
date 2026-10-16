@@ -52,6 +52,7 @@ class DesignSystemTests(unittest.TestCase):
         self.assertIn("if(frameId || document.hidden) return", html)
         self.assertIn('document.addEventListener("visibilitychange"', html)
         self.assertNotIn("/* never cancelled */", html)
+        self.assertIn("@media(prefers-reduced-motion:reduce){.stage::before,.grad,.grid.in .card{animation:none!important}}", html)
 
     def test_centered_layout_and_calc_compatibility(self):
         home = self.get_text("/")
