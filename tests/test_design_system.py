@@ -140,7 +140,7 @@ class DesignSystemTests(unittest.TestCase):
             self.assertNotIn("calc(100% - 2*var(--mc-gutter))", page)
 
     def test_quick_add_has_pin_gate_and_category_specific_publish_flow(self):
-        js = self.get_text("/mahi-ai-launcher.js")
+        js = self.get_text("/quick-add.js")
         self.assertIn("/api/catalog-add", js)
         self.assertIn("/api/catalog-add/verify", js)
         self.assertIn("mahi-catalog-plus", js)
