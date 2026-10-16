@@ -207,7 +207,23 @@ def _add_link(raw, url, category_override=None, custom_name=None):
     direct_download = category_override in _APP_LINK_CATEGORIES and _is_direct_app_download_url(url)
     if direct_download:
         download_url = _normalise_public_url(url)
-        meta = dict(_metadata_for_url(_app_metadata_page_url(download_url)))
+        # Fetch only a bounded prefix of the actual asset: confirms the public URL
+        # resolves while avoiding downloading or executing the installer on the server.
+        _fetch_public(download_url, max_bytes=1024, allow_truncate=True)
+        metadata_page = _app_metadata_page_url(download_url)
+        try:
+            meta = dict(_metadata_for_url(metadata_page))
+        except MahiAIError:
+            # A direct file host may not expose an HTML homepage. The item remains
+            # addable with a generated fallback mark when no publisher logo is available.
+            meta = {
+                "url": metadata_page,
+                "domain": urlsplit(download_url).hostname or "",
+                "title": "",
+                "description": "",
+                "content_hint": "",
+                "logo_sources": [],
+            }
         meta["url"] = download_url
         meta["domain"] = urlsplit(download_url).hostname or meta.get("domain", "")
     else:
