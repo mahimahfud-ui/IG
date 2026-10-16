@@ -398,6 +398,108 @@ def catalog_add_verify():
     return jsonify({"ok": True})
 
 
+
+_diag_lock = threading.Lock()
+_diag_events: dict[str, list[float]] = {}
+_diag_global: list[float] = []
+
+
+def _limited_diagnose():
+    now, key = time.monotonic(), request.remote_addr or "unknown"
+    with _diag_lock:
+        recent = _diag_events.setdefault(key, [])
+        recent[:] = [stamp for stamp in recent if now - stamp < 600]
+        _diag_global[:] = [stamp for stamp in _diag_global if now - stamp < 3600]
+        if len(recent) >= 5:
+            return max(1, int(600 - (now - recent[0])))
+        if len(_diag_global) >= 100:
+            return max(1, int(3600 - (now - _diag_global[0])))
+        recent.append(now)
+        _diag_global.append(now)
+        return 0
+
+
+@mahi_catalog_bp.post("/api/catalog-add/diagnose")
+def catalog_add_diagnose():
+    delay = _limited_diagnose()
+    if delay:
+        response = jsonify({"ok": False, "message": "Too many diagnostic checks. Wait and try again."})
+        response.status_code = 429
+        response.headers["Retry-After"] = str(delay)
+        return response
+
+    data = request.get_json(silent=True) or {}
+    password = str(data.get("password") or "")
+    expected = os.environ.get("MAHI_CATALOG_PASSWORD", "6993").strip()
+    if not hmac.compare_digest(password, expected):
+        return jsonify({"ok": False, "message": "PIN verification failed. No GitHub check was run."}), 401
+
+    token = _github_token()
+    if not token:
+        return jsonify({
+            "ok": False,
+            "stage": "token_config",
+            "message": "MAHI_AI_GITHUB_TOKEN is missing from the Render mahicloud service. Add it to that service's Environment Variables and redeploy."
+        })
+
+    repo = _repo_name()
+    try:
+        info = _github("GET", f"/repos/{repo}")
+    except MahiAIError as exc:
+        return jsonify({
+            "ok": False,
+            "stage": "repository_access",
+            "message": "The configured token could not read repository metadata. " + exc.message +
+                       " Check the token's resource owner, selected repository, and any pending organization approval."
+        })
+
+    actual_repo = str(info.get("full_name") or "")
+    if actual_repo and actual_repo.lower() != repo.lower():
+        return jsonify({
+            "ok": False,
+            "stage": "repository_mismatch",
+            "message": f"GitHub resolved the repository check to {actual_repo}, but MahiCloud is configured for {repo}."
+        })
+
+    try:
+        _github("GET", f"/repos/{repo}/git/ref/heads/main")
+    except MahiAIError as exc:
+        return jsonify({
+            "ok": False,
+            "stage": "main_branch_access",
+            "message": "Repository metadata is readable, but the main branch reference check failed. " + exc.message
+        })
+
+    try:
+        # This makes an unreferenced blob object only: no visible file or branch changes.
+        # It probes the same Contents write permission required by Quick Add's first Git write.
+        _github("POST", f"/repos/{repo}/git/blobs", payload={
+            "content": "MahiCloud Quick Add permission probe. Intentionally unattached to any tree or branch.",
+            "encoding": "utf-8",
+        })
+    except MahiAIError as exc:
+        return jsonify({
+            "ok": False,
+            "stage": "contents_write",
+            "message": "Repository and main-branch reads passed, but the Contents write probe failed. " +
+                       exc.message +
+                       " Check repository selection/approval and Contents: Read and write."
+        })
+
+    permissions = info.get("permissions") or {}
+    return jsonify({
+        "ok": True,
+        "stage": "contents_write",
+        "message": f"PASS: the configured token can access {repo}, read main, and create a Git blob. No visible file or branch was changed. If Publish still fails, its error will show the exact later API endpoint so we can distinguish a tree/commit/ref permission issue from branch protection.",
+        "checks": {
+            "repository": actual_repo or repo,
+            "main_ref": "readable",
+            "contents_write_probe": "passed",
+            "repository_push_role": permissions.get("push"),
+        }
+    })
+
+
 @mahi_catalog_bp.post("/api/catalog-add")
 def catalog_add():
     delay = _limited()
