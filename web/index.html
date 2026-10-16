@@ -627,7 +627,7 @@ function paint(){
     var o=enter*(1-leave), y=(1-enter)*DRIFT-leave*DRIFT;
     el.style.opacity=o;
     /* The first headline begins a little lower than the fixed navigation. */
-    var navClearance = i===0 ? (window.innerWidth<=720 ? 18 : 32) : 0;
+    var navClearance = i===0 ? (window.innerWidth<=720 ? 30 : 78) : 0;
     el.style.transform="translate3d(0,"+(y+navClearance)+"px,0)";
     el.style.visibility=o>0.01?"visible":"hidden";
     el.style.pointerEvents=o>0.6?"auto":"none";
