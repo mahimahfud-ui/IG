@@ -327,6 +327,16 @@ footer{text-align:center}
 @media(max-width:720px){.chrome{gap:8px}.panel{padding-top:max(112px,calc(env(safe-area-inset-top,0px) + 88px))}.eyebrow{max-width:100%}.sub{max-width:34ch}}
 @media(max-height:520px) and (orientation:landscape){.chrome{gap:6px}.panel{padding-top:88px;padding-bottom:120px}}
 </style>
+
+<style id="mc-professional-logo-system">
+/* One coherent system: a unique SVG glyph and palette per project, with consistent framing. */
+.card-top{min-height:78px;align-items:center;gap:10px}
+.card .icon{width:64px;height:64px;flex:0 0 64px;aspect-ratio:1;object-fit:contain;border-radius:18px;outline:1px solid rgba(255,255,255,.13);outline-offset:-1px;box-shadow:0 12px 28px color-mix(in srgb,var(--c1) 30%,transparent);transition:transform .35s var(--mc-ease-out),filter .35s ease,box-shadow .35s ease}
+.card .status{font-size:10px;font-weight:600;letter-spacing:.075em;text-transform:uppercase;border:1px solid rgba(255,255,255,.08)}
+@media(hover:hover){.card:hover .icon,.card:focus-within .icon{transform:translateY(-3px) scale(1.035);filter:saturate(1.08) brightness(1.04);box-shadow:0 16px 32px color-mix(in srgb,var(--c1) 34%,transparent)}}
+@media(max-width:720px){.card-top{min-height:68px}.card .icon{width:56px;height:56px;flex-basis:56px;border-radius:16px}}
+@media(prefers-reduced-motion:reduce){.card .icon{transition:none!important}.card:hover .icon,.card:focus-within .icon{transform:none;filter:none}}
+</style>
 </head>
 <body id="top">
 <div class="boot" id="boot"><img src="/brand-m.webp" alt="" width="56" height="56"><div class="bar"><i id="bootBar"></i></div><p id="bootPct">LOADING 0%</p></div>
@@ -450,7 +460,7 @@ var GLYPHS={
 };
 function iconURI(p){
   var ink=p.ink||"#fff";
-  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+p.c1+'"/><stop offset="1" stop-color="'+p.c2+'"/></linearGradient><linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect width="120" height="120" rx="27" fill="url(#g)"/><rect width="120" height="120" rx="27" fill="url(#h)"/><g color="'+ink+'" fill="none" stroke="'+ink+'" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">'+GLYPHS[p.glyph]+'</g></svg>';
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+p.c1+'"/><stop offset="1" stop-color="'+p.c2+'"/></linearGradient><linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect width="120" height="120" rx="27" fill="url(#g)"/><rect width="120" height="120" rx="27" fill="url(#h)"/><rect x="1.5" y="1.5" width="117" height="117" rx="26" fill="none" stroke="#fff" stroke-opacity=".34" stroke-width="2"/><rect x="7" y="7" width="106" height="106" rx="22" fill="none" stroke="#000" stroke-opacity=".13" stroke-width="1.5"/><circle cx="92" cy="25" r="17" fill="#fff" fill-opacity=".075"/><g color="'+ink+'" fill="none" stroke="'+ink+'" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">'+GLYPHS[p.glyph]+'</g></svg>';
   return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
 }
 projects.forEach(function(p){ p.icon = iconURI(p); });
@@ -555,7 +565,10 @@ function paint(){
     var c=CUES[i], el=panels[i];
     var enter=ramp(progress,c[0],c[1]), leave=ramp(progress,c[2],c[3]);
     var o=enter*(1-leave), y=(1-enter)*DRIFT-leave*DRIFT;
-    el.style.opacity=o; el.style.transform="translate3d(0,"+y+"px,0)";
+    el.style.opacity=o;
+    /* The first headline begins a little lower than the fixed navigation. */
+    var navClearance = i===0 ? (window.innerWidth<=720 ? 18 : 32) : 0;
+    el.style.transform="translate3d(0,"+(y+navClearance)+"px,0)";
     el.style.visibility=o>0.01?"visible":"hidden";
     el.style.pointerEvents=o>0.6?"auto":"none";
   }
