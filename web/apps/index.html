@@ -286,6 +286,22 @@ footer .links{display:flex;justify-content:center;align-items:center;flex-wrap:w
 @media(hover:hover){.app-card:hover .movie-app-logo,.app-card:focus-within .movie-app-logo{transform:translateY(-2px) scale(1.035);filter:brightness(1.07);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 12px 27px rgba(0,0,0,.38)}}
 @media(prefers-reduced-motion:reduce){.movie-app-logo{transition:none!important}.app-card:hover .movie-app-logo,.app-card:focus-within .movie-app-logo{transform:none;filter:none}}
 </style>
+<style id="mahi-app-catalog-finish-v1">
+/* Brand artwork: stay crisp on dark glass while preserving each logo's original shape. */
+.app-icon.movie-logo{isolation:isolate}
+.movie-app-logo{background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.12),transparent 68%),linear-gradient(145deg,#1c2028,#050608);border:1px solid rgba(255,255,255,.13);filter:brightness(1.08) saturate(1.14) contrast(1.04);padding:6px}
+.app-card:hover .movie-app-logo,.app-card:focus-within .movie-app-logo{filter:brightness(1.13) saturate(1.18) contrast(1.05)}
+/* Keep calls-to-action aligned even when descriptions wrap differently. */
+.movie-app-card .card-footer{margin-top:auto;padding-top:15px}
+.movie-card-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-items:stretch}
+.movie-card-actions .open-link{width:100%;min-width:0;min-height:42px;padding:10px 8px;display:inline-flex;justify-content:center;align-items:center;text-align:center;line-height:1.3;font-size:10px;overflow-wrap:anywhere}
+.movie-card-actions .secondary-link{background:linear-gradient(145deg,#ffffff0d,#ffffff04);border-color:rgba(255,255,255,.14);color:#f1f4ff}
+.movie-card-actions .download-link{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:rgba(255,255,255,.17);text-shadow:0 1px 1px rgba(0,0,0,.25)}
+.movie-card-actions .download-link:hover{filter:brightness(1.1);color:#fff}
+.movie-card-actions .is-unavailable{opacity:.46;pointer-events:none;cursor:not-allowed}
+@media(max-width:380px){.movie-card-actions{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){.movie-app-logo,.movie-card-actions .open-link{transition:none!important}}
+</style>
 </head>
 <body data-category="movie"><div class="ambient" aria-hidden="true"><span class="glow-ball a"></span><span class="glow-ball b"></span></div>
 <header id="header"><div class="wrap nav"><a class="brand" href="/" aria-label="Mahi homepage"><img class="site-brand-logo" src="/brand-m.webp" alt="Mahi logo" decoding="async"><span>Mahi <span style="color:var(--muted);font-weight:550">/ Apps</span></span></a><nav class="nav-links" aria-label="Site navigation"><a href="/">Home</a><a href="/mahiflix/">Movie Websites</a><a href="/linkora/">Windows Tools</a></nav></div></header>
@@ -344,6 +360,8 @@ const LOCAL_LOGOS={
  "anivortex|anivortex.in":"anivortex",
  "nxsha|nxsha.app":"nxsha"
 };
+const DIRECT_DOWNLOAD_SLUGS=new Set(["filmtv","nuvix","vega","netmirror","cinehd","moviboxapk","pvrplay","hdghartv","anivortex","nxsha"]);
+function verifiedDownloadPath(value){const match=String(value||"").trim().match(/^\/download\/app\/([a-z0-9-]+)\/?$/i);if(!match||!DIRECT_DOWNLOAD_SLUGS.has(match[1].toLowerCase()))return "";return "/download/app/"+match[1].toLowerCase()}
 const FAV_KEY="mahiflix-favourites-v1";
 const CUSTOM_KEY="mahiflix-custom-items-v1";
 let category="movie";
@@ -363,7 +381,7 @@ function saveFavourites(){try{localStorage.setItem(FAV_KEY,JSON.stringify(Array.
 function readCustomApps(){try{const all=JSON.parse(localStorage.getItem(CUSTOM_KEY)||"{}");return Array.isArray(all.apps)?all.apps.filter(function(x){return x&&typeof x.name==="string"&&typeof x.url==="string"&&typeof x.domain==="string"}):[]}catch(e){return []}}
 function saveCustomApp(item){let all={};try{all=JSON.parse(localStorage.getItem(CUSTOM_KEY)||"{}")||{}}catch(e){all={}}if(!Array.isArray(all.apps))all.apps=[];if(all.apps.some(function(x){return String(x.url||"").toLowerCase()===item.url.toLowerCase()||String(x.name||"").trim().toLowerCase()===item.name.trim().toLowerCase()}))return false;all.apps.push(item);try{localStorage.setItem(CUSTOM_KEY,JSON.stringify(all));return true}catch(e){return false}}
 function localLogoFor(item){const key=String(item.name||"").toLowerCase()+"|"+String(item.domain||"").toLowerCase();return LOCAL_LOGOS[key]||""}
-function logoSourcesFor(item,isMovie){let sources=Array.isArray(item.logoSources)?item.logoSources.filter(Boolean):[];if(!sources.length&&item.domain)sources=["https://www.google.com/s2/favicons?sz=128&domain="+encodeURIComponent(item.domain),"https://icons.duckduckgo.com/ip3/"+encodeURIComponent(item.domain)+".ico","https://"+item.domain+"/favicon.ico"];const asset=isMovie?localLogoFor(item):"";if(asset)sources=["/mahiflix/logos/"+asset+".webp"].concat(sources);return {sources:Array.from(new Set(sources)),index:asset?-1:0}}
+function logoSourcesFor(item,isMovie){let sources=Array.isArray(item.logoSources)?item.logoSources.filter(Boolean):[];if(!sources.length&&item.domain)sources=["https://www.google.com/s2/favicons?sz=128&domain="+encodeURIComponent(item.domain),"https://icons.duckduckgo.com/ip3/"+encodeURIComponent(item.domain)+".ico","https://"+item.domain+"/favicon.ico"];const asset=isMovie?localLogoFor(item):"";const local=asset?"/mahiflix/logos/"+asset+".webp":"";sources=Array.from(new Set(sources.filter(function(src){return src!==local})));return {source:local||sources[0]||"",sources:sources,index:local?-1:0}}
 function nextLogo(img){let sources=[];try{sources=JSON.parse(img.getAttribute("data-logo-sources")||"[]")}catch(e){}const idx=Number(img.getAttribute("data-logo-index")||"0")+1;if(idx<sources.length){img.setAttribute("data-logo-index",String(idx));img.src=sources[idx];return}const wrapper=img.closest(".app-icon");if(wrapper)wrapper.innerHTML='<span class="app-logo-fallback" aria-label="'+esc(img.alt.replace(/\s+logo$/i,""))+'">'+esc(initials(img.alt.replace(/\s+logo$/i,"")))+'</span>'}
 function svgPlus(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>'}
 function svgCheck(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>'}
@@ -384,7 +402,7 @@ function render(){
   count.textContent=String(shown.length).padStart(2,"0");empty.style.display=shown.length?"none":"block";addAppButton.hidden=!isMovie;
  grid.innerHTML=shown.map(function(x,i){
   const accent=x.accent||(isMovie?"#ff7166":"#80e5f4"),accent2=x.accent2||(isMovie?"#8e202d":"#7253bd");
-  const artwork=logoSourcesFor(x,isMovie),source=artwork.sources[0]||"",domain=x.domain?'<span>'+esc(x.domain)+'</span>':"";
+  const artwork=logoSourcesFor(x,isMovie),source=artwork.source||"",domain=x.domain?'<span>'+esc(x.domain)+'</span>':"";
   const icon='<div class="app-icon '+(isMovie?"movie-logo":"music-logo")+'"><img class="movie-app-logo" loading="lazy" decoding="async" alt="'+esc(x.name)+' logo" src="'+esc(source)+'" data-logo-sources="'+esc(JSON.stringify(artwork.sources))+'" data-logo-index="'+artwork.index+'"></div>';
   const fresh=x.new?'<span class="fresh">NEW</span>':"";
   const ads=x.ads===0?'<span class="ad-low">No / minimal ads</span>':x.ads===1?'<span class="ad-mid">Some ads</span>':x.ads===2?'<span class="ad-high">More / heavier ads</span>':"";
@@ -392,8 +410,10 @@ function render(){
   const desc=x.desc||x.description||"";
   if(isMovie){
    const fav=favoriteButton(x);
-   const visit='<a class="open-link secondary-link" href="'+esc(x.url||"#")+'" target="_blank" rel="noopener noreferrer">Visit website <span aria-hidden="true">↗</span></a>';
-   const download=x.downloadUrl?'<a class="open-link download-link" href="'+esc(x.downloadUrl)+'" target="_blank" rel="noopener noreferrer">Download APK <span aria-hidden="true">↗</span></a>':"";
+   const visitUrl=normaliseUrl(x.url);
+   const visit=visitUrl?'<a class="open-link secondary-link" href="'+esc(visitUrl)+'" target="_blank" rel="noopener noreferrer" aria-label="Visit '+esc(x.name)+' official website" title="Open official website">Visit website <span aria-hidden="true">↗</span></a>':'<span class="open-link secondary-link is-unavailable" aria-disabled="true" title="No valid HTTPS website is configured">Website unavailable</span>';
+   const directPath=verifiedDownloadPath(x.downloadUrl);
+   const download=directPath?'<a class="open-link download-link" href="'+esc(directPath)+'" target="_blank" rel="noopener noreferrer" aria-label="Download '+esc(x.name)+' APK" title="Download APK via the verified resolver">Download APK <span aria-hidden="true">↗</span></a>':'<span class="open-link download-link is-unavailable" aria-disabled="true" title="A verified direct-download route is not configured">Download unavailable</span>';
    const actions='<div class="movie-card-actions">'+visit+download+'</div>';
    return '<article class="app-card movie-app-card" tabindex="0" aria-label="'+esc(x.name)+' app card. Use the links to visit or download." data-url="'+esc(x.url||"")+'" data-search="'+esc((String(x.name||"")+" "+desc+" "+String(x.domain||"")).toLowerCase())+'" style="--accent:'+esc(accent)+';--accent2:'+esc(accent2)+';--accent-glow:'+esc(accent)+'30;animation:iosPanelIn .48s cubic-bezier(.22,1,.36,1) both;animation-delay:'+Math.min(i,8)*42+'ms">'+
     '<div class="card-top">'+icon+'<span class="kind">MOVIE &amp; TV</span></div><h3><span>'+esc(x.name)+'</span>'+fav+'</h3><p>'+esc(desc)+'</p>'+tags+
