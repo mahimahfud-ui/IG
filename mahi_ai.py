@@ -120,6 +120,13 @@ def _github(method: str, path: str, *, params: dict | None = None, payload: dict
             message = ""
         safe_message = re.sub(r"[\r\n\t]+", " ", message).strip()[:220]
         lower_message = safe_message.lower()
+        endpoint_note = f" Failed endpoint: {method.upper()} {path}."
+        response_headers = getattr(response, "headers", {})
+        accepted_permissions = response_headers.get("X-Accepted-GitHub-Permissions", "") if hasattr(response_headers, "get") else ""
+        if not isinstance(accepted_permissions, str):
+            accepted_permissions = ""
+        if accepted_permissions.strip():
+            endpoint_note += f" GitHub accepted-permissions hint: {accepted_permissions.strip()[:160]}."
         if response.status_code == 401:
             raise MahiAIError(
                 "GitHub returned HTTP 401 (Bad credentials). The MAHI_AI_GITHUB_TOKEN on the Render mahicloud service "
@@ -138,12 +145,12 @@ def _github(method: str, path: str, *, params: dict | None = None, payload: dict
             if "resource not accessible by personal access token" in lower_message or "not accessible" in lower_message:
                 raise MahiAIError(
                     f"GitHub returned HTTP 403: {safe_message or 'access denied'}. Grant the token access to "
-                    f"{repository} and set repository Contents permission to Read and write.",
+                    f"{repository} and set repository Contents permission to Read and write." + endpoint_note,
                     502,
                 )
             raise MahiAIError(
                 f"GitHub returned HTTP 403: {safe_message or 'access denied'}. Check token access to {repository} "
-                "and its Contents: Read and write permission.",
+                "and its Contents: Read and write permission." + endpoint_note,
                 502,
             )
         if response.status_code == 404:
