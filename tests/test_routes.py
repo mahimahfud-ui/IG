@@ -215,6 +215,43 @@ class MahiCloudRouteTests(unittest.TestCase):
 
 
 
+    def test_direct_app_download_uses_publisher_metadata_and_keeps_download_url(self):
+        from unittest.mock import patch
+        from mahi_ai import MahiAIError
+        from mahi_catalog import _add_link, _app_metadata_page_url, _is_direct_app_download_url
+
+        download_url = "https://github.com/FrancescoGrazioso/Meld/releases/download/v0.7.2/Meld-izzy.apk"
+        publisher_url = "https://github.com/FrancescoGrazioso/Meld"
+        self.assertTrue(_is_direct_app_download_url(download_url))
+        self.assertEqual(publisher_url, _app_metadata_page_url(download_url))
+        self.assertFalse(_is_direct_app_download_url("https://example.com/api/app"))
+
+        metadata = {
+            "url": publisher_url, "domain": "github.com", "title": "Meld",
+            "description": "", "content_hint": "Android music player", "logo_sources": [],
+        }
+        seen_record = {}
+        with patch("mahi_catalog._metadata_for_url", return_value=metadata) as scrape, \
+             patch("mahi_catalog._download_logo", side_effect=MahiAIError("no usable logo")), \
+             patch("mahi_catalog._repo_file", return_value={"content": "const otherApps=[];", "sha": "page-sha"}), \
+             patch("mahi_catalog._insert_js_array_item", side_effect=lambda content, array_name, record: seen_record.update(record) or content), \
+             patch("mahi_catalog._commit", return_value="https://github.com/mahimahfud-ui/mahicloud/commit/test-sha"):
+            result = _add_link(download_url, download_url, "app", "Meld")
+
+        scrape.assert_called_once_with(publisher_url)
+        self.assertEqual(download_url, seen_record["url"])
+        self.assertEqual("Download app", seen_record["linkLabel"])
+        self.assertIn("Direct app download", seen_record["sublabel"])
+        self.assertEqual("Apps", result["category_label"])
+
+    def test_apps_category_switch_has_spacing_and_three_states(self):
+        response = self.client.get("/apps/")
+        self.assertEqual(response.status_code, 200)
+        source = response.get_data(as_text=True)
+        self.assertIn("grid-template-columns:repeat(3,minmax(0,1fr))", source)
+        self.assertIn('body[data-category="apps"] .switch:before', source)
+        self.assertIn("@media(max-width:520px)", source)
+
     def test_hidden_metadata_helper_detects_page_logo_images(self):
         from mahi_ai import _MetadataParser
 
