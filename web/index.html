@@ -475,6 +475,12 @@ body.mc-route-active{overflow:hidden;overscroll-behavior:none}body.mc-route-acti
  .mc-mobile-dock a span{font-size:8px}
 }
 </style>
+<style id="mc-intro-scroll-smoothness">
+html.mc-scroll-active .grad,
+html.mc-scroll-active .eyebrow::before{animation-play-state:paused!important}
+html.mc-scroll-active .grad{filter:none!important}
+html.mc-scroll-active .panel h1{text-shadow:none!important}
+</style>
 </head>
 <body id="top">
 <div class="boot" id="boot"><img src="/brand-m.webp" alt="" width="56" height="56"><div class="bar"><i id="bootBar"></i></div><p id="bootPct">LOADING 0%</p></div>
@@ -677,7 +683,7 @@ var CUES=[[0,0,.15,.23],[.35,.43,.57,.65],[.77,.85,1.10,1.20]];
 var DRIFT = reduced ? 0 : 22;
 
 /* ===== State ===== */
-var progress=0, seekTo=0, seekAt=0, ready=false, started=false, needDraw=true, lastT=-1, frameId=0;
+var progress=0, seekTo=0, seekAt=0, ready=false, started=false, needDraw=true, needPaint=true, lastT=-1, frameId=0, scrollActive=false;
 var W=0,H=0,DPR=1, heroEnd=1;
 
 /* Render only when input/state changes; keep easing frames only while scrolling settles. */
@@ -691,6 +697,7 @@ function readScroll(){
   var y=window.pageYOffset;
   progress=clamp(y/heroEnd,0,1);
   seekTo=progress;
+  needPaint=true;
   chrome.classList.toggle("solid", y>heroEnd*0.985);
   scheduleFrame();
 }
@@ -713,7 +720,7 @@ setTimeout(start,1600); /* never strand the page behind the preloader */
 function resize(){
   var w=window.innerWidth, h=window.innerHeight;
   if(w===W && Math.abs(h-H)<90) return; /* ignore mobile URL-bar resizes */
-  W=w; H=h; DPR=Math.min(window.devicePixelRatio||1,w<=720?1:1.15);
+  W=w; H=h; DPR=Math.min(window.devicePixelRatio||1,1);
   cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); if(ctx) ctx.setTransform(DPR,0,0,DPR,0,0); needDraw=true;
   scheduleFrame();
 }
@@ -754,7 +761,7 @@ function draw(t,time){
     var it=items[k], im=imgs[it.i];
     if(it.s<1 || !im.complete || !im.naturalWidth) continue;
     ctx.save(); ctx.globalAlpha=clamp(it.a,0,1);
-    ctx.shadowColor=projects[it.i].c1; ctx.shadowBlur=W<=720?0:Math.min(10,8*it.a); ctx.drawImage(im,it.x-it.s/2,it.y-it.s/2,it.s,it.s); ctx.restore();
+    ctx.shadowColor=projects[it.i].c1; ctx.shadowBlur=(W<=720||scrollActive||reduced)?0:Math.min(10,8*it.a); ctx.drawImage(im,it.x-it.s/2,it.y-it.s/2,it.s,it.s); ctx.restore();
   }
 }
 
@@ -777,20 +784,23 @@ function paint(){
 
 function frame(time){
   frameId=0;
-  var keepAnimating=false;
   if(ready){
-    var gap=seekTo-seekAt;
-    if(reduced) seekAt=seekTo;
-    else if(Math.abs(gap)>0.001){
-      seekAt+=gap*0.28;
-      if(Math.abs(seekTo-seekAt)<=0.001) seekAt=seekTo;
-      else keepAnimating=true;
-    } else seekAt=seekTo;
+    /* The scene is a scroll-scrubbed animation, so render the actual scroll target.
+       Easing it by 28% made the hero trail behind the user's finger/wheel. */
+    seekAt=seekTo;
     var onHero=window.pageYOffset < heroEnd + window.innerHeight && !document.hidden;
-    if(onHero && (needDraw || Math.abs(seekAt-lastT)>0.0001)){ draw(seekAt,time); lastT=seekAt; needDraw=false; }
+    if(onHero && (needDraw || Math.abs(seekAt-lastT)>0.0001)){
+      draw(seekAt,time);
+      lastT=seekAt;
+      needDraw=false;
+    }
   }
-  paint();
-  if(keepAnimating) scheduleFrame();
+  /* Panel styles do not depend on the canvas easing. Paint only after scroll/layout input,
+     not on every extra frame used to animate the canvas. */
+  if(needPaint){
+    paint();
+    needPaint=false;
+  }
 }
 
 /* ===== Store: segmented control, search, grid ===== */
@@ -864,9 +874,11 @@ if("IntersectionObserver" in window){
 /* ===== iOS audio-free: nothing to unlock. Wiring, in order: ===== */
 window.addEventListener("scroll",readScroll,{passive:true});
 window.addEventListener("resize",function(){ resize(); measure(); readScroll(); moveGlider(); });
+document.addEventListener("mahicloud:scroll-start",function(){ scrollActive=true; });
+document.addEventListener("mahicloud:scroll-end",function(){ scrollActive=false; needDraw=true; scheduleFrame(); });
 document.addEventListener("visibilitychange",function(){
   if(document.hidden){ if(frameId) cancelAnimationFrame(frameId); frameId=0; return; }
-  needDraw=true; lastT=-1; scheduleFrame();
+  needDraw=true; needPaint=true; lastT=-1; scheduleFrame();
 });
 if(document.fonts && document.fonts.ready) document.fonts.ready.then(moveGlider);
 
