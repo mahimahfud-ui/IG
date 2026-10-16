@@ -1,0 +1,59 @@
+/* MahiCloud design tokens — shared by the homepage and the Apps collection.
+   Token-only: this file sets no element styles, so it is safe to link from any
+   page. Independent projects (MahiFlix, Linkora, LUMR, ...) keep their own
+   identity and do not need to include it.
+
+   Palette is built on the existing brand: charcoal #141414 + signature red
+   #e50914 (the same values mahicloud-theme.css already uses). */
+:root {
+  --mc-bg: #141414;
+  --mc-bg-deep: #0d0d0e;
+  --mc-surface-1: #1a1a1b;
+  --mc-surface-2: #212122;
+  --mc-surface-glass: rgba(255, 255, 255, .035);
+  --mc-fg: #f3efe8;
+  --mc-fg-soft: rgba(243, 239, 232, .68);
+  --mc-fg-faint: rgba(243, 239, 232, .46);
+  --mc-line: rgba(243, 239, 232, .10);
+  --mc-line-strong: rgba(243, 239, 232, .22);
+  --mc-accent: #e50914;
+  --mc-accent-hi: #ff4a52;
+  --mc-accent-soft: rgba(229, 9, 20, .14);
+  --mc-accent-glow: rgba(229, 9, 20, .32);
+  --mc-font-display: 'Inter Tight', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
+  --mc-font-body: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --mc-display-weight: 600;
+  --mc-display-track: -.045em;
+  --mc-display-leading: .9;
+  --mc-label-track: .14em;
+  --mc-container: 1320px;
+  --mc-gutter: clamp(18px, 4.2vw, 56px);
+  --mc-gap: clamp(10px, 1.2vw, 16px);
+  --mc-r-sm: 8px;
+  --mc-r-md: 14px;
+  --mc-r-lg: 20px;
+  --mc-shadow-card: 0 18px 44px rgba(0, 0, 0, .46);
+  --mc-shadow-lift: 0 26px 60px rgba(0, 0, 0, .55);
+  --mc-ease-out: cubic-bezier(.16, 1, .3, 1);
+  --mc-ease: cubic-bezier(.22, .61, .36, 1);
+  --mc-dur-s: .4s;
+  --mc-dur-m: .7s;
+  --mc-dur-l: .9s;
+  --mc-focus: 2px solid var(--mc-fg);
+}
+@keyframes mc-rise { from { opacity: 0; transform: translate3d(0, 14px, 0); } to { opacity: 1; transform: none; } }
+@keyframes mc-line { from { transform: translate3d(0, 108%, 0); } to { transform: none; } }
+@keyframes mc-pop  { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
+@keyframes mc-slide-in { from { opacity: 0; transform: translate3d(-18px, 0, 0); } to { opacity: 1; transform: none; } }
+.mc-ln { display: block; overflow: hidden; padding: .04em 0 .12em; margin: -.04em 0 -.12em; }
+.mc-ln > span { display: block; }
+.mc-ready .mc-rise { animation: mc-rise var(--mc-dur-m) var(--mc-ease-out) var(--mc-d, 0s) both; }
+.mc-ready .mc-ln > span { animation: mc-line var(--mc-dur-l) var(--mc-ease-out) var(--mc-d, 0s) both; }
+.mc-ready .mc-pop { animation: mc-pop var(--mc-dur-m) var(--mc-ease-out) var(--mc-d, 0s) both; }
+.mc-ready .mc-slide { animation: mc-slide-in var(--mc-dur-m) var(--mc-ease-out) var(--mc-d, 0s) both; }
+@media (prefers-reduced-motion: reduce) {
+  .mc-ready .mc-rise,
+  .mc-ready .mc-ln > span,
+  .mc-ready .mc-pop,
+  .mc-ready .mc-slide { animation: none !important; opacity: 1; transform: none; }
+}
