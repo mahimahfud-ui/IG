@@ -59,11 +59,24 @@ class DesignSystemTests(unittest.TestCase):
         for page in (home, apps):
             self.assertNotIn("calc(100% - 2*var(--mc-gutter))", page)
 
-    def test_quick_add_publishing_flow_is_untouched(self):
+    def test_quick_add_has_category_specific_publish_flow(self):
         js = self.get_text("/mahi-ai-launcher.js")
         self.assertIn("/api/catalog-add", js)
         self.assertIn("mahi-catalog-plus", js)
-        self.assertIn("Detect & Add", js)
+        for step in (
+            "Choose a category",
+            "Movie Websites",
+            "Movie Apps",
+            "Music Apps",
+            "Windows Automation (.BAT)",
+            "Windows Automation (.PY)",
+            "function showUrl()",
+            "function showCode()",
+            "function showName()",
+            "category:selectedCategory",
+        ):
+            with self.subTest(step=step):
+                self.assertIn(step, js)
 
 
 if __name__ == "__main__":

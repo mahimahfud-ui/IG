@@ -319,7 +319,7 @@ def catalog_add():
 
     raw = data.get("input")
     if not isinstance(raw, str) or not raw.strip():
-        return jsonify({"ok": False, "error": "Enter a website URL or paste the full script source."}), 400
+        return jsonify({"ok": False, "error": "Paste a link or a script source."}), 400
     raw = raw.strip()
     category = str(data.get("category") or "").strip().lower()
 
