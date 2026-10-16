@@ -235,7 +235,7 @@ button,a,[role="button"],input[type="button"],input[type="submit"]{-webkit-tap-h
 <style id="mc-cinematic">
 /* MahiCloud cinematic layer — editorial composition for the store sheet, cards and hero index.
    Built on /mahicloud-tokens.css. Everything here is presentation only. */
-.wrap{width:min(var(--mc-container),calc(100% - 2*var(--mc-gutter)))}
+.wrap{width:min(var(--mc-container),calc(100% - var(--mc-gutter) - var(--mc-gutter)))}
 .hero-index{position:absolute;left:max(var(--mc-gutter),calc((100% - var(--mc-container)) / 2));bottom:max(30px,calc(env(safe-area-inset-bottom,0px) + 24px));width:min(720px,60%);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2.2vw,32px);list-style:none;padding-top:16px;border-top:1px solid var(--mc-line);pointer-events:auto}
 .hero-index a{display:grid;gap:3px;text-decoration:none;color:inherit}
 .hero-index .n{font-size:11px;letter-spacing:var(--mc-label-track);color:var(--mc-accent-hi)}
@@ -285,6 +285,47 @@ button,a,[role="button"],input[type="button"],input[type="submit"]{-webkit-tap-h
 @media(max-width:720px){.card{padding:14px;border-radius:var(--mc-r-md)}.shelf-head h2{font-size:clamp(44px,14vw,72px)}}
 .about{text-align:left;margin-left:0;max-width:60ch}
 .foot-links a{letter-spacing:.02em}
+</style>
+
+<style id="mc-center-layout-fix">
+/* Center alignment pass: presentation-only overrides. Keep the hero/video scrub,
+   live project data, search/filter handlers, destinations and Quick Add intact. */
+.wrap{width:min(var(--mc-container),calc(100% - var(--mc-gutter) - var(--mc-gutter)));margin-inline:auto}
+.chrome{left:0;right:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:max(12px,calc(env(safe-area-inset-top,0px) + 8px)) var(--mc-gutter) 12px;text-align:center}
+.mark{justify-content:center;margin-inline:auto;text-align:center}
+.nav{justify-content:center;align-items:center;flex-wrap:wrap;gap:clamp(12px,2vw,24px);margin-inline:auto}
+.panel{align-items:center;text-align:center}
+.eyebrow{justify-content:center;text-align:center;margin-inline:auto;max-width:min(54ch,100%)}
+h1{width:100%;text-align:center;margin-inline:auto}
+.sub{width:min(44ch,100%);max-width:100%;text-align:center;margin-inline:auto}
+.cta{justify-content:center;align-self:center;margin-inline:auto}
+.hero-index{left:0;right:0;margin-inline:auto;width:min(720px,calc(100% - var(--mc-gutter) - var(--mc-gutter)));grid-template-columns:repeat(3,minmax(0,1fr));text-align:center}
+.hero-index a{justify-items:center;align-content:start;text-align:center}
+.profile{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;justify-items:center}
+.who,.who h2,.handle,.bio{text-align:center;margin-left:auto;margin-right:auto}
+.stats{justify-content:center;align-items:center;margin-inline:auto}
+.stat{text-align:center}
+.actions{justify-content:center;align-items:center}
+.shelf-head{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;margin-inline:auto}
+.shelf-head h2,.shelf-head p{text-align:center;margin-left:auto;margin-right:auto}
+.controls{justify-content:center;align-items:center;margin-left:auto;margin-right:auto}
+.search{margin-left:auto;margin-right:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),260px));justify-content:center;gap:var(--mc-gap)}
+.card{align-items:center;text-align:center}
+.card-top{width:100%;justify-content:center;align-items:center;flex-wrap:wrap}
+.card h3,.card .cat,.card .desc{width:100%;text-align:center;margin-left:auto;margin-right:auto}
+.card h3{justify-content:center}
+.card .tags{width:100%;justify-content:center}
+.card-foot{width:100%;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.empty{text-align:center}
+.about{margin-left:auto;margin-right:auto;text-align:center}
+.foot-row{flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.foot-brand,.foot-links{justify-content:center;align-items:center;text-align:center;flex-wrap:wrap}
+footer{text-align:center}
+@media(max-width:639px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.hero-index{display:none}.sub{max-width:34ch}}
+@media(max-width:360px){.grid{grid-template-columns:minmax(0,260px)}.card{padding:12px}}
+@media(max-width:720px){.chrome{gap:8px}.panel{padding-top:max(112px,calc(env(safe-area-inset-top,0px) + 88px))}.eyebrow{max-width:100%}.sub{max-width:34ch}}
+@media(max-height:520px) and (orientation:landscape){.chrome{gap:6px}.panel{padding-top:88px;padding-bottom:120px}}
 </style>
 </head>
 <body id="top">
