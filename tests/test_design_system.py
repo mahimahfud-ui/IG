@@ -46,6 +46,19 @@ class DesignSystemTests(unittest.TestCase):
         html = self.get_text("/")
         self.assertNotIn("animation:drift", html)
 
+    def test_centered_layout_and_calc_compatibility(self):
+        home = self.get_text("/")
+        apps = self.get_text("/apps/")
+        for page, needles in (
+            (home, ('id="mc-center-layout-fix"', ".panel{align-items:center;text-align:center}", ".foot-row{flex-direction:column")),
+            (apps, ('id="mc-apps-center-layout-fix"', ".hero{display:flex;flex-direction:column;align-items:center;text-align:center", ".apps-grid{display:grid")),
+        ):
+            for needle in needles:
+                with self.subTest(needle=needle):
+                    self.assertIn(needle, page)
+        for page in (home, apps):
+            self.assertNotIn("calc(100% - 2*var(--mc-gutter))", page)
+
     def test_quick_add_publishing_flow_is_untouched(self):
         js = self.get_text("/mahi-ai-launcher.js")
         self.assertIn("/api/catalog-add", js)
