@@ -448,6 +448,27 @@ body.mc-route-active{overflow:hidden;overscroll-behavior:none}body.mc-route-acti
  .mc-mobile-dock a{font-size:7.3px!important}
  .mc-mobile-dock a svg{width:16px;height:16px}
 }
+
+/* Project-name navigation: Home + actual project labels only. */
+#mcMainNav .pill{display:none!important}
+@media(min-width:721px){
+ .chrome .nav{flex-wrap:wrap!important;align-items:center;justify-content:flex-end;row-gap:3px!important;column-gap:clamp(3px,.65vw,10px)!important;max-width:min(100%,1120px)!important;overflow:visible}
+ .chrome .nav a[data-mc-project]{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;padding:8px clamp(6px,.7vw,10px)!important;font-size:clamp(9px,.76vw,11px)!important;letter-spacing:.045em!important}
+}
+@media(max-width:720px){
+ .chrome .nav{display:none!important}
+ .mc-mobile-dock{display:flex!important;align-items:stretch;justify-content:flex-start;gap:3px!important;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;grid-template-columns:none!important}
+ .mc-mobile-dock::-webkit-scrollbar{display:none}
+ .mc-mobile-dock a{flex:0 0 auto;min-width:65px;max-width:112px;padding:5px 8px!important;gap:4px!important;scroll-snap-align:start;white-space:nowrap}
+ .mc-mobile-dock a[data-mc-project]{min-width:75px}
+ .mc-mobile-dock a img{display:block;width:18px;height:18px;flex:none;object-fit:cover;border-radius:5px}
+ .mc-mobile-dock a span{display:block;max-width:104px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:8.5px;line-height:1.15}
+}
+@media(max-width:390px){
+ .mc-mobile-dock a{min-width:60px;padding-inline:6px!important}
+ .mc-mobile-dock a[data-mc-project]{min-width:69px}
+ .mc-mobile-dock a span{font-size:8px}
+}
 </style>
 </head>
 <body id="top">
@@ -462,11 +483,8 @@ body.mc-route-active{overflow:hidden;overscroll-behavior:none}body.mc-route-acti
 
 <header class="chrome" id="chrome">
   <a class="mark" href="#top" aria-label="MahiCloud home"><img src="/brand-m.webp" alt="" width="30" height="30"><span>MahiCloud</span></a>
-  <nav class="nav" aria-label="Main navigation" id="mcMainNav">
-    <a href="#home" data-mc-route="home">Home</a><a href="#projects" data-mc-route="projects">Projects</a>
-    <a href="#apps" data-mc-route="apps">Apps</a><a href="#windows" data-mc-route="windows">Windows Tools</a>
-    <a href="#movies" data-mc-route="movies">Movies</a><a href="#social" data-mc-route="social">Social Tools</a>
-    <a href="#privacy" data-mc-route="privacy">Privacy &amp; Network</a><a class="pill" href="#projects" data-mc-route="projects">Explore</a>
+  <nav class="nav" aria-label="Home and project navigation" id="mcMainNav">
+    <a href="#home" data-mc-route="home">Home</a>
   </nav>
 </header>
 
@@ -497,14 +515,8 @@ body.mc-route-active{overflow:hidden;overscroll-behavior:none}body.mc-route-acti
   </div></div>
   <div class="mc-app-toast" id="mcAppToast" role="status" aria-live="polite"></div>
 </section>
-<nav class="mc-mobile-dock" id="mcMobileDock" aria-label="MahiCloud app tabs">
+<nav class="mc-mobile-dock" id="mcMobileDock" aria-label="Home and project navigation">
   <a href="#home" data-mc-route="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></a>
-  <a href="#projects" data-mc-route="projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="5" rx="2"/><rect x="13" y="10" width="8" height="11" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/></svg><span>Projects</span></a>
-  <a href="#apps" data-mc-route="apps"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>Apps</span></a>
-  <a href="#windows" data-mc-route="windows"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5 11 4v7H4zM13 3.7 21 2v9h-8zM4 13h7v7l-7-1zM13 13h8v9l-8-1.5z"/></svg><span>Tools</span></a>
-  <a href="#movies" data-mc-route="movies"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="m10 8 6 4-6 4zM3 8h4M17 8h4M3 16h4M17 16h4"/></svg><span>Movies</span></a>
-  <a href="#social" data-mc-route="social"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 14.7 9.3 21 12l-6.3 2.7L12 21l-2.7-6.3L3 12l6.3-2.7z"/><path d="M19 3v4M17 5h4"/></svg><span>Social</span></a>
-  <a href="#privacy" data-mc-route="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6z"/><path d="m9 12 2 2 4-4"/></svg><span>Privacy</span></a>
 </nav>
 
 <section class="panels" aria-label="Introduction">
@@ -615,6 +627,7 @@ function iconURI(p){
   return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
 }
 projects.forEach(function(p){ p.icon = iconURI(p); });
+window.mcProjects = projects;
 
 /* ===== Helpers ===== */
 function clamp(v,a,b){ return Math.min(b,Math.max(a,v)); }
@@ -862,6 +875,28 @@ requestAnimationFrame(frame);
  var configs={home:{title:"Home",description:"Your personal digital ecosystem."},projects:{title:"Projects",description:"All of your projects in one place."},apps:{title:"Apps",description:"Browse your apps without leaving MahiCloud.",src:"/apps/"},windows:{title:"Windows Tools",description:"Your Windows automation workspace.",src:"/linkora/"},movies:{title:"Movies",description:"Explore your movie and series directory.",src:"/mahiflix/"},social:{title:"Social Tools",description:"Your social-media utility workspace.",src:"/instagram-cleaner.html"},legal:{title:"Privacy Policy",description:"MahiCloud privacy information.",src:"/privacy"},privacy:{title:"Privacy & Network",description:"Saved links and network endpoints, together in one tab."}};
  var appView=document.getElementById("mcAppView"),titleEl=document.getElementById("mcViewTitle"),descEl=document.getElementById("mcViewDescription"),kickerEl=document.getElementById("mcViewKicker"),stateEl=document.getElementById("mcViewState"),stateBadge=stateEl&&stateEl.parentElement,reloadBtn=document.getElementById("mcReloadButton"),panels=Array.prototype.slice.call(document.querySelectorAll("[data-mc-frame-panel]"));
  var activeRoute="home",activePanel=null,returnScrollY=0,toastTimer=0,reduced=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches),mainTitle=document.title;
+ var projectRoutes={mahiflix:"movies",apps:"apps",linkora:"windows","social-cleaner":"social"};
+ function makeProjectNavItem(project,mobile){
+  var a=document.createElement("a"),route=projectRoutes[project.id];
+  a.setAttribute("data-mc-project",project.id);
+  a.setAttribute("aria-label",project.title);
+  if(route){a.href="#"+route;a.setAttribute("data-mc-route",route);}
+  else{a.href=project.url;a.target="_blank";a.rel="noopener noreferrer";}
+  if(mobile&&project.icon){var img=document.createElement("img");img.src=project.icon;img.alt="";img.width=18;img.height=18;img.decoding="async";a.appendChild(img);}
+  if(mobile){var label=document.createElement("span");label.textContent=project.title;a.appendChild(label);}else{a.textContent=project.title;}
+  return a;
+ }
+ function buildProjectNavigation(){
+  var main=document.getElementById("mcMainNav"),dock=document.getElementById("mcMobileDock"),items=window.mcProjects;
+  if(!main||!dock||!Array.isArray(items))return;
+  var mainHome=main.querySelector('[data-mc-route="home"]'),dockHome=dock.querySelector('[data-mc-route="home"]');
+  main.textContent="";dock.textContent="";
+  if(!mainHome){mainHome=document.createElement("a");mainHome.href="#home";mainHome.setAttribute("data-mc-route","home");mainHome.textContent="Home";}
+  if(!dockHome){dockHome=document.createElement("a");dockHome.href="#home";dockHome.setAttribute("data-mc-route","home");dockHome.textContent="Home";}
+  main.appendChild(mainHome);dock.appendChild(dockHome);
+  items.forEach(function(project){main.appendChild(makeProjectNavItem(project,false));dock.appendChild(makeProjectNavItem(project,true));});
+ }
+ buildProjectNavigation();
  function panelFor(route){return panels.find(function(p){return p.getAttribute("data-mc-frame-panel")===route;})||null;}
  function pathToRoute(path){var p=String(path||"/").split("?")[0].replace(/\/$/,"")||"/";if(p==="/"||p==="/index.html")return "home";if(p==="/apps")return "apps";if(p==="/linkora")return "windows";if(p==="/mahiflix")return "movies";if(p==="/instagram-cleaner.html")return "social";if(p==="/privacy")return "legal";return null;}
  function routeFromHash(){var h=(location.hash||"").replace(/^#/,"").toLowerCase();if(!h||h==="top"||h==="home")return "home";if(h==="projects")return "projects";return configs[h]?h:"home";}
