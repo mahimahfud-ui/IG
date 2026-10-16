@@ -116,15 +116,40 @@ def _github(method: str, path: str, *, params: dict | None = None, payload: dict
     if response.status_code >= 400:
         try:
             message = str(response.json().get("message") or "")
-        except ValueError:
+        except (ValueError, TypeError, AttributeError):
             message = ""
-        if response.status_code in (401, 403):
-            raise MahiAIError("GitHub rejected the server token or its permissions. Verify MAHI_AI_GITHUB_TOKEN.", 502)
+        safe_message = re.sub(r"[\\r\\n\\t]+", " ", message).strip()[:220]
+        lower_message = safe_message.lower()
+        if response.status_code == 401:
+            raise MahiAIError(
+                "GitHub returned HTTP 401 (Bad credentials). The MAHI_AI_GITHUB_TOKEN on the Render mahicloud service "
+                "is invalid, expired, revoked, or the updated value was not saved to that service. Replace it with a "
+                "fresh token and save the environment variable again.",
+                502,
+            )
+        if response.status_code == 403:
+            if "rate limit" in lower_message:
+                raise MahiAIError(
+                    "GitHub returned HTTP 403 because its API rate limit was exceeded. Wait for the limit to reset, "
+                    "then retry. This message alone does not prove the token is invalid.",
+                    502,
+                )
+            repository = _repo_name()
+            if "resource not accessible by personal access token" in lower_message or "not accessible" in lower_message:
+                raise MahiAIError(
+                    f"GitHub returned HTTP 403: {safe_message or 'access denied'}. Grant the token access to "
+                    f"{repository} and set repository Contents permission to Read and write.",
+                    502,
+                )
+            raise MahiAIError(
+                f"GitHub returned HTTP 403: {safe_message or 'access denied'}. Check token access to {repository} "
+                "and its Contents: Read and write permission.",
+                502,
+            )
         if response.status_code == 404:
             raise MahiAIError("The GitHub path was not found, or the server token cannot read it.", 404)
         if response.status_code == 422:
             raise MahiAIError("GitHub rejected the change because of a conflict or invalid repository operation. Retry after checking the branch.", 409)
-        safe_message = re.sub(r"[\r\n]+", " ", message)[:220]
         raise MahiAIError(f"GitHub API request failed (HTTP {response.status_code}). {safe_message}".strip(), 502)
     if not response.content:
         return {}
