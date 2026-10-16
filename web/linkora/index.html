@@ -129,4 +129,5 @@ document.querySelectorAll('.reveal').forEach(el=>io?io.observe(el):el.classList.
 if(matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion:reduce)').matches){const g=$('#glow');let raf=0;document.addEventListener('pointermove',e=>{if(raf)return;raf=requestAnimationFrame(()=>{g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';g.style.opacity='.85';raf=0})});document.addEventListener('pointerleave',()=>g.style.opacity='0')}
 draw();
 </script>
+<script src="/scroll-performance.js" defer></script>
 </body></html>
