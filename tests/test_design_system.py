@@ -54,6 +54,30 @@ class DesignSystemTests(unittest.TestCase):
         self.assertNotIn("/* never cancelled */", html)
         self.assertIn("@media(prefers-reduced-motion:reduce){.stage::before,.grad,.grid.in .card{animation:none!important}}", html)
 
+    def test_hidden_project_iframes_pause_expensive_animation_loops(self):
+        home = self.get_text("/")
+        for needle in (
+            "function setFrameVisibility(route,visible)",
+            '"mahicloud:visibility"',
+            "setFrameVisibility(previousRoute,false)",
+            "setFrameVisibility(route,true)",
+        ):
+            with self.subTest(needle=needle):
+                self.assertIn(needle, home)
+
+        lumr = self.get_text("/lumr/cinematic.js")
+        self.assertIn('document.addEventListener("mahicloud:visibility"', lumr)
+        lumr_page = self.get_text("/lumr/")
+        self.assertIn("stopCursor", lumr_page)
+        self.assertIn('document.addEventListener(\'mahicloud:visibility\'', lumr_page)
+
+        cinema_main = self.get_text("/mahiflix/cinema/main.js")
+        self.assertIn('"mahicloud:visibility"', cinema_main)
+        self.assertIn("scene.setVisible(workspaceVisible)", cinema_main)
+        cinema_scene = self.get_text("/mahiflix/cinema/scene.js")
+        self.assertIn("function setVisible(visible)", cinema_scene)
+        self.assertIn("!workspaceVisible", cinema_scene)
+
     def test_centered_layout_and_calc_compatibility(self):
         home = self.get_text("/")
         apps = self.get_text("/apps/")
