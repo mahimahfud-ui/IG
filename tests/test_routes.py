@@ -212,5 +212,25 @@ class MahiCloudRouteTests(unittest.TestCase):
 
 
 
+    def test_hidden_metadata_helper_detects_page_logo_images(self):
+        from mahi_ai import _MetadataParser
+
+        parser = _MetadataParser()
+        parser.feed(
+            '<html><head><title>Example Music</title>'
+            '<link rel="icon" href="/favicon.ico">'
+            '<link rel="apple-touch-icon" sizes="180x180" href="/touch-icon.png">'
+            '</head><body>'
+            '<img class="navbar-brand" alt="Example Music logo" width="180" height="48" src="/assets/example-logo.svg">'
+            '<img src="/content/unrelated-photo.jpg" alt="Album cover">'
+            '</body></html>'
+        )
+        self.assertEqual("Example Music", " ".join(parser.title_parts))
+        self.assertTrue(parser.icons)
+        self.assertIn("/assets/example-logo.svg", parser.logo_images)
+        self.assertNotIn("/content/unrelated-photo.jpg", parser.logo_images)
+        self.assertEqual("/touch-icon.png", parser.icons[0])
+
+
 if __name__ == "__main__":
     unittest.main()

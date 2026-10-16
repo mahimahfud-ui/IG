@@ -60,7 +60,7 @@ def _logo_ext(kind, body):
 
 
 def _download_logo(meta, url):
-    for source in (meta.get("logo_sources") or [])[:8]:
+    for source in (meta.get("logo_sources") or [])[:10]:
         try:
             final, kind, body = _fetch_public(str(source), max_bytes=300000)
             ext = _logo_ext(kind, body)
