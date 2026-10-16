@@ -30,13 +30,9 @@ The helper does not bypass CAPTCHAs, security checks, rate limits, or other acco
 6. Open Instagram and sign in normally.
 7. Pin and open **Browser Tools**.
 
-## Updating the source
+## Updating the helper
 
-The canonical source is the `browser-helper` folder on the MahiCloud repository's `main` branch:
-
-https://github.com/mahimahfud-ui/mahicloud/tree/main/browser-helper
-
-Future code changes can be committed directly to the MahiCloud repository. A manually loaded extension still needs **Reload** in the browser after source changes. Automatic browser updates require installation through a supported extension store; the repository already contains a Chrome Web Store publishing workflow for that setup.
+After replacing the unpacked helper files with a newer version, open `chrome://extensions/` or `brave://extensions/` and click **Reload** on Browser Tools. A manually loaded extension does not update itself.
 
 ## Third-party
 
