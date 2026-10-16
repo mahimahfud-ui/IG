@@ -96,9 +96,12 @@ class DesignSystemTests(unittest.TestCase):
 
     def test_homepage_canvas_uses_a_lower_scroll_render_budget(self):
         home = self.get_text("/")
-        self.assertIn("w<=720?1:1.15", home)
+        self.assertIn("DPR=Math.min(window.devicePixelRatio||1,1)", home)
         self.assertIn("Math.min(10,8*it.a)", home)
-        self.assertIn("seekAt+=gap*0.28", home)
+        self.assertIn("(W<=720||scrollActive||reduced)?0", home)
+        self.assertIn("if(needPaint)", home)
+        self.assertIn("seekAt=seekTo", home)
+        self.assertNotIn("seekAt+=gap*0.28", home)
 
     def test_lumr_scroll_does_not_measure_and_rewrite_every_card(self):
         lumr = self.get_text("/lumr/")
