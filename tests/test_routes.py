@@ -288,10 +288,10 @@ class MahiCloudRouteTests(unittest.TestCase):
                 response.status_code = status_code
                 response.content = b'{"message":"test"}'
                 response.json.return_value = {"message": github_message}
-                with patch.dict(os.environ, {"MAHI_AI_GITHUB_TOKEN": "test-token"}), \\
-                     patch("mahi_ai.requests.request", return_value=response):
-                    with self.assertRaises(MahiAIError) as captured:
-                        _github("GET", "/user")
+                with patch.dict(os.environ, {"MAHI_AI_GITHUB_TOKEN": "test-token"}):
+                    with patch("mahi_ai.requests.request", return_value=response):
+                        with self.assertRaises(MahiAIError) as captured:
+                            _github("GET", "/user")
                 self.assertIn(expected_message, captured.exception.message)
                 self.assertNotIn("test-token", captured.exception.message)
 
