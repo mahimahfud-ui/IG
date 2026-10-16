@@ -1,7 +1,7 @@
 """Public, rate-limited MahiCloud quick-add endpoint (no OpenAI API calls)."""
 from __future__ import annotations
 import ast, base64, hashlib, hmac, html, os, re, threading, time
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urlunsplit
 from flask import Blueprint, jsonify, request
 from mahi_ai import MahiAIError, _check_bat_safety, _fetch_public, _github, _github_token, _insert_js_array_item, _metadata_for_url, _normalise_public_url, _repo_file, _repo_name, _slug
 
@@ -173,8 +173,61 @@ def _fallback_logo(name: str, category: str, url: str):
     return path, svg.encode("utf-8")
 
 
+
+_APP_DOWNLOAD_SUFFIXES = {".apk", ".aab", ".ipa", ".exe", ".msi", ".dmg", ".appx", ".msix", ".zip"}
+_APP_LINK_CATEGORIES = {"app", "movie_app", "music_app"}
+
+
+def _is_direct_app_download_url(url: str) -> bool:
+    """Return True for explicitly supported, public app-installer/archive URL suffixes."""
+    try:
+        path = urlsplit(_normalise_public_url(url)).path.lower()
+    except (MahiAIError, ValueError):
+        return False
+    return any(path.endswith(suffix) for suffix in _APP_DOWNLOAD_SUFFIXES)
+
+
+def _app_metadata_page_url(url: str) -> str:
+    """Resolve the publisher page to scrape when the submitted URL is a binary download."""
+    normalised = _normalise_public_url(url)
+    parts = urlsplit(normalised)
+    segments = [part for part in parts.path.split("/") if part]
+    host = (parts.hostname or "").lower()
+    # A GitHub release asset belongs to its repository page, which provides a much
+    # better title/logo than github.com's generic homepage.
+    if host in {"github.com", "www.github.com"} and len(segments) >= 2:
+        return urlunsplit((parts.scheme, parts.netloc, "/" + "/".join(segments[:2]), "", ""))
+    # For other hosts, start from the public origin homepage.
+    return urlunsplit((parts.scheme, parts.netloc, "/", "", ""))
+
+
 def _add_link(raw, url, category_override=None, custom_name=None):
-    meta = _metadata_for_url(url)
+    if category_override and category_override not in _LINK_CATEGORIES:
+        raise MahiAIError("Choose Apps, Movie Websites, Movie Apps, or Music Apps for a website or app download URL.", 400)
+    direct_download = category_override in _APP_LINK_CATEGORIES and _is_direct_app_download_url(url)
+    if direct_download:
+        download_url = _normalise_public_url(url)
+        # Fetch only a bounded prefix of the actual asset: confirms the public URL
+        # resolves while avoiding downloading or executing the installer on the server.
+        _fetch_public(download_url, max_bytes=1024, allow_truncate=True)
+        metadata_page = _app_metadata_page_url(download_url)
+        try:
+            meta = dict(_metadata_for_url(metadata_page))
+        except MahiAIError:
+            # A direct file host may not expose an HTML homepage. The item remains
+            # addable with a generated fallback mark when no publisher logo is available.
+            meta = {
+                "url": metadata_page,
+                "domain": urlsplit(download_url).hostname or "",
+                "title": "",
+                "description": "",
+                "content_hint": "",
+                "logo_sources": [],
+            }
+        meta["url"] = download_url
+        meta["domain"] = urlsplit(download_url).hostname or meta.get("domain", "")
+    else:
+        meta = _metadata_for_url(url)
     domain = str(meta.get("domain") or urlsplit(meta["url"]).hostname or "")
     source = " ".join([domain, str(meta.get("title") or ""), str(meta.get("description") or ""),
                        str(meta.get("content_hint") or ""), raw]).lower()
@@ -205,7 +258,8 @@ def _add_link(raw, url, category_override=None, custom_name=None):
             raise MahiAIError("This link doesn't clearly fit Movie Websites, Movie Apps, or Music Apps. Send an official page from one of those categories.")
 
     name = _catalog_display_name(custom_name) if custom_name is not None else _name(meta)
-    desc = re.sub(r"\s+", " ", str(meta.get("description") or (name + " official website."))).strip()[:240]
+    default_desc = name + (" direct app download." if direct_download else " official website.")
+    desc = re.sub(r"\s+", " ", str(meta.get("description") or default_desc)).strip()[:240]
     try:
         logo_path, logo = _download_logo(meta, str(meta["url"]))
     except MahiAIError:
@@ -215,12 +269,15 @@ def _add_link(raw, url, category_override=None, custom_name=None):
     record = {"name": name, "url": meta["url"], "domain": domain, "ads": 1, "pop": 70, "smooth": 70,
               "langs": 70, "new": True, "desc": desc, "logoSources": [local_logo]}
     if cat == "movie_app":
-        record.update({"externalWebsite": True, "linkLabel": "Visit website",
-                       "sublabel": "Official website · Verify downloads before installing", "tags": tags})
+        record.update({"externalWebsite": not direct_download,
+                       "linkLabel": "Download app" if direct_download else "Visit website",
+                       "sublabel": "Direct app download · Verify before installing" if direct_download else "Official website · Verify downloads before installing", "tags": tags})
     elif cat == "music_app":
-        record.update({"kind": "app", "linkLabel": "Visit website", "sublabel": "Official website", "tags": tags})
+        record.update({"kind": "app", "linkLabel": "Download app" if direct_download else "Visit website",
+                       "sublabel": "Direct app download · Verify before installing" if direct_download else "Official website", "tags": tags})
     elif cat == "other_app":
-        record.update({"kind": "app", "linkLabel": "Visit website", "sublabel": "Official website", "tags": tags})
+        record.update({"kind": "app", "linkLabel": "Download app" if direct_download else "Visit website",
+                       "sublabel": "Direct app download · Verify before installing" if direct_download else "Official website", "tags": tags})
     page = _repo_file(path, ref="main")
     content = _insert_js_array_item(page["content"], arr, record)
     commit_url = _commit({path: content, logo_path: logo}, {path: page["sha"], logo_path: None})
