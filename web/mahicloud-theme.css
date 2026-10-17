@@ -61,3 +61,19 @@ header:not(.hero), .chrome {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
+
+/* Shared iOS-inspired motion polish. Visual styles and interactions remain unchanged. */
+:root {
+  --mc-motion-ease: cubic-bezier(.22, 1, .36, 1);
+  --mc-motion-ease-soft: cubic-bezier(.32, .72, 0, 1);
+}
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  :where(a, button, input, select, textarea, [role="button"], .card, .app-card, .project-card, .tile, .pill, .ghost, .ico) {
+    transition-timing-function: var(--mc-motion-ease);
+    -webkit-tap-highlight-color: transparent;
+  }
+  :where(button, [role="button"], .btn, .button, .pill, .ghost, .ico) {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
