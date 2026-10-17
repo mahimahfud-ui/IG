@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MahiFlix</title>
+<title>MahiFlix — Movie &amp; Series Websites | MahiCloud</title>
 <meta name="description" content="MahiFlix — discover the best movie and web-series platforms by popularity, ads, languages and experience.">
 <meta name="theme-color" content="#141414">
 <link rel="icon" type="image/webp" href="/brand-m.webp">
@@ -234,6 +234,8 @@ body.mf-ready #mf-page-loader{opacity:0;visibility:hidden;pointer-events:none}
 }
 </style>
 
+<link rel="stylesheet" href="/site-polish.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 </head>
 <body>
 <div id="mf-page-loader" role="status" aria-label="Loading MahiFlix"><div class="mf-loader-mark"><img src="/brand-m.webp" alt="" width="54" height="54"><span class="mf-loader-ring"></span></div><p class="mf-loader-label">PREPARING YOUR COLLECTION</p><div class="mf-loader-progress"><span></span></div></div>
@@ -274,7 +276,7 @@ body.mf-ready #mf-page-loader{opacity:0;visibility:hidden;pointer-events:none}
   <p id="empty" class="empty">Nothing matched your search.</p>
 </main>
 
-<footer>MahiFlix © <span id="yr"></span></footer>
+<footer>MahiFlix © <span id="yr"></span><nav class="site-footer-links" aria-label="Footer links"><a href="/">Home</a><a href="/apps/">Apps</a><a href="/linkora/">Windows Tools</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a></nav></footer>
 
 <script>
 setTimeout(function(){document.body.classList.add("mf-ready")},650);
@@ -608,5 +610,6 @@ renderView("sites");
 
 </script>
 <script src="/scroll-performance.js" defer></script>
+<script src="/site-polish.js" defer></script>
 </body>
 </html>

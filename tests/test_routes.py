@@ -8,6 +8,56 @@ class MahiCloudRouteTests(unittest.TestCase):
         app.config["TESTING"] = True
         self.client = app.test_client()
 
+    def test_shared_mobile_polish_assets_and_page_metadata(self):
+        from html.parser import HTMLParser
+
+        class AssetParser(HTMLParser):
+            def __init__(self):
+                super().__init__()
+                self.links = []
+            def handle_starttag(self, tag, attrs):
+                attrs = dict(attrs)
+                for attr in ("href", "src"):
+                    value = attrs.get(attr, "")
+                    if value:
+                        self.links.append(value)
+
+        pages = (
+            "/", "/apps/", "/mahiflix/", "/linkora/", "/lumr/",
+            "/instagram-cleaner.html", "/browser-helper-guide.html",
+            "/unfollowers/", "/privacy", "/terms",
+        )
+        for path in pages:
+            with self.subTest(page=path):
+                response = self.client.get(path)
+                self.assertEqual(response.status_code, 200)
+                html = response.get_data(as_text=True)
+                self.assertIn("<title>", html)
+                self.assertIn('name="description"', html)
+                self.assertIn('href="/site-polish.css"', html)
+                self.assertIn('src="/site-polish.js"', html)
+                parser = AssetParser()
+                parser.feed(html)
+                for value in parser.links:
+                    if not value.startswith("/") or value.startswith("//"):
+                        continue
+                    from urllib.parse import urlsplit
+                    local_path = urlsplit(value).path
+                    if not local_path or local_path.startswith("/api/"):
+                        continue
+                    linked = self.client.get(local_path, follow_redirects=False)
+                    self.assertLess(
+                        linked.status_code, 400,
+                        f"Broken local link/asset {value!r} found on {path}",
+                    )
+
+    def test_custom_404_page_is_branded_and_returns_404(self):
+        response = self.client.get("/this-page-should-not-exist")
+        self.assertEqual(response.status_code, 404)
+        self.assertIn(b"Page not found", response.data)
+        self.assertIn(b"/site-polish.css", response.data)
+        self.assertIn(b"Return to MahiCloud", response.data)
+
     def test_homepage_is_still_served(self):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
