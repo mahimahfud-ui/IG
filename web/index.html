@@ -480,6 +480,242 @@ body.mc-route-active{overflow:hidden;overscroll-behavior:none}body.mc-route-acti
 </style>
 <link rel="stylesheet" href="/site-polish.css">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+<style id="mc-usability-refinements">
+/* Consolidated homepage type, colour, radius and interaction tokens. */
+:root {
+  --mc-type-xs: 0.6875rem;
+  --mc-type-label: 0.75rem;
+  --mc-type-sm: 0.8125rem;
+  --mc-type-body: 0.9375rem;
+  --mc-type-card: 1.125rem;
+  --mc-type-profile: clamp(1.5rem, 3vw, 2.125rem);
+  --mc-type-stat: clamp(1.375rem, 2.4vw, 1.875rem);
+  --mc-type-display: clamp(2.5rem, 8.6vw, 10rem);
+  --mc-type-section: clamp(1.75rem, 3.6vw, 2.75rem);
+
+  --mc-text-primary: var(--mc-fg);
+  --mc-text-secondary: var(--mc-fg-soft);
+  --mc-text-muted: var(--mc-fg-faint);
+
+  --mc-r-pill: 999px;
+  --mc-r-sm: 8px;
+  --mc-r-md: 14px;
+  --mc-r-lg: 20px;
+  --mc-r-xl: 26px;
+}
+
+/* A shared type scale without flattening the existing hierarchy. */
+.boot p,
+.hero-index .n,
+.hero-index small,
+.stat span,
+.card .status,
+.tags li,
+.src,
+.mc-mobile-dock a span {
+  font-size: var(--mc-type-xs);
+}
+.eyebrow,
+.pill,
+.cta .pill {
+  font-size: var(--mc-type-label);
+}
+#mcMainNav > a:not(.pill),
+.handle,
+.cat,
+.seg button,
+footer {
+  font-size: var(--mc-type-sm);
+}
+.sub,
+.bio,
+.shelf-head p,
+.desc,
+.about,
+.empty,
+.search input {
+  font-size: var(--mc-type-body);
+}
+.card h3 {
+  font-size: var(--mc-type-card);
+}
+.who h2 {
+  font-size: var(--mc-type-profile);
+}
+.stat b {
+  font-size: var(--mc-type-stat);
+}
+h1 {
+  font-size: var(--mc-type-display);
+  text-transform: none;
+}
+.shelf-head h2 {
+  font-size: var(--mc-type-section);
+}
+@media (max-width: 720px) {
+  h1 { font-size: clamp(2.5rem, 14vw, 4.75rem); }
+  .mc-app-view { border-radius: var(--mc-r-lg); }
+}
+@media (max-width: 420px) {
+  h1 { font-size: clamp(2.375rem, 14vw, 3.5rem); }
+}
+
+/* Semantic text colours: accent and meaningful status colours stay intact. */
+.mark,
+.who h2,
+.stat b,
+.card h3,
+.shelf-head h2 {
+  color: var(--mc-text-primary);
+}
+#mcMainNav > a:not(.pill),
+.handle,
+.cat,
+.stat span,
+.tags li,
+.card .status,
+.src,
+footer {
+  color: var(--mc-text-muted);
+}
+.eyebrow,
+.sub,
+.bio,
+.shelf-head p,
+.desc,
+.about,
+.empty {
+  color: var(--mc-text-secondary);
+}
+
+/* Five intentional radius tiers. Circular icon controls remain circular. */
+.nav,
+.pill,
+.skip {
+  border-radius: var(--mc-r-pill);
+}
+.card,
+.search input,
+.seg {
+  border-radius: var(--mc-r-md);
+}
+.card .status,
+.tags li {
+  border-radius: var(--mc-r-sm);
+}
+.mc-app-view {
+  border-radius: var(--mc-r-xl);
+}
+
+/* A small, predictable set of action treatments. */
+.pill,
+.get {
+  background: var(--mc-fg);
+  color: var(--mc-bg-deep);
+  border: 1px solid var(--mc-fg);
+  -webkit-text-fill-color: var(--mc-bg-deep);
+}
+.ghost {
+  background: transparent;
+  color: var(--mc-fg);
+  border: 1px solid var(--mc-line-strong);
+}
+.src {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  color: var(--mc-fg-soft);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.src:hover,
+.src:focus-visible {
+  background: transparent;
+  color: var(--mc-fg);
+}
+.card:hover .get,
+.get:hover,
+.get:focus-visible {
+  background: #fff;
+  color: var(--mc-bg-deep);
+  -webkit-text-fill-color: var(--mc-bg-deep);
+}
+
+/* Natural casing and more obvious keyboard/touch affordances. */
+#mcMainNav > a:not(.pill) {
+  min-height: 44px;
+  padding-inline: clamp(10px, 0.9vw, 14px) !important;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid transparent;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+#mcMainNav > a:not(.pill):hover,
+#mcMainNav > a:not(.pill):focus-visible {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: var(--mc-line-strong);
+}
+#mcMainNav > a[aria-current="page"] {
+  opacity: 1;
+  color: var(--mc-fg);
+  background: var(--mc-accent-soft);
+  border-color: rgba(229, 9, 20, 0.45);
+  box-shadow: inset 0 -2px 0 var(--mc-accent-hi);
+}
+#top .cta > a.pill {
+  background: var(--mc-fg);
+  color: var(--mc-bg-deep);
+  border-color: var(--mc-fg);
+  -webkit-text-fill-color: var(--mc-bg-deep);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+#top .cta > a.pill:focus-visible {
+  outline: 2px solid var(--mc-accent-hi);
+  outline-offset: 4px;
+}
+.eyebrow {
+  text-transform: none;
+  letter-spacing: 0.04em;
+}
+#mcMainNav {
+  column-gap: clamp(8px, 1vw, 16px) !important;
+  row-gap: 8px !important;
+}
+@media (min-width: 721px) {
+  #skip {
+    left: max(var(--mc-gutter), calc((100% - var(--mc-container)) / 2));
+    right: auto;
+    transform: none;
+  }
+}
+@media (max-width: 720px) {
+  #skip {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+  }
+  .mc-mobile-dock a {
+    min-height: 48px;
+  }
+}
+
+/* Search has a visible resting edge and a reliable keyboard-focus ring. */
+.search input {
+  border-color: var(--mc-line-strong);
+  background: rgba(255, 255, 255, 0.065);
+}
+.search input:focus {
+  border-color: var(--mc-accent-hi);
+  background: rgba(255, 255, 255, 0.08);
+}
+.search input:focus-visible {
+  outline: var(--mc-focus);
+  outline-offset: 3px;
+}
+</style>
+
 </head>
 <body id="top">
 <div class="boot" id="boot"><img src="/brand-m.webp" alt="" width="56" height="56"><div class="bar"><i id="bootBar"></i></div><p id="bootPct">LOADING 0%</p></div>
