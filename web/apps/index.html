@@ -286,6 +286,8 @@ footer .links{display:flex;justify-content:center;align-items:center;flex-wrap:w
 @media(hover:hover){.app-card:hover .movie-app-logo,.app-card:focus-within .movie-app-logo{transform:translateY(-2px) scale(1.035);filter:brightness(1.07);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 12px 27px rgba(0,0,0,.38)}}
 @media(prefers-reduced-motion:reduce){.movie-app-logo{transition:none!important}.app-card:hover .movie-app-logo,.app-card:focus-within .movie-app-logo{transform:none;filter:none}}
 </style>
+<link rel="stylesheet" href="/site-polish.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 </head>
 <body data-category="movie"><div class="ambient" aria-hidden="true"><span class="glow-ball a"></span><span class="glow-ball b"></span></div>
 <header id="header"><div class="wrap nav"><a class="brand" href="/" aria-label="Mahi homepage"><img class="site-brand-logo" src="/brand-m.webp" alt="Mahi logo" decoding="async"><span>Mahi <span style="color:var(--muted);font-weight:550">/ Apps</span></span></a><nav class="nav-links" aria-label="Site navigation"><a href="/">Home</a><a href="/mahiflix/">Movie Websites</a><a href="/linkora/">Windows Tools</a></nav></div></header>
@@ -302,7 +304,7 @@ footer .links{display:flex;justify-content:center;align-items:center;flex-wrap:w
 <div class="switch-wrap"><div class="switch" role="tablist" aria-label="App category"><button class="active" data-category="movie" type="button" role="tab" aria-selected="true">▣ Movie apps</button><button data-category="music" type="button" role="tab" aria-selected="false">♫ Music apps</button><button data-category="apps" type="button" role="tab" aria-selected="false">▦ TV Apps</button></div></div>
 <div class="search-row"><label class="search-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="query" type="search" placeholder="Search apps..." autocomplete="off" aria-label="Search apps"></label></div>
 <div class="results-bar"><span id="activeTitle">Movie apps</span><span class="results-actions"><strong id="count">10</strong> apps <button class="add-app-button" id="addAppBtn" type="button">+ Add app</button></span></div><h2 class="collection-title" id="collectionTitle">For your next watch</h2><section class="apps-grid" id="grid" aria-live="polite"></section><p class="empty" id="empty">No apps matched that search.</p></main>
-<footer><div class="wrap">A little space for good sound and good stories · <span id="year"></span><div class="links"><a href="/">Personal site</a><a href="/mahiflix/">Movie Websites</a></div></div></footer>
+<footer><div class="wrap">A little space for good sound and good stories · <span id="year"></span><nav class="site-footer-links" aria-label="Footer links"><a href="/">Home</a><a href="/mahiflix/">Movie Websites</a><a href="/linkora/">Windows Tools</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a></nav></div></footer>
 <script>
 (function(){
 "use strict";
@@ -447,4 +449,5 @@ document.getElementById("year").textContent=new Date().getFullYear();
 render();
 })();
 </script><script src="/scroll-performance.js" defer></script>
+<script src="/site-polish.js" defer></script>
 </body></html>
