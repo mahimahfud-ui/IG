@@ -485,5 +485,22 @@ class MahiCloudRouteTests(unittest.TestCase):
 
 
 
+    def test_homepage_usability_refinements_are_present(self):
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
+        source = response.get_data(as_text=True)
+        self.assertIn('<style id="mc-usability-refinements">', source)
+        for fragment in (
+            "--mc-type-display",
+            "--mc-text-primary",
+            "--mc-r-pill",
+            "text-transform: none;",
+            '#mcMainNav > a[aria-current="page"]',
+            "#top .cta > a.pill:focus-visible",
+            ".search input:focus-visible",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, source)
+
 if __name__ == "__main__":
     unittest.main()
