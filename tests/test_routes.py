@@ -584,5 +584,16 @@ class MahiCloudRouteTests(unittest.TestCase):
         self.assertNotIn("0 0 0 4px rgba(229,9,20,.14)", quick_source)
         self.assertNotIn("0 0 0 3px rgba(229,9,20,.13)", quick_source)
 
+
+    def test_intro_motion_tracks_scroll_without_easing_lag(self):
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
+        source = response.get_data(as_text=True)
+
+        self.assertIn("Scroll is the animation timeline: render the exact current scroll progress.", source)
+        self.assertIn("seekAt=seekTo;", source)
+        self.assertNotIn("seekAt+=gap*0.115", source)
+        self.assertNotIn("var keepAnimating=false;", source)
+
 if __name__ == "__main__":
     unittest.main()
