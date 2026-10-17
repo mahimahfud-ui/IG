@@ -178,7 +178,7 @@ class MahiCloudRouteTests(unittest.TestCase):
     def test_catalog_add_needs_pin_but_not_openai_key(self):
         import os
         from unittest.mock import patch
-        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "6993", "MAHI_AI_GITHUB_TOKEN": "", "OPENAI_API_KEY": ""}):
+        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "test-catalog-secret-2026", "MAHI_AI_GITHUB_TOKEN": "", "OPENAI_API_KEY": ""}):
             denied = self.client.post("/api/catalog-add", json={"password": "wrong", "input": "https://example.com"})
             self.assertEqual(denied.status_code, 401)
             self.assertIn("Incorrect password", denied.get_json().get("error", ""))
@@ -418,6 +418,14 @@ class MahiCloudRouteTests(unittest.TestCase):
         self.assertIn("POST /repos/mahimahfud-ui/mahicloud/git/blobs", captured.exception.message)
         self.assertIn("contents=write", captured.exception.message)
         self.assertNotIn("secret-not-for-response", captured.exception.message)
+
+    def test_quick_add_fails_closed_without_a_configured_secret(self):
+        import os
+        from unittest.mock import patch
+        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": ""}):
+            response = self.client.post("/api/catalog-add/verify", json={"password": "test-catalog-secret-2026"})
+        self.assertEqual(response.status_code, 503)
+        self.assertIn("at least 24 characters", response.get_json().get("error", ""))
 
     def test_catalog_add_pin_can_be_verified_before_selecting_a_category(self):
         import os
