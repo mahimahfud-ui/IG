@@ -8,6 +8,14 @@
       if (el) el.textContent = year;
     });
   };
+  const optimizeImages = () => {
+    document.querySelectorAll("img").forEach(img => {
+      if (!img.hasAttribute("decoding")) img.decoding = "async";
+      if (img.hasAttribute("loading")) return;
+      if (img.closest("header, nav, .hero, .profile, .boot, .intro") || img.fetchPriority === "high") return;
+      img.loading = "lazy";
+    });
+  };
   const initMobileMenu = () => {
     if (document.getElementById("mcMainNav") || document.getElementById("mcMobileDock")) return;
     if (document.querySelector(".menu-btn, #menuBtn, [data-existing-mobile-menu]")) return;
@@ -48,9 +56,10 @@
     });
   };
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => { setYear(); initMobileMenu(); });
+    document.addEventListener("DOMContentLoaded", () => { setYear(); optimizeImages(); initMobileMenu(); });
   } else {
     setYear();
+    optimizeImages();
     initMobileMenu();
   }
 })();
