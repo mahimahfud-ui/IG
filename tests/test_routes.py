@@ -543,5 +543,46 @@ class MahiCloudRouteTests(unittest.TestCase):
             with self.subTest(fragment=fragment):
                 self.assertIn(fragment, movie_source)
 
+    def test_apps_design_system_cta_navigation_and_quick_add_shadows(self):
+        apps = self.client.get("/apps/")
+        home = self.client.get("/")
+        quick_add = self.client.get("/quick-add.js")
+
+        self.assertEqual(apps.status_code, 200)
+        self.assertEqual(home.status_code, 200)
+        self.assertEqual(quick_add.status_code, 200)
+        apps_source = apps.get_data(as_text=True)
+        home_source = home.get_data(as_text=True)
+        quick_source = quick_add.get_data(as_text=True)
+
+        for fragment in (
+            "--apps-xs:0.6875rem",
+            "--apps-text-primary:#f5f3ff",
+            "--apps-radius-pill:999px",
+            'class="hero-cta mc-rise" href="#grid"',
+            ".hero-cta:focus-visible",
+            ".app-card h3 { font-size: var(--apps-card-title); }",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, apps_source)
+
+        for fragment in (
+            '#mcMainNav > a[aria-current="page"]:hover',
+            'padding: 8px 10px !important;',
+            'min-height: 44px;',
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, home_source)
+
+        for fragment in (
+            "box-shadow:0 8px 22px rgba(0,0,0,.38)",
+            "box-shadow:0 8px 20px rgba(0,0,0,.38)",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, quick_source)
+
+        self.assertNotIn("0 0 0 4px rgba(229,9,20,.14)", quick_source)
+        self.assertNotIn("0 0 0 3px rgba(229,9,20,.13)", quick_source)
+
 if __name__ == "__main__":
     unittest.main()
