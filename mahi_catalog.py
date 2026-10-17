@@ -6,6 +6,14 @@ from flask import Blueprint, jsonify, request
 from mahi_ai import MahiAIError, _check_bat_safety, _fetch_public, _github, _github_token, _insert_js_array_item, _metadata_for_url, _normalise_public_url, _repo_file, _repo_name, _slug
 
 mahi_catalog_bp = Blueprint("mahi_catalog", __name__)
+
+
+def _configured_catalog_password() -> str | None:
+    """Fail closed unless a unique, high-entropy Quick Add secret is configured."""
+    password = os.environ.get("MAHI_CATALOG_PASSWORD", "").strip()
+    return password if len(password) >= 24 else None
+
+
 _lock = threading.Lock()
 _events: dict[str, list[float]] = {}
 _global: list[float] = []
@@ -392,7 +400,9 @@ def catalog_add_verify():
         return response
     data = request.get_json(silent=True) or {}
     password = str(data.get("password") or "")
-    expected = os.environ.get("MAHI_CATALOG_PASSWORD", "6993").strip()
+    expected = _configured_catalog_password()
+    if not expected:
+        return jsonify({"ok": False, "error": "Quick Add is disabled until MAHI_CATALOG_PASSWORD is set to a unique secret of at least 24 characters."}), 503
     if not hmac.compare_digest(password, expected):
         return jsonify({"ok": False, "error": "Incorrect password."}), 401
     return jsonify({"ok": True})
@@ -430,7 +440,9 @@ def catalog_add_diagnose():
 
     data = request.get_json(silent=True) or {}
     password = str(data.get("password") or "")
-    expected = os.environ.get("MAHI_CATALOG_PASSWORD", "6993").strip()
+    expected = _configured_catalog_password()
+    if not expected:
+        return jsonify({"ok": False, "message": "Quick Add is disabled until MAHI_CATALOG_PASSWORD is set to a unique secret of at least 24 characters. No GitHub check was run."}), 503
     if not hmac.compare_digest(password, expected):
         return jsonify({"ok": False, "message": "PIN verification failed. No GitHub check was run."}), 401
 
@@ -558,7 +570,9 @@ def catalog_add():
 
     data = request.get_json(silent=True) or {}
     password = str(data.get("password") or "")
-    expected = os.environ.get("MAHI_CATALOG_PASSWORD", "6993").strip()
+    expected = _configured_catalog_password()
+    if not expected:
+        return jsonify({"ok": False, "error": "Quick Add is disabled until MAHI_CATALOG_PASSWORD is set to a unique secret of at least 24 characters."}), 503
     if not hmac.compare_digest(password, expected):
         return jsonify({"ok": False, "error": "Incorrect password."}), 401
 

@@ -178,11 +178,11 @@ class MahiCloudRouteTests(unittest.TestCase):
     def test_catalog_add_needs_pin_but_not_openai_key(self):
         import os
         from unittest.mock import patch
-        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "6993", "MAHI_AI_GITHUB_TOKEN": "", "OPENAI_API_KEY": ""}):
+        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "test-catalog-secret-2026", "MAHI_AI_GITHUB_TOKEN": "", "OPENAI_API_KEY": ""}):
             denied = self.client.post("/api/catalog-add", json={"password": "wrong", "input": "https://example.com"})
             self.assertEqual(denied.status_code, 401)
             self.assertIn("Incorrect password", denied.get_json().get("error", ""))
-            unconfigured = self.client.post("/api/catalog-add", json={"password": "6993", "input": "https://example.com"})
+            unconfigured = self.client.post("/api/catalog-add", json={"password": "test-catalog-secret-2026", "input": "https://example.com"})
             self.assertEqual(unconfigured.status_code, 503)
             self.assertIn("MAHI_AI_GITHUB_TOKEN", unconfigured.get_json().get("error", ""))
             self.assertNotIn("OPENAI_API_KEY", unconfigured.get_data(as_text=True))
@@ -190,8 +190,8 @@ class MahiCloudRouteTests(unittest.TestCase):
     def test_catalog_add_rejects_blank_input(self):
         import os
         from unittest.mock import patch
-        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "6993", "MAHI_AI_GITHUB_TOKEN": "test-github-key"}):
-            response = self.client.post("/api/catalog-add", json={"password": "6993", "input": " "})
+        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "test-catalog-secret-2026", "MAHI_AI_GITHUB_TOKEN": "test-github-key"}):
+            response = self.client.post("/api/catalog-add", json={"password": "test-catalog-secret-2026", "input": " "})
             self.assertEqual(response.status_code, 400)
             self.assertIn("Paste a link", response.get_json().get("error", ""))
 
@@ -224,27 +224,27 @@ class MahiCloudRouteTests(unittest.TestCase):
         import os
         from unittest.mock import patch
 
-        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "6993", "MAHI_AI_GITHUB_TOKEN": "", "OPENAI_API_KEY": ""}):
+        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "test-catalog-secret-2026", "MAHI_AI_GITHUB_TOKEN": "", "OPENAI_API_KEY": ""}):
             unknown = self.client.post("/api/catalog-add", json={
-                "password": "6993", "category": "unknown_category", "input": "https://example.com", "name": "Test"
+                "password": "test-catalog-secret-2026", "category": "unknown_category", "input": "https://example.com", "name": "Test"
             })
             self.assertEqual(unknown.status_code, 400)
             self.assertIn("supported Quick Add categories", unknown.get_json().get("error", ""))
 
             invalid_python = self.client.post("/api/catalog-add", json={
-                "password": "6993", "category": "windows_python", "input": "def broken(:", "name": "Test Script"
+                "password": "test-catalog-secret-2026", "category": "windows_python", "input": "def broken(:", "name": "Test Script"
             })
             self.assertEqual(invalid_python.status_code, 400)
             self.assertIn("syntax error", invalid_python.get_json().get("error", ""))
 
             invalid_bat = self.client.post("/api/catalog-add", json={
-                "password": "6993", "category": "windows_bat", "input": "print('not a BAT file')", "name": "Test Script"
+                "password": "test-catalog-secret-2026", "category": "windows_bat", "input": "print('not a BAT file')", "name": "Test Script"
             })
             self.assertEqual(invalid_bat.status_code, 400)
             self.assertIn("readable Windows BAT", invalid_bat.get_json().get("error", ""))
 
             valid_python_without_github = self.client.post("/api/catalog-add", json={
-                "password": "6993", "category": "windows_python",
+                "password": "test-catalog-secret-2026", "category": "windows_python",
                 "input": "print('hello from a harmless utility')", "name": "Test Python Utility"
             })
             self.assertEqual(valid_python_without_github.status_code, 503)
@@ -335,7 +335,7 @@ class MahiCloudRouteTests(unittest.TestCase):
     def test_catalog_add_diagnostic_requires_pin_and_never_returns_token(self):
         import os
         from unittest.mock import patch
-        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "6993", "MAHI_AI_GITHUB_TOKEN": "secret-not-for-response"}):
+        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "test-catalog-secret-2026", "MAHI_AI_GITHUB_TOKEN": "secret-not-for-response"}):
             denied = self.client.post("/api/catalog-add/diagnose", json={"password": "wrong"})
             self.assertEqual(denied.status_code, 401)
             self.assertNotIn("secret-not-for-response", denied.get_data(as_text=True))
@@ -347,7 +347,7 @@ class MahiCloudRouteTests(unittest.TestCase):
                     {"object": {"sha": "test-main-sha"}},
                     {"sha": "test-blob-sha"},
                 ]
-                ok = self.client.post("/api/catalog-add/diagnose", json={"password": "6993"})
+                ok = self.client.post("/api/catalog-add/diagnose", json={"password": "test-catalog-secret-2026"})
             payload = ok.get_json()
             self.assertEqual(ok.status_code, 200)
             self.assertTrue(payload["ok"])
@@ -361,7 +361,7 @@ class MahiCloudRouteTests(unittest.TestCase):
         import os
         from unittest.mock import patch
         from mahi_ai import MahiAIError
-        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "6993", "MAHI_AI_GITHUB_TOKEN": "secret-not-for-response"}):
+        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "test-catalog-secret-2026", "MAHI_AI_GITHUB_TOKEN": "secret-not-for-response"}):
             with patch("mahi_catalog._github") as github:
                 github.side_effect = [
                     {"login": "mahimahfud-ui"},
@@ -369,7 +369,7 @@ class MahiCloudRouteTests(unittest.TestCase):
                     {"object": {"sha": "test-main-sha"}},
                     MahiAIError("GitHub returned HTTP 403: Resource not accessible by personal access token. Failed endpoint: POST /repos/mahimahfud-ui/mahicloud/git/blobs."),
                 ]
-                response = self.client.post("/api/catalog-add/diagnose", json={"password": "6993"})
+                response = self.client.post("/api/catalog-add/diagnose", json={"password": "test-catalog-secret-2026"})
         payload = response.get_json()
         self.assertFalse(payload["ok"])
         self.assertEqual("contents_write", payload["stage"])
@@ -384,7 +384,7 @@ class MahiCloudRouteTests(unittest.TestCase):
         from unittest.mock import patch
         from mahi_ai import MahiAIError
 
-        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "6993", "MAHI_AI_GITHUB_TOKEN": "test-token"}):
+        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "test-catalog-secret-2026", "MAHI_AI_GITHUB_TOKEN": "test-token"}):
             with patch("mahi_catalog._github") as github:
                 github.side_effect = [
                     {"login": "another-account"},
@@ -392,7 +392,7 @@ class MahiCloudRouteTests(unittest.TestCase):
                     {"object": {"sha": "test-main-sha"}},
                     MahiAIError("GitHub returned HTTP 403: Resource not accessible by personal access token."),
                 ]
-                response = self.client.post("/api/catalog-add/diagnose", json={"password": "6993"})
+                response = self.client.post("/api/catalog-add/diagnose", json={"password": "test-catalog-secret-2026"})
 
         payload = response.get_json()
         self.assertEqual("contents_write", payload["stage"])
@@ -419,16 +419,24 @@ class MahiCloudRouteTests(unittest.TestCase):
         self.assertIn("contents=write", captured.exception.message)
         self.assertNotIn("secret-not-for-response", captured.exception.message)
 
+    def test_quick_add_fails_closed_without_a_configured_secret(self):
+        import os
+        from unittest.mock import patch
+        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": ""}):
+            response = self.client.post("/api/catalog-add/verify", json={"password": "test-catalog-secret-2026"})
+        self.assertEqual(response.status_code, 503)
+        self.assertIn("at least 24 characters", response.get_json().get("error", ""))
+
     def test_catalog_add_pin_can_be_verified_before_selecting_a_category(self):
         import os
         from unittest.mock import patch
 
-        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "6993", "MAHI_AI_GITHUB_TOKEN": "", "OPENAI_API_KEY": ""}):
+        with patch.dict(os.environ, {"MAHI_CATALOG_PASSWORD": "test-catalog-secret-2026", "MAHI_AI_GITHUB_TOKEN": "", "OPENAI_API_KEY": ""}):
             wrong = self.client.post("/api/catalog-add/verify", json={"password": "wrong"})
             self.assertEqual(wrong.status_code, 401)
             self.assertIn("Incorrect password", wrong.get_json().get("error", ""))
 
-            correct = self.client.post("/api/catalog-add/verify", json={"password": "6993"})
+            correct = self.client.post("/api/catalog-add/verify", json={"password": "test-catalog-secret-2026"})
             self.assertEqual(correct.status_code, 200)
             self.assertTrue(correct.get_json().get("ok"))
             self.assertNotIn("OPENAI_API_KEY", correct.get_data(as_text=True))

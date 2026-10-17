@@ -13,7 +13,7 @@ This flow does not call OpenAI and does not require OpenAI API billing. Name/cat
 
 - MAHI_AI_GITHUB_TOKEN: required; use a fine-grained token with Contents read/write permission for mahimahfud-ui/mahicloud. The token stays on the server.
 - MAHI_AI_REPOSITORY: optional; defaults to mahimahfud-ui/mahicloud.
-- MAHI_CATALOG_PASSWORD: optional; defaults to 6993. If changed, update the browser launcher code at the same time.
+- MAHI_CATALOG_PASSWORD: required; set a unique random value of at least 24 characters in Render. There is no default PIN. If it is missing or too short, Quick Add endpoints return HTTP 503 rather than accepting a fallback.
 
 OPENAI_API_KEY and MAHI_AI_ACCESS_TOKEN are not used by quick-add.
 
