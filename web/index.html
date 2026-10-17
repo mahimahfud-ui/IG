@@ -1047,21 +1047,14 @@ function paint(){
 
 function frame(time){
   frameId=0;
-  var keepAnimating=false;
   if(ready){
-    var gap=seekTo-seekAt;
-    if(reduced) seekAt=seekTo;
-    else if(Math.abs(gap)>0.0002){
-      /* Keep the original orbit and dock; soften only scroll-follow easing. */
-      seekAt+=gap*0.115;
-      if(Math.abs(seekTo-seekAt)<=0.0002) seekAt=seekTo;
-      else keepAnimating=true;
-    } else seekAt=seekTo;
+    /* Scroll is the animation timeline: render the exact current scroll progress.
+       Do not ease seekAt toward seekTo; that creates visible catch-up lag. */
+    seekAt=seekTo;
     var onHero=window.pageYOffset < heroEnd + window.innerHeight && !document.hidden;
     if(onHero && (needDraw || Math.abs(seekAt-lastT)>0.0001)){ draw(seekAt,time); lastT=seekAt; needDraw=false; }
   }
   paint();
-  if(keepAnimating) scheduleFrame();
 }
 
 /* ===== Store: segmented control, search, grid ===== */
