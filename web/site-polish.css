@@ -58,3 +58,11 @@ a, button { touch-action: manipulation; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+.site-footer-links {
+  display: flex; justify-content: center; align-items: center; flex-wrap: wrap;
+  gap: 10px 18px; margin: 14px auto 0; font-size: 12px; line-height: 1.6;
+}
+.site-footer-links a { color: inherit; opacity: .78; text-decoration: none; }
+.site-footer-links a:hover, .site-footer-links a:focus-visible { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+.site-legal-footer { max-width: 760px; margin: 0 auto; padding: 0 20px 32px; text-align: center; color: #aaa5b0; font-size: 13px; }
+.site-legal-footer a { color: inherit; text-underline-offset: 4px; }
