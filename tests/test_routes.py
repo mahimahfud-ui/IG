@@ -502,5 +502,46 @@ class MahiCloudRouteTests(unittest.TestCase):
             with self.subTest(fragment=fragment):
                 self.assertIn(fragment, source)
 
+    def test_homepage_quick_add_and_mahiflix_audit_fixes(self):
+        home = self.client.get("/")
+        quick_add = self.client.get("/quick-add.js")
+        mahiflix = self.client.get("/mahiflix/")
+
+        self.assertEqual(home.status_code, 200)
+        self.assertEqual(quick_add.status_code, 200)
+        self.assertEqual(mahiflix.status_code, 200)
+        home_source = home.get_data(as_text=True)
+        quick_source = quick_add.get_data(as_text=True)
+        movie_source = mahiflix.get_data(as_text=True)
+
+        for fragment in (
+            "height:280vh;min-height:1600px",
+            "Apps, films &amp;",
+            '#nav ul{display:none!important}',
+            'routeGap=activeRoute==="movies"?8:0',
+            "#skip {",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, home_source)
+
+        for fragment in (
+            'buttonLabel.textContent="Quick add"',
+            ".mc-catalog-plus-label{white-space:nowrap}",
+            'body:has([data-mc-frame-panel="movies"].is-active) #mahi-catalog-plus',
+            "var(--mc-text-primary,#f3efe8)",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, quick_source)
+
+        for fragment in (
+            "--mf-text-primary",
+            "--mf-text-display",
+            "--mf-r-pill",
+            "--mf-action-secondary",
+            "font-size:var(--mf-text-display)",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, movie_source)
+
 if __name__ == "__main__":
     unittest.main()
