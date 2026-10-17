@@ -98,9 +98,10 @@ class DesignSystemTests(unittest.TestCase):
         home = self.get_text("/")
         self.assertIn("w<=720?1:1.15", home)
         self.assertIn("Math.min(10,8*it.a)", home)
-        self.assertIn("seekAt+=gap*0.115", home)
-        self.assertIn("Math.abs(gap)>0.0002", home)
-        self.assertIn("if(keepAnimating) scheduleFrame();", home)
+        self.assertIn("seekAt=seekTo;", home)
+        self.assertNotIn("seekAt+=gap*0.115", home)
+        self.assertNotIn("var keepAnimating=false;", home)
+        self.assertNotIn("if(keepAnimating) scheduleFrame();", home)
 
     def test_homepage_intro_visual_design_remains_scroll_scrubbed(self):
         home = self.get_text("/")
