@@ -85,7 +85,7 @@ h1{font-family:var(--mc-font-display);font-weight:var(--mc-display-weight,600);f
 .cta{margin-top:clamp(28px,3.4vw,44px);pointer-events:auto;display:flex;justify-content:flex-start}
 .cta .pill{height:48px;padding:0 26px;font-size:12.5px;max-width:min(100%,320px)}
 
-.track{position:relative;z-index:1;height:460vh;min-height:2800px}
+.track{position:relative;z-index:1;height:280vh;min-height:1600px}
 
 /* ---------- store sheet ---------- */
 .store{position:relative;z-index:30;background:var(--bg);border-radius:32px 32px 0 0;border-top:1px solid var(--rule);box-shadow:0 -40px 90px rgba(0,0,0,.7);min-height:100vh;padding-top:clamp(36px,5vw,64px)}
@@ -714,6 +714,22 @@ footer {
   outline: var(--mc-focus);
   outline-offset: 3px;
 }
+
+/* Finish shared token hookups for remaining homepage controls. */
+.hero-index b, .get, .seg button { font-size: var(--mc-type-sm); }
+.panel .cta > .pill { text-transform: none; letter-spacing: 0.02em; }
+.card .cat { text-transform: none; letter-spacing: 0.02em; }
+/* Make project cards easier to activate without covering footer actions. */
+.card h3 { position: static; }
+.card h3 a::after { content: ""; position: absolute; inset: 0; z-index: 4; }
+.card-foot { z-index: 5; }
+/* Comfortable, high-contrast skip control on desktop and mobile. */
+#skip { left:50%; right:auto; bottom:max(20px,calc(env(safe-area-inset-bottom,0px) + 14px)); transform:translateX(-50%); min-height:44px; padding:12px 18px; display:inline-flex; align-items:center; justify-content:center; font-size:var(--mc-type-sm); font-weight:600; color:var(--mc-fg); background:rgba(20,20,20,.94); border:1px solid var(--mc-line-strong); box-shadow:0 8px 28px rgba(0,0,0,.35); }
+/* Contrasting editorial rhythm while keeping all three hero animation stages. */
+section.panels > .panel:nth-child(2) { align-items:flex-end; text-align:right; }
+section.panels > .panel:nth-child(2) .eyebrow { justify-content:flex-end; }
+section.panels > .panel:nth-child(2) .cta { align-self:flex-end; justify-content:flex-end; }
+
 </style>
 
 </head>
@@ -775,9 +791,9 @@ footer {
     <ul class="hero-index mc-slide" id="heroIndex" style="--d:1s" aria-label="Featured collections"></ul>
   </div>
   <div class="panel" data-panel>
-    <p class="eyebrow">Different things, different reasons</p>
-    <h1>Every creation<br><span class="grad">has a character.</span></h1>
-    <p class="sub">Some help me find something to watch; others take care of little everyday jobs.</p>
+    <p class="eyebrow">Explore the collection</p>
+    <h1>Apps, films &amp; <span class="grad">useful tools.</span></h1>
+    <p class="sub">Browse the Apps library or explore projects built for everyday use.</p>
     <div class="cta"><a class="pill" href="/apps/">Open the Apps library</a></div>
   </div>
   <div class="panel" data-panel>
@@ -1193,11 +1209,11 @@ resize(); measure(); readScroll(); build(); moveGlider(); scheduleFrame();
  function toast(message){var el=document.getElementById("mcAppToast");if(!el)return;el.textContent=message;el.classList.add("is-visible");clearTimeout(toastTimer);toastTimer=setTimeout(function(){el.classList.remove("is-visible");},2100);}
  function fallbackCopy(value){var t=document.createElement("textarea");t.value=value;t.setAttribute("readonly","");t.style.position="fixed";t.style.opacity="0";t.style.pointerEvents="none";document.body.appendChild(t);t.select();var ok=false;try{ok=document.execCommand("copy");}catch(e){}t.remove();toast(ok?"Copied to clipboard":"Copy unavailable — select and copy the address");}
  function copy(value){if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(value).then(function(){toast("Copied to clipboard");}).catch(function(){fallbackCopy(value);});else fallbackCopy(value);}
- function bridge(frame,route){try{var d=frame.contentDocument;if(!d||!d.documentElement)return;if(!d.getElementById("mc-iframe-workspace-style")){var s=d.createElement("style");s.id="mc-iframe-workspace-style";s.textContent="html{overscroll-behavior:contain;scroll-behavior:auto}body{max-width:100%;overflow-x:hidden!important;-webkit-tap-highlight-color:transparent}img,video,canvas,svg{max-width:100%}";if(route==="apps")s.textContent+="#header{display:none!important}";(d.head||d.documentElement).appendChild(s);}if(d.documentElement.dataset.mcBridgeInstalled==="1")return;d.documentElement.dataset.mcBridgeInstalled="1";d.addEventListener("click",function(ev){if(ev.defaultPrevented||ev.button!==0||ev.metaKey||ev.ctrlKey||ev.shiftKey||ev.altKey)return;var n=ev.target,a=n&&n.closest?n.closest("a[href]"):null;if(!a||a.hasAttribute("download")||a.getAttribute("target")==="_blank")return;var r=routeForAnchor(a);if(r&&r!==activeRoute){ev.preventDefault();navigate(r);}},true);}catch(e){}}
+ function bridge(frame,route){try{var d=frame.contentDocument;if(!d||!d.documentElement)return;if(!d.getElementById("mc-iframe-workspace-style")){var s=d.createElement("style");s.id="mc-iframe-workspace-style";s.textContent="html{overscroll-behavior:contain;scroll-behavior:auto}body{max-width:100%;overflow-x:hidden!important;-webkit-tap-highlight-color:transparent}img,video,canvas,svg{max-width:100%}";if(route==="apps")s.textContent+="#header{display:none!important}";else if(route==="movies")s.textContent+="#nav ul{display:none!important}";(d.head||d.documentElement).appendChild(s);}if(d.documentElement.dataset.mcBridgeInstalled==="1")return;d.documentElement.dataset.mcBridgeInstalled="1";d.addEventListener("click",function(ev){if(ev.defaultPrevented||ev.button!==0||ev.metaKey||ev.ctrlKey||ev.shiftKey||ev.altKey)return;var n=ev.target,a=n&&n.closest?n.closest("a[href]"):null;if(!a||a.hasAttribute("download")||a.getAttribute("target")==="_blank")return;var r=routeForAnchor(a);if(r&&r!==activeRoute){ev.preventDefault();navigate(r);}},true);}catch(e){}}
  function ensureFrame(route){var p=panelFor(route);if(!p)return;var f=p.querySelector("iframe"),loader=p.querySelector(".mc-frame-loader");if(!f)return;if(!f.getAttribute("src")){status("OPENING",true);f.addEventListener("load",function(){f.dataset.mcLoaded="true";if(loader)loader.classList.add("is-dismissed");bridge(f,route);setFrameVisibility(route,activeRoute===route);if(activeRoute===route)status("READY",false);});f.addEventListener("error",function(){if(activeRoute===route)status("CHECK CONNECTION",false);});var src=f.getAttribute("data-src");f.setAttribute("src",src+(src.indexOf("?")>=0?"&":"?")+"mc-embed=1");}else if(f.dataset.mcLoaded==="true"){bridge(f,route);setFrameVisibility(route,activeRoute===route);if(loader)loader.classList.add("is-dismissed");status("READY",false);}else{status("OPENING",true);if(loader)loader.classList.remove("is-dismissed");}}
  function activate(route){var next=panelFor(route);if(!next)return;if(activePanel===next){next.classList.add("is-active");next.classList.remove("mc-frame-leave");setFrameVisibility(route,true);return;}if(activePanel){var old=activePanel;var oldRoute=old.getAttribute("data-mc-frame-panel");if(oldRoute)setFrameVisibility(oldRoute,false);clearTimeout(old._mcLeaveTimer);old.classList.remove("is-active","mc-frame-leave");old.classList.add("mc-frame-leave");old.setAttribute("aria-hidden","true");old._mcLeaveTimer=setTimeout(function(){old.classList.remove("mc-frame-leave");},reduced?1:380);}activePanel=next;clearTimeout(next._mcLeaveTimer);next.classList.remove("mc-frame-leave");next.classList.add("is-active");next.setAttribute("aria-hidden","false");setFrameVisibility(route,true);panels.forEach(function(p){if(p!==next&&!p.classList.contains("mc-frame-leave"))p.setAttribute("aria-hidden","true");});}
  function heading(route){var c=configs[route]||configs.home;if(titleEl)titleEl.textContent=c.title;if(descEl)descEl.textContent=c.description;if(kickerEl)kickerEl.textContent=route==="privacy"?"MAHICLOUD / PRIVATE ACCESS":route==="legal"?"MAHICLOUD / LEGAL":"MAHICLOUD / WORKSPACE";document.title=(route==="home"||route==="projects")?mainTitle:c.title+" — MahiCloud";}
- function shellTop(){var h=document.getElementById("chrome");if(!h)return;var r=h.getBoundingClientRect(),mob=matchMedia("(max-width: 720px)").matches;document.documentElement.style.setProperty("--mc-shell-top",Math.max(mob?84:112,Math.ceil(r.bottom+(mob?7:12)))+"px");}
+ function shellTop(){var h=document.getElementById("chrome");if(!h)return;var r=h.getBoundingClientRect(),mob=matchMedia("(max-width: 720px)").matches,routeGap=activeRoute==="movies"?8:0;document.documentElement.style.setProperty("--mc-shell-top",Math.max(mob?84:112,Math.ceil(r.bottom+(mob?7:12)+routeGap))+"px");}
  function refreshHome(){window.dispatchEvent(new Event("resize"));window.dispatchEvent(new Event("scroll"));}
  function navigate(route,opts){opts=opts||{};if(!configs[route])route="home";var previousRoute=activeRoute;var wasOverlay=document.body.classList.contains("mc-route-active");if(previousRoute&&previousRoute!==route&&previousRoute!=="home"&&previousRoute!=="projects")setFrameVisibility(previousRoute,false);if(!wasOverlay)returnScrollY=window.scrollY||window.pageYOffset||0;if(!opts.fromHistory){var hash=route==="projects"?"projects":route;if(location.hash!=="#"+hash){try{history.pushState({mcRoute:route},"",location.pathname+location.search+"#"+hash);}catch(e){}}}activeRoute=route;tabs(route);heading(route);var overlay=route!=="home"&&route!=="projects";if(!overlay){document.body.classList.remove("mc-route-active");appView.hidden=true;requestAnimationFrame(function(){if(route==="projects"){var p=document.getElementById("projects");if(p)p.scrollIntoView({behavior:reduced?"auto":"smooth",block:"start"});}else window.scrollTo(0,wasOverlay?returnScrollY:0);refreshHome();});return;}shellTop();document.body.classList.add("mc-route-active");appView.hidden=false;status("READY",false);activate(route);if(route!=="privacy")ensureFrame(route);else status("READY",false);}
  document.addEventListener("click",function(ev){if(ev.defaultPrevented||ev.button!==0||ev.metaKey||ev.ctrlKey||ev.shiftKey||ev.altKey)return;var n=ev.target,copyBtn=n&&n.closest?n.closest("[data-mc-copy]"):null;if(copyBtn){ev.preventDefault();copy(copyBtn.getAttribute("data-mc-copy")||"");return;}var a=n&&n.closest?n.closest("a[href]"):null;if(!a)return;var special=a.closest(".project-quick-link,.project-nextdns");if(special&&!a.classList.contains("src")){ev.preventDefault();navigate("privacy");return;}if(a.getAttribute("target")==="_blank"||a.hasAttribute("download"))return;var r=routeForAnchor(a);if(r){ev.preventDefault();navigate(r);}},true);
