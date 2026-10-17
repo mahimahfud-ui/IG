@@ -1,0 +1,60 @@
+/* Shared responsive polish for MahiCloud sub-sites. Keep page-specific visual systems intact. */
+html { max-width: 100%; overflow-x: clip; }
+body { max-width: 100%; overflow-x: clip; }
+img, video, canvas, iframe, svg { max-width: 100%; }
+button, input, select, textarea { max-width: 100%; }
+pre, code, .code, .code-block { overflow-wrap: anywhere; }
+pre { max-width: 100%; overflow-x: auto; }
+main, section, article, header, footer, nav, .wrap, .container, .content, .card,
+.grid, .nav, .navlinks, .nav-links, .controls, .toolbar, .actions {
+  min-width: 0;
+}
+a, button { touch-action: manipulation; }
+:where(a, button, input, select, textarea) { scroll-margin-block: 1rem; }
+:where(button, .btn, .pill) { -webkit-tap-highlight-color: transparent; }
+:where(footer, .footer, .foot-links, .links) { overflow-wrap: anywhere; }
+:where(footer .links, footer nav, .footer-links) { flex-wrap: wrap; }
+.site-menu-toggle {
+  display: none; align-items: center; justify-content: center; gap: 9px;
+  min-height: 42px; min-width: 44px; padding: 9px 12px;
+  border: 1px solid rgba(255,255,255,.16); border-radius: 12px;
+  background: rgba(255,255,255,.06); color: inherit; font: inherit;
+  font-size: 13px; cursor: pointer; flex: 0 0 auto;
+}
+.site-menu-toggle .site-menu-icon, .site-menu-toggle .site-menu-icon::before,
+.site-menu-toggle .site-menu-icon::after {
+  display: block; width: 17px; height: 2px; border-radius: 2px; background: currentColor;
+}
+.site-menu-toggle .site-menu-icon { position: relative; }
+.site-menu-toggle .site-menu-icon::before, .site-menu-toggle .site-menu-icon::after {
+  content: ""; position: absolute; left: 0;
+}
+.site-menu-toggle .site-menu-icon::before { top: -5px; }
+.site-menu-toggle .site-menu-icon::after { top: 5px; }
+.site-mobile-nav-host { position: relative; }
+@media (max-width: 760px) {
+  html { scroll-padding-top: 76px; }
+  body { width: 100%; }
+  .site-menu-toggle { display: inline-flex; }
+  .site-mobile-nav-host { flex-wrap: wrap !important; }
+  .site-mobile-nav-links {
+    display: none !important; position: absolute !important; z-index: 80;
+    top: calc(100% + 10px); right: 0; left: auto; width: min(280px, calc(100vw - 28px));
+    max-width: calc(100vw - 28px); padding: 10px; gap: 4px;
+    flex-direction: column !important; align-items: stretch !important;
+    border: 1px solid rgba(255,255,255,.14); border-radius: 16px;
+    background: rgba(20,20,20,.97); box-shadow: 0 18px 55px rgba(0,0,0,.38);
+    -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
+  }
+  .site-mobile-nav-host.site-mobile-nav-open .site-mobile-nav-links { display: flex !important; }
+  .site-mobile-nav-links a { display: flex; align-items: center; min-height: 42px; padding: 10px 12px; border-radius: 9px; white-space: normal; overflow-wrap: anywhere; }
+  .site-mobile-nav-links a:hover, .site-mobile-nav-links a:focus-visible { background: rgba(255,255,255,.08); }
+  :where(.wrap, .container, main, .content) { max-width: 100%; }
+  :where(.grid, .cards, .card-grid, .controls, .toolbar, .actions, .navlinks, .nav-links) { min-width: 0; }
+  :where(input, select, textarea) { min-width: 0; }
+  :where(button, .btn, .pill) { max-width: 100%; white-space: normal; }
+  :where(footer, .footer, .foot-links, .links) { gap: 10px 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
