@@ -299,7 +299,7 @@ footer .links{display:flex;justify-content:center;align-items:center;flex-wrap:w
 <div class="music-scene"><div class="vinyl-disc"><span></span></div>
 <div class="music-visualizer"><i style="--h:20px;--d:-.2s"></i><i style="--h:44px;--d:-.6s"></i><i style="--h:28px;--d:-.3s"></i><i style="--h:64px;--d:-.8s"></i><i style="--h:37px;--d:-.1s"></i><i style="--h:53px;--d:-.5s"></i><i style="--h:25px;--d:-.4s"></i><i style="--h:70px;--d:-.9s"></i><i style="--h:34px;--d:-.2s"></i><i style="--h:54px;--d:-.7s"></i><i style="--h:22px;--d:-.4s"></i><i style="--h:40px;--d:-.8s"></i><i style="--h:27px;--d:-.1s"></i></div></div>
 </div></section>
-<div class="switch-wrap"><div class="switch" role="tablist" aria-label="App category"><button class="active" data-category="movie" type="button" role="tab" aria-selected="true">▣ Movie apps</button><button data-category="music" type="button" role="tab" aria-selected="false">♫ Music apps</button><button data-category="apps" type="button" role="tab" aria-selected="false">▦ Apps</button></div></div>
+<div class="switch-wrap"><div class="switch" role="tablist" aria-label="App category"><button class="active" data-category="movie" type="button" role="tab" aria-selected="true">▣ Movie apps</button><button data-category="music" type="button" role="tab" aria-selected="false">♫ Music apps</button><button data-category="apps" type="button" role="tab" aria-selected="false">▦ TV Apps</button></div></div>
 <div class="search-row"><label class="search-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="query" type="search" placeholder="Search apps..." autocomplete="off" aria-label="Search apps"></label></div>
 <div class="results-bar"><span id="activeTitle">Movie apps</span><span class="results-actions"><strong id="count">10</strong> apps <button class="add-app-button" id="addAppBtn" type="button">+ Add app</button></span></div><h2 class="collection-title" id="collectionTitle">For your next watch</h2><section class="apps-grid" id="grid" aria-live="polite"></section><p class="empty" id="empty">No apps matched that search.</p></main>
 <footer><div class="wrap">A little space for good sound and good stories · <span id="year"></span><div class="links"><a href="/">Personal site</a><a href="/mahiflix/">Movie Websites</a></div></div></footer>
@@ -380,7 +380,7 @@ function render(){
  const heroTitle=document.getElementById("heroTitle"),heroDescription=document.getElementById("heroDescription");
  if(isMovie){heroTitle.innerHTML='Screen worlds.<br><span class="grad">Next watch.</span>';heroDescription.textContent="The original MahiFlix movie-app collection, with app pages, direct APK links and saved favourites.";activeTitle.textContent="Movie apps";collectionTitle.textContent="For your next watch"}
  else if(isMusic){heroTitle.innerHTML='Find your rhythm.<br><span class="grad">Feel the sound.</span>';heroDescription.textContent="Music players from our curated collection, with original artwork and their download links.";activeTitle.textContent="Music apps";collectionTitle.textContent="For every kind of mood"}
- else{heroTitle.innerHTML='Useful apps.<br><span class="grad">One place.</span>';heroDescription.textContent="Other apps and useful online tools, with their official pages and brand artwork.";activeTitle.textContent="Apps";collectionTitle.textContent="Explore apps and tools"}
+ else{heroTitle.innerHTML='TV apps.<br><span class="grad">Big-screen ready.</span>';heroDescription.textContent="A dedicated shelf for TV apps and Android TV streaming tools.";activeTitle.textContent="TV Apps";collectionTitle.textContent="Browse TV apps"}
   count.textContent=String(shown.length).padStart(2,"0");empty.style.display=shown.length?"none":"block";addAppButton.hidden=!isMovie;
  grid.innerHTML=shown.map(function(x,i){
   const accent=x.accent||(isMovie?"#ff7166":"#80e5f4"),accent2=x.accent2||(isMovie?"#8e202d":"#7253bd");
@@ -400,7 +400,7 @@ function render(){
     '<div class="card-footer"><small>Language coverage score · '+esc(x.langs==null?"—":x.langs)+'/100</small>'+actions+'</div></article>';
   }
   return '<article class="app-card" style="--accent:'+esc(accent)+';--accent2:'+esc(accent2)+';--accent-glow:'+esc(accent)+'30;animation:iosPanelIn .48s cubic-bezier(.22,1,.36,1) both;animation-delay:'+Math.min(i,8)*42+'ms">'+
-   '<div class="card-top">'+icon+'<span class="kind">'+(isMusic?"MUSIC":"APP")+'</span></div><h3>'+esc(x.name)+'</h3><p>'+esc(desc)+'</p>'+tags+
+   '<div class="card-top">'+icon+'<span class="kind">'+(isMusic?"MUSIC":"TV APP")+'</span></div><h3>'+esc(x.name)+'</h3><p>'+esc(desc)+'</p>'+tags+
    '<div class="card-footer"><small>'+(x.sublabel||(isMusic?"Direct app download":"Official website"))+'</small><a class="open-link" href="'+esc(x.url||"#")+'" target="_blank" rel="noopener noreferrer">'+esc(x.linkLabel||(isMusic?"Download app":"Visit website"))+' <span aria-hidden="true">↗</span></a></div></article>';
  }).join("");
  grid.querySelectorAll(".movie-app-logo").forEach(function(img){img.addEventListener("error",function(){nextLogo(img)})});
@@ -422,7 +422,7 @@ function openAddDialog(){
  const title=overlay.querySelector("#mf-add-title"),copy=overlay.querySelector("#mf-add-copy"),label=overlay.querySelector("#mf-add-label"),input=overlay.querySelector("#mf-add-input"),error=overlay.querySelector("#mf-add-error"),form=overlay.querySelector("#mf-add-form"),next=overlay.querySelector("#mf-add-next");
  function close(){overlay.classList.remove("open");form.reset();error.textContent=""}
  function showUrl(){stage="url";input.value="";input.type="url";input.inputMode="url";input.autocomplete="url";input.placeholder="https://example.com";title.textContent="App website URL";copy.textContent="Paste the official website URL. The app logo will be detected automatically.";label.textContent="Website URL";input.setAttribute("aria-label","App website URL");next.textContent="Next";error.textContent="";setTimeout(function(){input.focus()},20)}
- function showName(){stage="name";input.value="";input.type="text";input.inputMode="text";input.autocomplete="off";input.placeholder="App name";title.textContent="App name";copy.textContent="Enter the name that should appear in Movie Apps.";label.textContent="App name";input.setAttribute("aria-label","App name");next.textContent="Add app";error.textContent="";setTimeout(function(){input.focus()},20)}
+ function showName(){stage="name";input.value="";input.type="text";input.inputMode="text";input.autocomplete="off";input.placeholder="App name";title.textContent="App name";copy.textContent="Enter the name that should appear in TV Apps.";label.textContent="App name";input.setAttribute("aria-label","App name");next.textContent="Add app";error.textContent="";setTimeout(function(){input.focus()},20)}
  form.addEventListener("submit",function(e){
   e.preventDefault();error.textContent="";const value=input.value.trim();
   if(stage==="pin"){if(value!=="6993"){error.textContent="Incorrect passcode.";input.select();return}showUrl();return}
