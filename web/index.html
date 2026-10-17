@@ -477,6 +477,14 @@ body.mc-route-active{overflow:hidden;overscroll-behavior:none}body.mc-route-acti
  .mc-mobile-dock a[data-mc-project]{min-width:69px}
  .mc-mobile-dock a span{font-size:8px}
 }
+
+/* iOS-inspired interaction easing: polish transitions without changing layout or behavior. */
+@media (prefers-reduced-motion: no-preference) {
+  :where(a, button, input, select, textarea, [role="button"], .card, .ico, .ghost, .pill, .seg button) {
+    transition-timing-function: cubic-bezier(.22, 1, .36, 1);
+    -webkit-tap-highlight-color: transparent;
+  }
+}
 </style>
 </head>
 <body id="top">
