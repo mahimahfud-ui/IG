@@ -5,6 +5,7 @@
 - Default branch: `main`.
 - This is an existing, working multi-page website/project collection. Treat the current repository as the source of truth.
 - The public site and sub-sites include `web/index.html`, `web/apps/`, `web/mahiflix/`, `web/linkora/`, and other tools/pages under `web/`. The Python application serves routes and APIs; inspect the actual code before assuming how something works.
+- **Default redesign scope:** redesign the individual sub-sites/tools under `web/` that the user's primary design brief targets. Leave the main MahiCloud landing page (`web/index.html`) and shared parent shell/navigation visually unchanged unless the user's primary design brief explicitly includes them or a narrowly scoped integration fix is necessary.
 
 ## When the user provides design briefs and MotionSite AI demos
 1. Treat the user's own design prompt as the primary brief. Treat MotionSite AI prompts as visual/motion references, not replacement specifications.
